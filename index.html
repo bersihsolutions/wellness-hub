@@ -1,1801 +1,1610 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-slate-50">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bersih Care Portal | Workplace Mental Health Month</title>
-
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase JS Client v2 -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- FontAwesome Icons CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <!-- Canvas Confetti for Celebration Effects -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            teal: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              500: '#14b8a6',
-              600: '#0d9488',
-              700: '#0f766e',
-              800: '#115e59',
-              900: '#134e4a',
-            },
-            emerald: {
-              500: '#10b981',
-              600: '#059669',
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bersih Care Portal - Office Wellness Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bersih: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#198754',
+                            600: '#0f5132',
+                            700: '#0d5c38',
+                            teal: '#0d9488',
+                            sage: '#e8f5e9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
             }
-          },
-          animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'bounce-subtle': 'bounce 2s infinite',
-          }
         }
-      }
-    }
-  </script>
+    </script>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* Custom styles & animations */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        
+        .breath-ring {
+            transition: all 4s ease-in-out;
+        }
+        
+        .breath-inhale {
+            transform: scale(1.4);
+            background-color: rgba(25, 135, 84, 0.25);
+            border-color: #198754;
+        }
+        
+        .breath-hold {
+            transform: scale(1.4);
+            background-color: rgba(13, 148, 136, 0.35);
+            border-color: #0d9488;
+        }
+        
+        .breath-exhale {
+            transform: scale(0.9);
+            background-color: rgba(232, 245, 233, 0.5);
+            border-color: #a7f3d0;
+        }
 
-  <style>
-    /* Custom CSS animations for Breathing Guide */
-    @keyframes breatheBox {
-      0%, 100% { transform: scale(1); }
-      25% { transform: scale(1.35); }
-      50% { transform: scale(1.35); }
-      75% { transform: scale(1); }
-    }
-    @keyframes breathe478 {
-      0% { transform: scale(1); }
-      21% { transform: scale(1.4); } /* 4s in */
-      58% { transform: scale(1.4); } /* 7s hold */
-      100% { transform: scale(1); }  /* 8s out */
-    }
-    @keyframes breathe21 {
-      0%, 100% { transform: scale(1); }
-      66% { transform: scale(1.3); }
-    }
+        .sticky-note {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .sticky-note:hover {
+            transform: translateY(-4px) rotate(0.5deg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
 
-    .anim-breathe-box { animation: breatheBox 16s ease-in-out infinite; }
-    .anim-breathe-478 { animation: breathe478 19s ease-in-out infinite; }
-    .anim-breathe-21 { animation: breathe21 3s ease-in-out infinite; }
-
-    /* Custom Glassmorphism Card Style */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(226, 232, 240, 0.8);
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-  </style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body class="h-full flex flex-col font-sans text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
+<body class="h-full text-slate-800 flex flex-col font-sans bg-slate-50 antialiased selection:bg-bersih-100 selection:text-bersih-600">
 
-  <div id="broadcastBanner" class="hidden bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-600 text-white px-4 py-2.5 shadow-md flex items-center justify-between transition-all duration-300 z-50">
-    <div class="flex items-center gap-3 max-w-7xl mx-auto w-full">
-      <span class="flex h-3 w-3 relative">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-400"></span>
-      </span>
-      <i class="fa-solid fa-bullhorn text-amber-300 text-sm"></i>
-      <span id="broadcastText" class="text-sm font-medium tracking-wide"></span>
-    </div>
-    <button onclick="dismissBroadcast()" class="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10 text-xs">
-      <i class="fa-solid fa-xmark text-base"></i>
-    </button>
-  </div>
-
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Brand Logo & October Flag -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 flex items-center justify-center text-white shadow-md shadow-teal-600/20">
-          <i class="fa-solid fa-hand-holding-heart text-xl"></i>
+    <!-- Supabase Setup & Cloud Sync Banner -->
+    <div id="sync-banner" class="bg-bersih-600 text-white text-xs py-2 px-4 flex flex-wrap justify-between items-center z-50 border-b border-bersih-700">
+        <div class="flex items-center space-x-2">
+            <span id="sync-status-indicator" class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block animate-pulse"></span>
+            <span id="sync-status-text" class="font-medium">Connecting to Bersih Supabase Cloud Database...</span>
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="font-bold text-lg leading-none text-slate-900 tracking-tight">Bersih Care Portal</h1>
-            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-800">
-              Oct Mental Health Month 🌿
-            </span>
-          </div>
-          <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">Workplace Wellness & Resilience Hub</p>
-        </div>
-      </div>
-
-      <!-- Navigation Tabs (Desktop) -->
-      <nav id="desktopNav" class="hidden lg:flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-sm font-medium text-slate-600">
-        <button onclick="switchTab('wellness')" id="nav-wellness" class="px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 bg-white text-teal-700 shadow-sm font-semibold">
-          <i class="fa-solid fa-sun text-amber-500"></i> Daily Hub
-        </button>
-        <button onclick="switchTab('gratitude')" id="nav-gratitude" class="px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 hover:text-teal-700">
-          <i class="fa-solid fa-comments text-teal-500"></i> Pulse & Gratitude
-        </button>
-        <button onclick="switchTab('microbreak')" id="nav-microbreak" class="px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 hover:text-teal-700">
-          <i class="fa-solid fa-wind text-cyan-500"></i> Micro-Break
-        </button>
-        <button onclick="switchTab('bingo')" id="nav-bingo" class="px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 hover:text-teal-700">
-          <i class="fa-solid fa-trophy text-amber-500"></i> Bingo & Points
-        </button>
-        <button onclick="switchTab('burnout')" id="nav-burnout" class="px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 hover:text-teal-700">
-          <i class="fa-solid fa-chart-line text-emerald-500"></i> Self-Check
-        </button>
-      </nav>
-
-      <!-- User Info / Auth Controls -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <!-- SQL Script Launcher -->
-        <button onclick="openSqlModal()" title="View Supabase SQL Script" class="p-2 text-slate-500 hover:text-teal-700 hover:bg-slate-100 rounded-lg text-sm flex items-center gap-1.5 transition">
-          <i class="fa-solid fa-database text-teal-600"></i>
-          <span class="hidden md:inline text-xs font-mono font-medium bg-slate-200 px-1.5 py-0.5 rounded">SQL Setup</span>
-        </button>
-
-        <!-- Admin Access Button -->
-        <button onclick="openAdminModal()" title="Admin Control Panel" class="p-2 text-slate-500 hover:text-teal-700 hover:bg-slate-100 rounded-lg text-sm transition">
-          <i class="fa-solid fa-user-shield text-slate-600"></i>
-        </button>
-
-        <!-- User Profile Pill or Auth Trigger -->
-        <div id="userProfileArea">
-          <!-- Dynamically populated JS -->
-        </div>
-      </div>
-
-    </div>
-  </header>
-
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 lg:pb-8">
-
-    <!-- Personalized Dashboard Greeting Bar -->
-    <div id="dashboardGreeting" class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-teal-800 via-teal-700 to-emerald-700 text-white shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 id="greetingTitle" class="text-xl sm:text-2xl font-bold tracking-tight">Welcome back! ✨</h2>
-        <p id="greetingSubtitle" class="text-teal-100 text-xs sm:text-sm mt-0.5">Let's nurture peace and positivity in our workplace today.</p>
-      </div>
-      <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl border border-white/20 self-stretch sm:self-auto justify-between sm:justify-start">
-        <div class="text-left">
-          <div class="text-xs text-teal-200 font-medium">Department</div>
-          <div id="userDeptBadge" class="text-sm font-semibold text-white">Sales & Marketing</div>
-        </div>
-        <div class="h-8 w-px bg-white/20"></div>
-        <div class="text-right sm:text-left">
-          <div class="text-xs text-teal-200 font-medium">October Points</div>
-          <div id="userPointsBadge" class="text-sm font-bold text-amber-300 flex items-center gap-1">
-            <i class="fa-solid fa-star text-xs"></i> <span>0</span> pts
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 1: DAILY WELLNESS HUB -->
-    <section id="tab-wellness" class="tab-content space-y-6">
-      
-      <!-- Quote Generator Card -->
-      <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
-        <div class="absolute -right-6 -bottom-6 text-teal-500/10 text-9xl pointer-events-none select-none">
-          <i class="fa-solid fa-quote-right"></i>
-        </div>
-        
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
-          <div class="flex items-center gap-2">
-            <span class="px-3 py-1 bg-teal-100 text-teal-800 text-xs font-bold rounded-full uppercase tracking-wider">
-              Day <span id="quoteDayNum">1</span> of 100 • October Reflection
-            </span>
-          </div>
-
-          <!-- Filter Pills -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-medium text-slate-600">
-            <button onclick="filterQuotes('all')" id="qfilter-all" class="px-3 py-1 rounded-lg bg-white text-teal-700 shadow-sm font-bold">All Quotes</button>
-            <button onclick="filterQuotes('general')" id="qfilter-general" class="px-3 py-1 rounded-lg hover:text-teal-700">General</button>
-            <button onclick="filterQuotes('islamic')" id="qfilter-islamic" class="px-3 py-1 rounded-lg hover:text-teal-700">Islamic Reflections</button>
-          </div>
-        </div>
-
-        <blockquote class="my-4">
-          <p id="quoteText" class="text-lg sm:text-2xl font-serif font-medium text-slate-800 leading-relaxed italic">
-            "Loading today's motivational message..."
-          </p>
-        </blockquote>
-
-        <div class="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
-          <div class="flex items-center gap-2">
-            <span id="quoteBadge" class="text-xs px-2.5 py-1 rounded-md bg-teal-50 text-teal-700 font-medium">Workplace Mindfulness</span>
-          </div>
-          <button onclick="rotateRandomQuote()" class="text-xs text-teal-700 hover:text-teal-900 font-semibold flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-teal-50 transition">
-            <i class="fa-solid fa-shuffle"></i> Discover Another Quote
-          </button>
-        </div>
-      </div>
-
-      <!-- Daily Mood Meter & Team Pulse Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Interactive Mood Selection -->
-        <div class="lg:col-span-7 glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                <i class="fa-solid fa-battery-half text-teal-600"></i> Daily Mood & Energy Meter
-              </h3>
-              <span class="text-xs text-slate-500">1-Click Quick Check-in</span>
-            </div>
-            <p class="text-xs text-slate-600 mb-6">How is your energy feeling right now? Tap to record your status today.</p>
-
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <button onclick="recordMood('Recharged', '⚡')" class="mood-btn group p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition text-center focus:ring-2 focus:ring-emerald-500/20">
-                <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">⚡</div>
-                <div class="font-bold text-sm text-slate-800">Recharged</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Energized & Focused</div>
-              </button>
-
-              <button onclick="recordMood('Steady', '🌿')" class="mood-btn group p-4 rounded-xl border border-slate-200 hover:border-teal-500 hover:bg-teal-50/50 transition text-center focus:ring-2 focus:ring-teal-500/20">
-                <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">🌿</div>
-                <div class="font-bold text-sm text-slate-800">Steady</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Calm & Balanced</div>
-              </button>
-
-              <button onclick="recordMood('Running Low', '🔋')" class="mood-btn group p-4 rounded-xl border border-slate-200 hover:border-amber-500 hover:bg-amber-50/50 transition text-center focus:ring-2 focus:ring-amber-500/20">
-                <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">🔋</div>
-                <div class="font-bold text-sm text-slate-800">Running Low</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Need a Micro-Break</div>
-              </button>
-
-              <button onclick="recordMood('Overwhelmed', '🌊')" class="mood-btn group p-4 rounded-xl border border-slate-200 hover:border-rose-500 hover:bg-rose-50/50 transition text-center focus:ring-2 focus:ring-rose-500/20">
-                <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">🌊</div>
-                <div class="font-bold text-sm text-slate-800">Overwhelmed</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">High Stress / Tired</div>
-              </button>
-            </div>
-          </div>
-
-          <div id="selectedMoodBanner" class="mt-6 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-info text-teal-600"></i>
-              <span id="selectedMoodStatus">You haven't logged your energy today yet.</span>
-            </span>
-          </div>
-        </div>
-
-        <!-- Team Aggregate Energy Pulse Breakdown -->
-        <div class="lg:col-span-5 glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                <i class="fa-solid fa-chart-pie text-teal-600"></i> Bersih Team Energy Pulse
-              </h3>
-              <span class="text-xs text-slate-500">Live Aggregate</span>
-            </div>
-
-            <!-- Pulse Bars -->
-            <div class="space-y-3.5">
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">⚡ Recharged</span>
-                  <span id="pulse-recharged-pct" class="text-emerald-600">35%</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div id="pulse-recharged-bar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 35%"></div>
-                </div>
-              </div>
-
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">🌿 Steady</span>
-                  <span id="pulse-steady-pct" class="text-teal-600">45%</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div id="pulse-steady-bar" class="bg-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 45%"></div>
-                </div>
-              </div>
-
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">🔋 Running Low</span>
-                  <span id="pulse-low-pct" class="text-amber-600">15%</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div id="pulse-low-bar" class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 15%"></div>
-                </div>
-              </div>
-
-              <div>
-                <div class="flex justify-between text-xs font-semibold mb-1">
-                  <span class="text-slate-700">🌊 Overwhelmed</span>
-                  <span id="pulse-overwhelmed-pct" class="text-rose-600">5%</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div id="pulse-overwhelmed-bar" class="bg-rose-500 h-2.5 rounded-full transition-all duration-500" style="width: 5%"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 flex justify-between items-center">
-            <span>Total responses today: <strong id="totalMoodCount">0</strong></span>
-            <span class="text-teal-700 font-medium">Refreshed real-time</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- TAB 2: DAILY PULSE & GRATITUDE WALL -->
-    <section id="tab-gratitude" class="tab-content hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Post Submission Form -->
-        <div class="lg:col-span-4 glass-card rounded-2xl p-6 shadow-sm h-fit">
-          <h3 class="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
-            <i class="fa-solid fa-pen-to-square text-teal-600"></i> Share Appreciation
-          </h3>
-          <p class="text-xs text-slate-600 mb-4">Shout out a helpful colleague or post a daily moment of gratitude.</p>
-
-          <form onsubmit="submitGratitudePost(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Your Message</label>
-              <textarea id="gratitudeText" rows="4" maxlength="280" required
-                placeholder="e.g. Thanks to Sarah from HR for facilitating today's mental wellness workshop! 🌟"
-                class="w-full text-sm rounded-xl border-slate-200 focus:border-teal-500 focus:ring-teal-500 p-3 bg-slate-50/50 border transition"></textarea>
-              <div class="flex justify-end text-[11px] text-slate-400 mt-1">
-                <span id="charCounter">0</span>/280
-              </div>
-            </div>
-
-            <button type="submit" class="w-full py-2.5 bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-paper-plane"></i> Post Gratitude
+        <div class="flex items-center space-x-3 mt-1 sm:mt-0">
+            <button onclick="openSqlModal()" class="bg-white/10 hover:bg-white/20 px-2.5 py-0.5 rounded text-white text-xs font-medium transition flex items-center gap-1">
+                <i class="fa-solid fa-database"></i> SQL Schema
             </button>
-          </form>
+            <span class="text-white/60">|</span>
+            <span class="text-white/80 font-mono text-[11px]">URL: hihb...supabase.co</span>
         </div>
+    </div>
 
-        <!-- Gratitude Feed Grid -->
-        <div class="lg:col-span-8 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-              <i class="fa-solid fa-heart text-rose-500"></i> Workplace Appreciation Feed
-            </h3>
-            <span class="text-xs text-slate-500">Spread Kindness Daily</span>
-          </div>
-
-          <div id="gratitudeFeed" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Dynamically Populated JS -->
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- TAB 3: MICRO-BREAK & BREATHING COMPANION -->
-    <section id="tab-microbreak" class="tab-content hidden space-y-6">
-      
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- MAIN APP CONTAINER (Hidden until logged in) -->
+    <div id="app-container" class="hidden flex-1 flex flex-col min-h-screen">
         
-        <!-- Interactive Visual Breathing Guide -->
-        <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col items-center text-center justify-between">
-          <div class="w-full flex items-center justify-between mb-4">
-            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-              <i class="fa-solid fa-lungs text-teal-600"></i> Visual Breathing Guide
-            </h3>
-            <!-- Breathing Technique Selector -->
-            <select id="breathTechnique" onchange="changeBreathingTechnique()" class="text-xs rounded-lg border-slate-200 bg-slate-50 p-1.5 font-medium text-slate-700">
-              <option value="box">Box Breathing (4-4-4-4)</option>
-              <option value="478">4-7-8 Deep Relax Technique</option>
-              <option value="21">2-1 Deep Calming Reset</option>
-            </select>
-          </div>
+        <!-- HEADER / NAVIGATION -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    
+                    <!-- BRANDING HEADER -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-bersih-600 to-bersih-teal flex items-center justify-center text-white font-bold text-xl shadow-md">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg text-slate-900 tracking-tight flex items-center gap-2">
+                                Bersih Care Portal
+                                <span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded-full font-semibold">October Mental Health</span>
+                            </h1>
+                            <p class="text-xs text-slate-500 font-medium">Bersih Solutions Workplace Wellness Hub</p>
+                        </div>
+                    </div>
 
-          <!-- Animated Breathing Canvas / Circle Wrapper -->
-          <div class="my-8 relative flex items-center justify-center w-56 h-56 sm:w-64 sm:h-64">
-            <!-- Outer Glow Circle -->
-            <div id="breathCircleOuter" class="absolute inset-0 rounded-full bg-teal-100/60 transition-all duration-300"></div>
-            <!-- Animated Circle -->
-            <div id="breathCircleInner" class="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 flex flex-col items-center justify-center text-white shadow-xl shadow-teal-600/30 transition-transform">
-              <span id="breathPhaseText" class="text-lg font-bold tracking-wide">Inhale</span>
-              <span id="breathCounter" class="text-xs text-teal-100 mt-1">Ready</span>
+                    <!-- USER INFO & ACTIONS -->
+                    <div class="flex items-center space-x-3">
+                        <div class="hidden md:flex flex-col text-right">
+                            <span id="nav-user-name" class="text-sm font-semibold text-slate-800">User</span>
+                            <span id="nav-user-dept" class="text-xs text-slate-500">Department</span>
+                        </div>
+                        <button onclick="openAdminModal()" class="p-2 text-slate-600 hover:text-bersih-600 hover:bg-slate-100 rounded-lg transition title='Admin Portal'" title="Admin Backend (PIN: 1234)">
+                            <i class="fa-solid fa-user-shield text-lg"></i>
+                        </button>
+                        <button onclick="handleLogout()" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition" title="Logout">
+                            <i class="fa-solid fa-right-from-bracket text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- NAVIGATION TABS -->
+                <nav class="flex space-x-1 sm:space-x-4 border-t border-slate-100 overflow-x-auto py-2 scrollbar-none" id="main-nav-tabs">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-btn active px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition bg-bersih-50 text-bersih-600">
+                        <i class="fa-solid fa-house mr-1.5"></i> Daily Pulse & Home
+                    </button>
+                    <button onclick="switchTab('gratitude')" id="tab-gratitude" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap text-slate-600 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-heart mr-1.5"></i> Gratitude Wall
+                    </button>
+                    <button onclick="switchTab('microbreak')" id="tab-microbreak" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap text-slate-600 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-spa mr-1.5"></i> Micro-Break & Breathing
+                    </button>
+                    <button onclick="switchTab('bingo')" id="tab-bingo" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap text-slate-600 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-trophy mr-1.5"></i> October Bingo & Leaderboard
+                    </button>
+                    <button onclick="switchTab('burnout')" id="tab-burnout" class="nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap text-slate-600 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-gauge-high mr-1.5"></i> Burnout Self-Check
+                    </button>
+                </nav>
             </div>
-          </div>
+        </header>
 
-          <!-- Controls -->
-          <div class="w-full max-w-xs flex gap-3">
-            <button id="breathStartBtn" onclick="toggleBreathingGuide()" class="flex-1 py-2.5 bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold rounded-xl shadow-md transition">
-              <i class="fa-solid fa-play mr-1"></i> Start Guide
-            </button>
-          </div>
-          <p id="breathDesc" class="text-xs text-slate-500 mt-4 max-w-md">
-            Box Breathing restores mental focus by equalizing inhale, hold, and exhale cycles.
-          </p>
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+            <!-- ASSIGNED TASK NOTIFICATION PROMPT (If any active) -->
+            <div id="assigned-tasks-banner" class="hidden bg-gradient-to-r from-teal-500 to-bersih-600 text-white rounded-2xl p-4 shadow-lg flex items-center justify-between animate-fadeIn">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-white/20 rounded-xl">
+                        <i class="fa-solid fa-bullhorn text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm sm:text-base">New Today's Challenge Assigned by Admin!</h4>
+                        <p id="assigned-task-text" class="text-xs sm:text-sm text-teal-100">Task details here...</p>
+                    </div>
+                </div>
+                <button onclick="markTaskAcknowledged()" class="px-3 py-1.5 bg-white text-bersih-600 font-semibold text-xs rounded-lg hover:bg-teal-50 transition shadow">
+                    I'm On It!
+                </button>
+            </div>
+
+            <!-- VIEW 1: DASHBOARD & DAILY PULSE -->
+            <section id="view-dashboard" class="space-y-6 tab-content">
+                
+                <!-- PERSONALIZED GREETING BANNER -->
+                <div class="bg-gradient-to-br from-bersih-600 via-bersih-700 to-bersih-teal rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
+                    <div class="relative z-10 max-w-3xl">
+                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-medium tracking-wide mb-3">
+                            <i class="fa-regular fa-calendar-check mr-1"></i> October Mental Health Month 2026
+                        </span>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight" id="greeting-title">
+                            Good day, <span id="user-greeting-name">Team Member</span>! 🌿
+                        </h2>
+                        <p class="mt-2 text-sm sm:text-base text-emerald-100 font-light leading-relaxed">
+                            Welcome to your office wellness hub. How is your energy and spirit feeling today?
+                        </p>
+
+                        <!-- DAILY MOOD CHECK-IN METER -->
+                        <div class="mt-6 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-emerald-100 mb-3">
+                                Select Your Today's Energy Level:
+                            </label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                                <button onclick="logMood('Recharged', '⚡ Highly Focused & Energized')" class="mood-btn flex flex-col items-center p-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition text-center group">
+                                    <span class="text-2xl group-hover:scale-125 transition">⚡</span>
+                                    <span class="text-xs font-bold mt-1">Recharged</span>
+                                </button>
+                                <button onclick="logMood('Steady', '🌱 Calm, Balanced & Ready')" class="mood-btn flex flex-col items-center p-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition text-center group">
+                                    <span class="text-2xl group-hover:scale-125 transition">🌱</span>
+                                    <span class="text-xs font-bold mt-1">Steady</span>
+                                </button>
+                                <button onclick="logMood('Running Low', '🔋 Needs a Micro-Break Reset')" class="mood-btn flex flex-col items-center p-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition text-center group">
+                                    <span class="text-2xl group-hover:scale-125 transition">🔋</span>
+                                    <span class="text-xs font-bold mt-1">Running Low</span>
+                                </button>
+                                <button onclick="logMood('Overwhelmed', '🧘 Needs Gentle Self-Care')" class="mood-btn flex flex-col items-center p-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition text-center group">
+                                    <span class="text-2xl group-hover:scale-125 transition">🌊</span>
+                                    <span class="text-xs font-bold mt-1">Overwhelmed</span>
+                                </button>
+                            </div>
+
+                            <!-- DYNAMIC MOOD RESPONSE SUGGESTION -->
+                            <div id="mood-response-box" class="hidden mt-4 p-3 bg-white text-slate-800 rounded-xl text-xs sm:text-sm font-medium shadow-inner flex items-start gap-2.5 animate-fadeIn">
+                                <i class="fa-solid fa-circle-info text-bersih-600 text-lg mt-0.5"></i>
+                                <div>
+                                    <span class="font-bold text-bersih-600" id="mood-response-title">Care Suggestion:</span>
+                                    <p id="mood-response-text" class="text-slate-600 mt-0.5"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- ROTATING DAILY MENTAL HEALTH & ISLAMIC QUOTE CARD -->
+                    <div class="lg:col-span-2 glass-card rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between border border-slate-200">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold text-bersih-600 uppercase tracking-widest bg-bersih-50 px-3 py-1 rounded-full border border-bersih-200">
+                                    <i class="fa-solid fa-quote-left mr-1"></i> Daily Reflection #<span id="quote-day-num">1</span> (100-Day Series)
+                                </span>
+                                <button onclick="getNewQuote()" class="text-xs text-slate-500 hover:text-bersih-600 flex items-center gap-1">
+                                    <i class="fa-solid fa-rotate"></i> Next Quote
+                                </button>
+                            </div>
+                            <blockquote class="text-base sm:text-xl font-medium text-slate-800 italic leading-relaxed" id="daily-quote-text">
+                                "Loading today's inspiring perspective..."
+                            </blockquote>
+                            <p class="mt-4 text-xs sm:text-sm font-bold text-slate-600 text-right" id="daily-quote-author">
+                                — Author
+                            </p>
+                        </div>
+
+                        <!-- ROTATING DAILY MINDFULNESS PROMPT -->
+                        <div class="mt-6 pt-6 border-t border-slate-100">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Today's Office Reflection Prompt</h4>
+                            <p class="text-sm text-slate-700 bg-amber-50/60 border border-amber-200/60 p-3 rounded-xl font-medium" id="daily-mindfulness-prompt">
+                                "What is one small accomplishment or act of kindness you witnessed or performed today?"
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- OFFICE LIVE PULSE WIDGET -->
+                    <div class="glass-card rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-bold text-slate-900 text-base">Office Energy Pulse</h3>
+                                <span class="text-xs text-slate-400 font-medium">Live Aggregate</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mb-4">Current team state recorded today in Bersih Solutions:</p>
+
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium mb-1">
+                                        <span class="text-emerald-700 font-semibold">⚡ Recharged</span>
+                                        <span id="pulse-recharged-pct">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="pulse-recharged-bar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium mb-1">
+                                        <span class="text-teal-700 font-semibold">🌱 Steady</span>
+                                        <span id="pulse-steady-pct">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="pulse-steady-bar" class="bg-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium mb-1">
+                                        <span class="text-amber-700 font-semibold">🔋 Running Low</span>
+                                        <span id="pulse-low-pct">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="pulse-low-bar" class="bg-amber-400 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium mb-1">
+                                        <span class="text-rose-700 font-semibold">🌊 Overwhelmed</span>
+                                        <span id="pulse-overwhelmed-pct">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="pulse-overwhelmed-bar" class="bg-rose-400 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-100 text-center">
+                            <span class="text-xs text-slate-400">Total Check-ins Today: <strong id="total-pulse-count" class="text-slate-700">0</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: GRATITUDE & SHOUT-OUT WALL -->
+            <section id="view-gratitude" class="space-y-6 tab-content hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Shout-Out & Gratitude Board</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Send appreciation to colleagues or drop an encouraging note to brighten up the workspace.</p>
+                    </div>
+                    <button onclick="toggleGratitudeModal(true)" class="px-5 py-2.5 bg-bersih-600 hover:bg-bersih-700 text-white font-semibold rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-plus"></i> Post Gratitude
+                    </button>
+                </div>
+
+                <!-- GRATITUDE STICKY POSTS GRID -->
+                <div id="gratitude-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic Gratitude Cards injected here -->
+                </div>
+            </section>
+
+            <!-- VIEW 3: MICRO-BREAK & BREATHING COMPANION -->
+            <section id="view-microbreak" class="space-y-6 tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- VISUAL ANIMATED BREATHING EXERCISES -->
+                    <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col items-center text-center">
+                        <h3 class="font-bold text-xl text-slate-900 mb-1">Visual Breathing Exercise</h3>
+                        <p class="text-xs text-slate-500 mb-6">Regulate your nervous system with guided desk breathing patterns.</p>
+
+                        <!-- BREATH TECHNIQUE SELECTOR -->
+                        <div class="flex gap-2 mb-8 bg-slate-100 p-1.5 rounded-xl text-xs font-semibold">
+                            <button onclick="setBreathingTechnique('box')" id="btn-breath-box" class="px-3 py-1.5 rounded-lg bg-white text-bersih-600 shadow-sm transition">Box (4-4-4-4)</button>
+                            <button onclick="setBreathingTechnique('478')" id="btn-breath-478" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">4-7-8 Relax</button>
+                            <button onclick="setBreathingTechnique('deep')" id="btn-breath-deep" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">2-1 Deep Calming</button>
+                        </div>
+
+                        <!-- ANIMATED BREATH CIRCLE -->
+                        <div class="relative flex items-center justify-center my-6">
+                            <div id="breath-ring" class="w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-bersih-500 bg-emerald-50 flex flex-col items-center justify-center breath-ring shadow-inner">
+                                <span id="breath-instruction" class="text-base sm:text-lg font-bold text-bersih-600">Ready?</span>
+                                <span id="breath-timer" class="text-2xl font-black text-slate-800 mt-1">4</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 mt-4">
+                            <button id="btn-start-breath" onclick="toggleBreathing()" class="px-6 py-2.5 bg-bersih-600 hover:bg-bersih-700 text-white font-semibold rounded-xl text-sm transition shadow">
+                                Start Breathing
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- DIGITAL ZIKR & TASBEEH COUNTER -->
+                    <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col items-center text-center">
+                        <h3 class="font-bold text-xl text-slate-900 mb-1">Digital Zikr & Tasbeeh</h3>
+                        <p class="text-xs text-slate-500 mb-4">Mindful remembrance for inner peace and spiritual grounding.</p>
+
+                        <!-- PRESET SUPPLICATIONS -->
+                        <select id="tasbeeh-preset" onchange="changeTasbeehPreset()" class="w-full max-w-xs text-xs font-semibold bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 mb-6 focus:outline-none">
+                            <option value="Subhanallah">SubhanAllah (Glory be to Allah)</option>
+                            <option value="Alhamdulillah">Alhamdulillah (Praise be to Allah)</option>
+                            <option value="Allahu Akbar">Allahu Akbar (Allah is the Greatest)</option>
+                            <option value="Astaghfirullah">Astaghfirullah (I seek forgiveness)</option>
+                            <option value="La hawla wa la quwwata illa billah">La hawla wa la quwwata illa billah</option>
+                        </select>
+
+                        <!-- INTERACTIVE TAP BUTTON -->
+                        <button onclick="incrementTasbeeh()" class="w-40 h-40 rounded-full bg-gradient-to-tr from-bersih-600 to-teal-500 text-white font-extrabold shadow-xl hover:scale-105 active:scale-95 transition flex flex-col items-center justify-center border-4 border-white">
+                            <span id="tasbeeh-count" class="text-4xl font-black">0</span>
+                            <span class="text-xs text-emerald-100 mt-1 uppercase font-semibold">TAP TO COUNT</span>
+                        </button>
+
+                        <div class="flex items-center gap-4 mt-6">
+                            <button onclick="resetTasbeeh()" class="px-4 py-1.5 text-xs font-semibold text-slate-500 hover:text-red-600 bg-slate-100 hover:bg-red-50 rounded-lg transition">
+                                <i class="fa-solid fa-rotate-right mr-1"></i> Reset Counter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DESK STRETCH & EYE-RESET & SOUNDSCAPES -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- DESK STRETCH GUIDE -->
+                    <div class="glass-card rounded-3xl p-6 border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-lg text-slate-900 mb-3"><i class="fa-solid fa-child text-bersih-600 mr-2"></i> Quick Desk Reset Guides</h3>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-slate-50 rounded-2xl flex items-center space-x-3">
+                                <div class="p-2.5 bg-emerald-100 text-emerald-800 rounded-xl font-bold text-lg">1</div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-800">20-20-20 Eye Reset</h4>
+                                    <p class="text-xs text-slate-500">Every 20 mins, look at something 20 feet away for 20 seconds to reduce screen strain.</p>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-2xl flex items-center space-x-3">
+                                <div class="p-2.5 bg-teal-100 text-teal-800 rounded-xl font-bold text-lg">2</div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-800">Seated Shoulder Roll & Neck Tilt</h4>
+                                    <p class="text-xs text-slate-500">Roll shoulders back 5 times, tilt ear gently towards shoulder and hold for 15s.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AMBIENT SOUNDSCAPE GENERATOR (Web Audio API) -->
+                    <div class="glass-card rounded-3xl p-6 border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-lg text-slate-900 mb-1"><i class="fa-solid fa-headphones text-bersih-teal mr-2"></i> Focus Soundscapes</h3>
+                        <p class="text-xs text-slate-500 mb-4">Synthesized calm background audio to block office noise.</p>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="toggleAudio('rain')" id="audio-btn-rain" class="p-3 rounded-2xl border border-slate-200 hover:border-bersih-500 flex items-center space-x-3 transition text-left">
+                                <i class="fa-solid fa-cloud-rain text-bersih-teal text-xl"></i>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-800">Gentle Rain</span>
+                                    <span class="text-[10px] text-slate-400" id="audio-state-rain">Off</span>
+                                </div>
+                            </button>
+                            <button onclick="toggleAudio('white')" id="audio-btn-white" class="p-3 rounded-2xl border border-slate-200 hover:border-bersih-500 flex items-center space-x-3 transition text-left">
+                                <i class="fa-solid fa-wind text-slate-400 text-xl"></i>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-800">Soft White Noise</span>
+                                    <span class="text-[10px] text-slate-400" id="audio-state-white">Off</span>
+                                </div>
+                            </button>
+                            <button onclick="toggleAudio('forest')" id="audio-btn-forest" class="p-3 rounded-2xl border border-slate-200 hover:border-bersih-500 flex items-center space-x-3 transition text-left">
+                                <i class="fa-solid fa-tree text-emerald-600 text-xl"></i>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-800">Forest Ambient</span>
+                                    <span class="text-[10px] text-slate-400" id="audio-state-forest">Off</span>
+                                </div>
+                            </button>
+                            <button onclick="toggleAudio('waves')" id="audio-btn-waves" class="p-3 rounded-2xl border border-slate-200 hover:border-bersih-500 flex items-center space-x-3 transition text-left">
+                                <i class="fa-solid fa-water text-blue-500 text-xl"></i>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-800">Calm Ocean Waves</span>
+                                    <span class="text-[10px] text-slate-400" id="audio-state-waves">Off</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: OCTOBER MENTAL HEALTH BINGO & LEADERBOARD -->
+            <section id="view-bingo" class="space-y-6 tab-content hidden">
+                
+                <!-- WEEKLY FOCUS BANNER -->
+                <div class="bg-gradient-to-r from-bersih-600 to-teal-600 text-white p-6 rounded-3xl shadow-md">
+                    <h2 class="text-xl sm:text-2xl font-bold">October Mental Health Bingo Challenge</h2>
+                    <p class="text-xs sm:text-sm text-emerald-100 mt-1">Complete daily wellness habits to earn points and level up on the office leaderboard!</p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4 text-center text-xs font-semibold">
+                        <div class="bg-white/10 p-2 rounded-xl border border-white/20">Week 1: Mindfulness</div>
+                        <div class="bg-white/10 p-2 rounded-xl border border-white/20">Week 2: Physical Reset</div>
+                        <div class="bg-white/10 p-2 rounded-xl border border-white/20">Week 3: Connection</div>
+                        <div class="bg-white/10 p-2 rounded-xl border border-white/20">Week 4: Gratitude</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- BINGO CARD GRID (4x4) -->
+                    <div class="lg:col-span-2 glass-card rounded-3xl p-6 border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg text-slate-900">Your October Bingo Card</h3>
+                            <span class="text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full">
+                                Score: <span id="user-bingo-score">0</span> pts
+                            </span>
+                        </div>
+
+                        <div id="bingo-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- REAL-TIME LEADERBOARD -->
+                    <div class="glass-card rounded-3xl p-6 border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-trophy text-amber-500 mr-2"></i> Live Leaderboard</h3>
+                            <button onclick="loadBingoLeaderboard()" class="text-xs text-slate-400 hover:text-bersih-600">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4">Top participants actively building workplace wellness habits:</p>
+
+                        <div id="leaderboard-list" class="space-y-3">
+                            <!-- Leaderboard list items injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 5: WORKPLACE WORK-LIFE & BURNOUT SELF-CHECK TOOL -->
+            <section id="view-burnout" class="space-y-6 tab-content hidden">
+                <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm max-w-3xl mx-auto">
+                    <div class="text-center max-w-xl mx-auto mb-8">
+                        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold uppercase tracking-wider">Self-Assessment</span>
+                        <h2 class="text-2xl font-bold text-slate-900 mt-2">Work-Life & Burnout Self-Check</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Gauge your recent stress levels privately. Scores are aggregated anonymously for team health statistics.</p>
+                    </div>
+
+                    <form id="burnout-form" onsubmit="calculateBurnoutScore(event)" class="space-y-6">
+                        
+                        <!-- SLIDER 1 -->
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm font-semibold text-slate-800 mb-2">
+                                <label>1. Workload Balance & Overtime Frequency</label>
+                                <span id="val-q1" class="text-bersih-600 font-bold">3 / 5</span>
+                            </div>
+                            <input type="range" min="1" max="5" value="3" class="w-full accent-bersih-600 cursor-pointer" oninput="document.getElementById('val-q1').innerText = this.value + ' / 5'">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <span>1 = Very Manageable</span>
+                                <span>5 = Extremely Overwhelming</span>
+                            </div>
+                        </div>
+
+                        <!-- SLIDER 2 -->
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm font-semibold text-slate-800 mb-2">
+                                <label>2. Digital & Screen Fatigue</label>
+                                <span id="val-q2" class="text-bersih-600 font-bold">3 / 5</span>
+                            </div>
+                            <input type="range" min="1" max="5" value="3" class="w-full accent-bersih-600 cursor-pointer" oninput="document.getElementById('val-q2').innerText = this.value + ' / 5'">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <span>1 = Fresh & Clear</span>
+                                <span>5 = Severe Eye/Brain Drain</span>
+                            </div>
+                        </div>
+
+                        <!-- SLIDER 3 -->
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm font-semibold text-slate-800 mb-2">
+                                <label>3. Rest Quality & Sleep Restoration</label>
+                                <span id="val-q3" class="text-bersih-600 font-bold">3 / 5</span>
+                            </div>
+                            <input type="range" min="1" max="5" value="3" class="w-full accent-bersih-600 cursor-pointer" oninput="document.getElementById('val-q3').innerText = this.value + ' / 5'">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <span>1 = Deeply Rested</span>
+                                <span>5 = Exhausted / Poor Sleep</span>
+                            </div>
+                        </div>
+
+                        <!-- SLIDER 4 -->
+                        <div>
+                            <div class="flex justify-between text-xs sm:text-sm font-semibold text-slate-800 mb-2">
+                                <label>4. Ability to Disconnect After Work Hours</label>
+                                <span id="val-q4" class="text-bersih-600 font-bold">3 / 5</span>
+                            </div>
+                            <input type="range" min="1" max="5" value="3" class="w-full accent-bersih-600 cursor-pointer" oninput="document.getElementById('val-q4').innerText = this.value + ' / 5'">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <span>1 = Easy Boundary Setting</span>
+                                <span>5 = Constantly Thinking of Work</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-bersih-600 hover:bg-bersih-700 text-white font-bold rounded-xl shadow-md transition">
+                            Calculate My Score & Guidance
+                        </button>
+                    </form>
+
+                    <!-- ACTIONABLE FEEDBACK RESULT BOX -->
+                    <div id="burnout-result-box" class="hidden mt-8 p-6 rounded-2xl bg-slate-50 border border-slate-200 animate-fadeIn">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <span id="burnout-badge" class="px-3 py-1 rounded-full text-xs font-bold text-white bg-emerald-600">Low Risk</span>
+                            <h4 class="font-bold text-slate-900 text-lg">Your Assessment Summary</h4>
+                        </div>
+                        <p id="burnout-advice-text" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Guidance text will appear here based on your score.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- AUTH OVERLAY SCREEN (Shown when user is logged out) -->
+    <div id="auth-overlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-100 relative">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-bersih-600 to-bersih-teal mx-auto flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900">Bersih Care Portal</h2>
+                <p class="text-xs text-slate-500 mt-1">Sign in to access your office wellness hub</p>
+            </div>
+
+            <!-- AUTH TAB TOGGLE -->
+            <div class="flex bg-slate-100 p-1 rounded-xl mb-6">
+                <button onclick="toggleAuthMode('login')" id="auth-tab-login" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white text-bersih-600 shadow-sm transition">
+                    Sign In
+                </button>
+                <button onclick="toggleAuthMode('signup')" id="auth-tab-signup" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition">
+                    Register Account
+                </button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+                    <input type="email" id="login-email" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-bersih-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="login-password" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-bersih-500">
+                </div>
+                <button type="submit" class="w-full py-3 bg-bersih-600 hover:bg-bersih-700 text-white font-bold rounded-xl text-sm transition shadow-md">
+                    Sign In to Portal
+                </button>
+            </form>
+
+            <!-- SIGNUP FORM (Hidden by default) -->
+            <form id="form-signup" onsubmit="handleSignup(event)" class="space-y-3 hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+                    <input type="text" id="signup-name" required placeholder="e.g. Sarah Ahmad" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-bersih-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Department</label>
+                    <select id="signup-dept" required class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-bersih-500 bg-white">
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Finance & Accounting">Finance & Accounting</option>
+                        <option value="Operations & Logistics">Operations & Logistics</option>
+                        <option value="Sales & Marketing">Sales & Marketing</option>
+                        <option value="Executive / Management">Executive / Management</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+                    <input type="email" id="signup-email" required placeholder="name@company.com" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-bersih-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="signup-password" required minlength="6" placeholder="Min. 6 characters" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-bersih-500">
+                </div>
+                <button type="submit" class="w-full py-3 bg-bersih-600 hover:bg-bersih-700 text-white font-bold rounded-xl text-sm transition shadow-md">
+                    Create Account
+                </button>
+            </form>
         </div>
+    </div>
 
-        <!-- Digital Tasbeeh / Zikr Counter -->
-        <div class="lg:col-span-5 glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                <i class="fa-solid fa-fingerprint text-teal-600"></i> Digital Tasbeeh & Mindfulness Counter
-              </h3>
-              <span class="text-xs text-teal-700 bg-teal-50 font-bold px-2 py-0.5 rounded">Mindful Pause</span>
-            </div>
-            <p class="text-xs text-slate-600 mb-6">Use this tactile counter for Zikr, positive affirmations, or deep calming breaths.</p>
-
-            <div class="text-center py-4 bg-slate-50 rounded-2xl border border-slate-100 mb-6">
-              <div id="tasbeehDisplay" class="text-5xl font-mono font-bold text-teal-800 tracking-wider">0</div>
-              <div class="text-xs text-slate-500 mt-1">Target: <span id="tasbeehTarget">33</span></div>
-            </div>
-
-            <div class="flex gap-3">
-              <button onclick="incrementTasbeeh()" class="flex-1 py-4 bg-gradient-to-r from-teal-700 to-emerald-600 hover:from-teal-800 hover:to-emerald-700 text-white text-lg font-bold rounded-2xl shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-plus-circle"></i> Count +1
-              </button>
-              <button onclick="resetTasbeeh()" class="p-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl transition" title="Reset Counter">
-                <i class="fa-solid fa-rotate-right"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="mt-4 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
-            <em>"SubhanAllah / Peace in every breath"</em>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Audio Soundscapes & Desk Timers -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Web Audio Synthesizer Soundscapes -->
-        <div class="lg:col-span-7 glass-card rounded-2xl p-6 shadow-sm">
-          <h3 class="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
-            <i class="fa-solid fa-headphones text-teal-600"></i> Ambient Audio Soundscapes
-          </h3>
-          <p class="text-xs text-slate-600 mb-6">Synthesized real-time focus soundscapes using Web Audio API.</p>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <!-- ADMIN BACKEND MODAL (PIN Protected: 1234) -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col border border-slate-100 overflow-hidden">
             
-            <!-- Rain -->
-            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
-              <div class="flex items-center justify-between mb-3">
-                <span class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-cloud-rain text-cyan-600"></i> Gentle Rain</span>
-                <button onclick="toggleSoundscape('rain')" id="btn-sound-rain" class="px-3 py-1 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs hover:bg-teal-600 hover:text-white transition">Play</button>
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Volume</label>
-                <input type="range" id="vol-rain" min="0" max="1" step="0.05" value="0.5" oninput="updateSoundVolume('rain')" class="w-full accent-teal-600">
-              </div>
+            <!-- ADMIN HEADER -->
+            <div class="bg-slate-900 text-white p-5 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-bersih-600 rounded-xl text-white">
+                        <i class="fa-solid fa-user-shield text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Bersih Admin Backend Portal</h3>
+                        <p class="text-xs text-slate-400">System Management & Employee Wellness Insights</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
 
-            <!-- Waves -->
-            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
-              <div class="flex items-center justify-between mb-3">
-                <span class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-water text-teal-600"></i> Ocean Waves</span>
-                <button onclick="toggleSoundscape('waves')" id="btn-sound-waves" class="px-3 py-1 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs hover:bg-teal-600 hover:text-white transition">Play</button>
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Volume</label>
-                <input type="range" id="vol-waves" min="0" max="1" step="0.05" value="0.5" oninput="updateSoundVolume('waves')" class="w-full accent-teal-600">
-              </div>
+            <!-- PIN VERIFICATION SCREEN (If not unlocked) -->
+            <div id="admin-pin-screen" class="p-8 text-center my-auto">
+                <i class="fa-solid fa-lock text-4xl text-slate-300 mb-4"></i>
+                <h4 class="text-lg font-bold text-slate-800">Admin Authentication Required</h4>
+                <p class="text-xs text-slate-500 mb-6">Enter PIN Code to access employee statistics and management tools.</p>
+                
+                <div class="max-w-xs mx-auto space-y-3">
+                    <input type="password" id="admin-pin-input" placeholder="Enter PIN (Default: 1234)" maxlength="6" class="w-full text-center tracking-widest text-lg font-mono px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-bersih-600">
+                    <button onclick="verifyAdminPin()" class="w-full py-2.5 bg-bersih-600 text-white font-bold rounded-xl text-sm hover:bg-bersih-700 transition">
+                        Unlock Admin Access
+                    </button>
+                </div>
             </div>
 
-            <!-- White Noise -->
-            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between">
-              <div class="flex items-center justify-between mb-3">
-                <span class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-wind text-slate-500"></i> White Noise</span>
-                <button onclick="toggleSoundscape('noise')" id="btn-sound-noise" class="px-3 py-1 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs hover:bg-teal-600 hover:text-white transition">Play</button>
-              </div>
-              <div>
-                <label class="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Volume</label>
-                <input type="range" id="vol-noise" min="0" max="1" step="0.05" value="0.5" oninput="updateSoundVolume('noise')" class="w-full accent-teal-600">
-              </div>
+            <!-- ADMIN DASHBOARD CONTENT (Unlocked) -->
+            <div id="admin-content-screen" class="hidden flex-1 overflow-y-auto p-6 space-y-6">
+                
+                <!-- ADMIN ACTION CONTROLS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- RESET BINGO BUTTON -->
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-xs uppercase text-amber-900">October Bingo Reset</h4>
+                            <p class="text-xs text-amber-700 mt-1">Clear all completed tiles and restart leaderboard fresh.</p>
+                        </div>
+                        <button onclick="adminResetBingo()" class="mt-3 px-3 py-1.5 bg-amber-600 text-white text-xs font-bold rounded-lg hover:bg-amber-700 transition">
+                            Reset October Bingo
+                        </button>
+                    </div>
+
+                    <!-- ASSIGN CUSTOM TASK -->
+                    <div class="p-4 bg-teal-50 border border-teal-200 rounded-2xl md:col-span-2">
+                        <h4 class="font-bold text-xs uppercase text-teal-900 mb-2">Assign Office Daily Challenge / Task</h4>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="admin-task-desc" placeholder="e.g. Join 3PM Office Stretch in Lobby!" class="flex-1 text-xs px-3 py-2 rounded-lg border border-teal-200 focus:outline-none">
+                            <button onclick="adminAssignTask()" class="px-4 py-2 bg-teal-600 text-white text-xs font-bold rounded-lg hover:bg-teal-700 transition whitespace-nowrap">
+                                Dispatch Challenge
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USER MANAGEMENT LIST -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    <h4 class="font-bold text-sm text-slate-800 mb-3"><i class="fa-solid fa-users mr-1.5"></i> Registered Staff Users</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-200/60 text-slate-700 font-bold">
+                                <tr>
+                                    <th class="p-2.5 rounded-l-lg">Name</th>
+                                    <th class="p-2.5">Department</th>
+                                    <th class="p-2.5">Email</th>
+                                    <th class="p-2.5 text-right rounded-r-lg">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-table" class="divide-y divide-slate-200">
+                                <!-- Injected dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BURNOUT & WELLNESS STATS -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    <h4 class="font-bold text-sm text-slate-800 mb-2"><i class="fa-solid fa-chart-line mr-1.5"></i> Work-Life & Burnout Analytics</h4>
+                    <p id="admin-burnout-summary" class="text-xs text-slate-600">Loading aggregate stats...</p>
+                </div>
             </div>
-
-          </div>
         </div>
+    </div>
 
-        <!-- Desk Stretch & Eye Reset Timers -->
-        <div class="lg:col-span-5 glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <h3 class="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
-              <i class="fa-solid fa-eye text-teal-600"></i> 20-20-20 Eye & Stretch Reset
-            </h3>
-            <p class="text-xs text-slate-600 mb-4">Every 20 mins, look at something 20 feet away for 20 seconds.</p>
-
-            <div class="p-4 rounded-xl bg-teal-50/50 border border-teal-100 flex items-center justify-between mb-4">
-              <div>
-                <div class="text-xs font-bold text-teal-900">Eye Rest Timer</div>
-                <div id="eyeTimerDisplay" class="text-2xl font-mono font-bold text-teal-700">20:00</div>
-              </div>
-              <button id="eyeTimerBtn" onclick="toggleEyeTimer()" class="px-4 py-2 bg-teal-700 text-white rounded-lg text-xs font-semibold hover:bg-teal-800 transition">
-                Start Timer
-              </button>
+    <!-- POST GRATITUDE MODAL -->
+    <div id="gratitude-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <h3 class="font-bold text-lg text-slate-900">Post Gratitude Note</h3>
+            <textarea id="gratitude-text" rows="3" placeholder="Express appreciation or shout-out a team member..." class="w-full p-3 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-bersih-500"></textarea>
+            
+            <div class="flex items-center justify-between">
+                <label class="flex items-center space-x-2 text-xs font-medium text-slate-600 cursor-pointer">
+                    <input type="checkbox" id="gratitude-anon" class="rounded text-bersih-600">
+                    <span>Post Anonymously</span>
+                </label>
+                <div class="flex space-x-2">
+                    <button onclick="toggleGratitudeModal(false)" class="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800">Cancel</button>
+                    <button onclick="submitGratitudePost()" class="px-5 py-2 bg-bersih-600 text-white font-bold text-xs rounded-xl hover:bg-bersih-700 shadow">Post Note</button>
+                </div>
             </div>
-          </div>
-
-          <button onclick="showQuickStretchModal()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-child-reaching text-teal-600"></i> View 2-Min Desk Stretch Guide
-          </button>
         </div>
+    </div>
 
-      </div>
-
-    </section>
-
-    <!-- TAB 4: MENTAL HEALTH BINGO & LEADERBOARD -->
-    <section id="tab-bingo" class="tab-content hidden space-y-6">
-      
-      <!-- Week Tabs Bar -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass-card p-4 rounded-2xl">
-        <div>
-          <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-border-all text-amber-500"></i> October Mental Health Bingo
-          </h3>
-          <p class="text-xs text-slate-500">Complete daily wellness tiles to earn points and climb the team leaderboard!</p>
-        </div>
-
-        <!-- Week Filters -->
-        <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-medium text-slate-600 self-stretch sm:self-auto justify-between">
-          <button onclick="switchBingoWeek(1)" id="bingoweek-1" class="px-3 py-1.5 rounded-lg bg-white text-teal-700 shadow-sm font-bold">Week 1</button>
-          <button onclick="switchBingoWeek(2)" id="bingoweek-2" class="px-3 py-1.5 rounded-lg hover:text-teal-700">Week 2</button>
-          <button onclick="switchBingoWeek(3)" id="bingoweek-3" class="px-3 py-1.5 rounded-lg hover:text-teal-700">Week 3</button>
-          <button onclick="switchBingoWeek(4)" id="bingoweek-4" class="px-3 py-1.5 rounded-lg hover:text-teal-700">Week 4</button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Bingo Grid Cards -->
-        <div class="lg:col-span-8">
-          <div id="bingoGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Populated JS -->
-          </div>
-        </div>
-
-        <!-- Live Leaderboard -->
-        <div class="lg:col-span-4 glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between h-fit">
-          <div>
+    <!-- SQL DATABASE SCHEMA MODAL -->
+    <div id="sql-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 text-slate-100 rounded-3xl p-6 max-w-3xl w-full shadow-2xl flex flex-col max-h-[85vh]">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                <i class="fa-solid fa-ranking-star text-amber-500"></i> October Champions
-              </h3>
-              <span class="text-xs text-slate-500">Top Members</span>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-terminal text-emerald-400 text-lg"></i>
+                    <h3 class="font-bold text-base">Supabase PostgreSQL Schema Setup Script</h3>
+                </div>
+                <button onclick="closeSqlModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
+            <p class="text-xs text-slate-400 mb-3">
+                Copy and run this SQL script in your <a href="https://supabase.com/dashboard/project/hihbmsqeglelqjqrezuo/sql" target="_blank" class="text-emerald-400 underline">Supabase SQL Editor</a> to generate all required tables and permissions:
+            </p>
 
-            <div id="leaderboardList" class="space-y-3">
-              <!-- Dynamically populated JS -->
-            </div>
-          </div>
-
-          <div class="mt-6 pt-4 border-t border-slate-100 text-center">
-            <p class="text-xs text-slate-500">Points are updated live with every tile unlocked!</p>
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- TAB 5: WORKPLACE BURNOUT SELF-CHECK -->
-    <section id="tab-burnout" class="tab-content hidden space-y-6">
-      
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Slider Assessment Form -->
-        <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 shadow-sm">
-          <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
-            <i class="fa-solid fa-sliders text-teal-600"></i> Workplace Stress & Burnout Self-Check
-          </h3>
-          <p class="text-xs text-slate-600 mb-6">Adjust the sliders reflecting your past week. Scores are aggregated anonymously for department insights.</p>
-
-          <div class="space-y-6">
-            
-            <!-- Slider 1 -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-slate-700">Workload & Task Pressure</label>
-                <span id="val-workload" class="text-xs font-mono font-bold text-teal-700">5 / 10</span>
-              </div>
-              <input type="range" id="slider-workload" min="1" max="10" value="5" oninput="calculateBurnoutScore()" class="w-full accent-teal-600">
-              <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
-                <span>Manageable</span>
-                <span>Extremely Overwhelming</span>
-              </div>
-            </div>
-
-            <!-- Slider 2 -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-slate-700">Screen Fatigue & Physical Exhaustion</label>
-                <span id="val-fatigue" class="text-xs font-mono font-bold text-teal-700">5 / 10</span>
-              </div>
-              <input type="range" id="slider-fatigue" min="1" max="10" value="5" oninput="calculateBurnoutScore()" class="w-full accent-teal-600">
-              <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
-                <span>Fresh & Energized</span>
-                <span>Severe Digital Fatigue</span>
-              </div>
-            </div>
-
-            <!-- Slider 3 -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-slate-700">Rest & Sleep Quality (Inverted Impact)</label>
-                <span id="val-rest" class="text-xs font-mono font-bold text-teal-700">5 / 10</span>
-              </div>
-              <input type="range" id="slider-rest" min="1" max="10" value="5" oninput="calculateBurnoutScore()" class="w-full accent-teal-600">
-              <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
-                <span>Deep Restful Sleep</span>
-                <span>Insomnia / Poor Rest</span>
-              </div>
-            </div>
-
-            <!-- Slider 4 -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-bold text-slate-700">Emotional Clarity & Focus</label>
-                <span id="val-clarity" class="text-xs font-mono font-bold text-teal-700">5 / 10</span>
-              </div>
-              <input type="range" id="slider-clarity" min="1" max="10" value="5" oninput="calculateBurnoutScore()" class="w-full accent-teal-600">
-              <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
-                <span>Clear & Mindful</span>
-                <span>Brain Fog / Anxious</span>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="mt-8">
-            <button onclick="saveBurnoutSurvey()" class="w-full py-3 bg-teal-700 hover:bg-teal-800 text-white font-semibold rounded-xl text-sm shadow-md transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-cloud-arrow-up"></i> Log Assessment Anonymously
-            </button>
-          </div>
-        </div>
-
-        <!-- Result Card & Action Plan -->
-        <div class="lg:col-span-5 glass-card rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Calculated Assessment</span>
-            
-            <div id="burnoutStatusBadge" class="my-4 p-4 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-200 text-center">
-              <div id="burnoutScoreText" class="text-3xl font-extrabold mb-1">Balanced 💚</div>
-              <p id="burnoutScoreSub" class="text-xs font-medium">Your reported stress levels are within healthy resilience limits.</p>
-            </div>
-
-            <div class="space-y-3">
-              <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Tailored Recommendations</h4>
-              <ul id="burnoutRecommendations" class="text-xs text-slate-600 space-y-2 list-disc pl-4">
-                <li>Maintain your regular breaks and desktop stretch routine.</li>
-                <li>Keep setting clear digital boundaries at the end of your workday.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-500">
-            Need confidential support? Contact Bersih HR Wellness Desk at <a href="mailto:wellness@bersih.com" class="text-teal-700 underline">wellness@bersih.com</a>.
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-  <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 py-2 z-40 flex justify-around items-center text-[10px] font-medium text-slate-500 shadow-lg">
-    <button onclick="switchTab('wellness')" id="mob-wellness" class="flex flex-col items-center gap-1 p-1 text-teal-700">
-      <i class="fa-solid fa-sun text-base"></i>
-      <span>Hub</span>
-    </button>
-    <button onclick="switchTab('gratitude')" id="mob-gratitude" class="flex flex-col items-center gap-1 p-1 hover:text-teal-700">
-      <i class="fa-solid fa-comments text-base"></i>
-      <span>Pulse</span>
-    </button>
-    <button onclick="switchTab('microbreak')" id="mob-microbreak" class="flex flex-col items-center gap-1 p-1 hover:text-teal-700">
-      <i class="fa-solid fa-wind text-base"></i>
-      <span>Break</span>
-    </button>
-    <button onclick="switchTab('bingo')" id="mob-bingo" class="flex flex-col items-center gap-1 p-1 hover:text-teal-700">
-      <i class="fa-solid fa-trophy text-base"></i>
-      <span>Bingo</span>
-    </button>
-    <button onclick="switchTab('burnout')" id="mob-burnout" class="flex flex-col items-center gap-1 p-1 hover:text-teal-700">
-      <i class="fa-solid fa-chart-line text-base"></i>
-      <span>Check</span>
-    </button>
-  </nav>
-
-  <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="glass-card bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-      
-      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="text-center mb-6">
-        <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center mx-auto mb-3 text-2xl">
-          <i class="fa-solid fa-user-circle"></i>
-        </div>
-        <h3 id="authModalTitle" class="text-xl font-bold text-slate-900">Sign In to Bersih Care</h3>
-        <p class="text-xs text-slate-500 mt-1">Access your October Mental Health Dashboard</p>
-      </div>
-
-      <!-- Auth Form -->
-      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-        
-        <!-- Sign Up Specific Fields -->
-        <div id="signupFields" class="space-y-4 hidden">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
-            <input type="text" id="authFullName" placeholder="e.g. Sarah Ahmad" class="w-full text-sm rounded-xl border-slate-200 focus:border-teal-500 focus:ring-teal-500 p-2.5 bg-slate-50 border">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Department</label>
-            <select id="authDept" class="w-full text-sm rounded-xl border-slate-200 focus:border-teal-500 focus:ring-teal-500 p-2.5 bg-slate-50 border">
-              <option value="Sales & Marketing">Sales & Marketing</option>
-              <option value="Operations">Operations</option>
-              <option value="HR">HR</option>
-              <option value="Finance">Finance</option>
-              <option value="IT">IT</option>
-              <option value="Administration">Administration</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Work Email</label>
-          <input type="email" id="authEmail" required placeholder="name@bersih.com" class="w-full text-sm rounded-xl border-slate-200 focus:border-teal-500 focus:ring-teal-500 p-2.5 bg-slate-50 border">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
-          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full text-sm rounded-xl border-slate-200 focus:border-teal-500 focus:ring-teal-500 p-2.5 bg-slate-50 border">
-        </div>
-
-        <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold rounded-xl shadow-md transition">
-          Sign In
-        </button>
-      </form>
-
-      <div class="mt-4 pt-4 border-t border-slate-100 text-center text-xs text-slate-600">
-        <span id="authToggleText">Don't have an account?</span>
-        <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-teal-700 font-bold ml-1 hover:underline">
-          Sign Up
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <div id="adminPinModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="glass-card bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative text-center">
-      <button onclick="closeAdminPinModal()" class="absolute top-4 right-4 text-slate-400 p-1">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl">
-        <i class="fa-solid fa-lock"></i>
-      </div>
-      <h3 class="text-lg font-bold text-slate-900">Admin Portal Verification</h3>
-      <p class="text-xs text-slate-500 mb-4">Enter standard PIN <strong>1234</strong> to access settings.</p>
-
-      <input type="password" id="adminPinInput" maxlength="6" placeholder="Enter PIN" class="text-center font-mono text-xl tracking-widest w-full py-2.5 border rounded-xl mb-4 bg-slate-50">
-
-      <button onclick="verifyAdminPin()" class="w-full py-2.5 bg-teal-700 text-white font-semibold text-sm rounded-xl shadow-md">
-        Verify PIN
-      </button>
-    </div>
-  </div>
-
-  <!-- Admin Panel Drawer / Modal -->
-  <div id="adminPanelModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="glass-card bg-white rounded-2xl max-w-4xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-      <button onclick="closeAdminPanelModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
-        <div class="w-10 h-10 rounded-xl bg-teal-700 text-white flex items-center justify-center text-xl">
-          <i class="fa-solid fa-user-shield"></i>
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-slate-900">Portal Administration</h3>
-          <p class="text-xs text-slate-500">Manage portal users, task schedules, and broadcast notifications</p>
-        </div>
-      </div>
-
-      <div class="space-y-8">
-        
-        <!-- Broadcast Notification Dispatcher -->
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-          <h4 class="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">
-            <i class="fa-solid fa-bullhorn text-teal-600"></i> Dispatch Portal Broadcast Banner
-          </h4>
-          <div class="flex gap-2">
-            <input type="text" id="adminBroadcastInput" placeholder="e.g. 🌟 Week 2 Mental Health Bingo Tasks are officially unlocked!" class="flex-1 text-xs border rounded-lg p-2.5 bg-white">
-            <button onclick="dispatchAdminBroadcast()" class="px-4 py-2.5 bg-teal-700 text-white text-xs font-semibold rounded-lg hover:bg-teal-800 transition">
-              Dispatch
-            </button>
-          </div>
-        </div>
-
-        <!-- User Management Table -->
-        <div>
-          <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center justify-between">
-            <span><i class="fa-solid fa-users text-teal-600 mr-2"></i> User Directory & Profiles</span>
-            <span class="text-xs text-slate-500 font-normal">Active portal members</span>
-          </h4>
-          <div class="overflow-x-auto border rounded-xl">
-            <table class="w-full text-left text-xs text-slate-600">
-              <thead class="bg-slate-100 text-slate-800 font-semibold border-b">
-                <tr>
-                  <th class="p-3">Full Name</th>
-                  <th class="p-3">Email</th>
-                  <th class="p-3">Dept</th>
-                  <th class="p-3">Points</th>
-                  <th class="p-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="adminUserTable" class="divide-y">
-                <!-- JS populated -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Burnout Aggregates Insights -->
-        <div>
-          <h4 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-chart-column text-teal-600"></i> Department Burnout Aggregates
-          </h4>
-          <div id="adminBurnoutStats" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <!-- JS Populated -->
-          </div>
-        </div>
-
-        <!-- Leaderboard Reset Button -->
-        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-          <div>
-            <div class="text-xs font-bold text-rose-700">Danger Zone</div>
-            <div class="text-[11px] text-slate-500">Reset October Bingo points for all users back to 0</div>
-          </div>
-          <button onclick="adminResetLeaderboard()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs rounded-xl shadow transition">
-            Reset All Leaderboard Points
-          </button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div id="sqlModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="glass-card bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] flex flex-col">
-      <button onclick="closeSqlModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-        <div>
-          <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-database text-teal-600"></i> Supabase DDL SQL Setup Script
-          </h3>
-          <p class="text-xs text-slate-500">Copy & paste into your Supabase SQL Editor to initialize all 8 required tables and seed data.</p>
-        </div>
-        <button onclick="copySqlScript()" class="px-3 py-1.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1.5">
-          <i class="fa-solid fa-copy"></i> Copy Script
-        </button>
-      </div>
-
-      <div class="flex-1 overflow-y-auto bg-slate-900 text-teal-300 font-mono text-xs p-4 rounded-xl selection:bg-teal-500 selection:text-white">
-        <pre id="sqlScriptContainer" class="whitespace-pre-wrap leading-relaxed">
--- ===================================================
--- BERSIH CARE PORTAL - SUPABASE DDL & SEED SCRIPT
--- ===================================================
-
--- 1. Profiles Table
+            <pre class="flex-1 bg-slate-950 p-4 rounded-xl text-[11px] font-mono text-emerald-300 overflow-y-auto border border-slate-800 selection:bg-emerald-900" id="sql-code-text">
+-- CREATE PROFILES TABLE
 CREATE TABLE IF NOT EXISTS public.profiles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    full_name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    department TEXT NOT NULL,
-    password_hash TEXT NOT NULL,
-    total_points INT DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name TEXT NOT NULL,
+  department TEXT NOT NULL,
+  email TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. Gratitude Posts Table
+-- CREATE GRATITUDE POSTS TABLE
 CREATE TABLE IF NOT EXISTS public.gratitude_posts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-    user_name TEXT NOT NULL,
-    content TEXT NOT NULL,
-    likes_count INT DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  author_name TEXT NOT NULL,
+  content TEXT NOT NULL,
+  likes INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. Gratitude Likes Tracking Table
-CREATE TABLE IF NOT EXISTS public.gratitude_likes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    post_id UUID REFERENCES public.gratitude_posts(id) ON DELETE CASCADE,
-    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-    UNIQUE(post_id, user_id)
-);
-
--- 4. Mood Logs Table
+-- CREATE MOOD LOGS TABLE
 CREATE TABLE IF NOT EXISTS public.mood_logs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-    department TEXT NOT NULL,
-    energy_level TEXT NOT NULL,
-    logged_date DATE DEFAULT CURRENT_DATE
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  mood TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. Bingo Tasks Master Table
-CREATE TABLE IF NOT EXISTS public.bingo_tasks (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    title TEXT NOT NULL,
-    category TEXT NOT NULL,
-    week_num INT NOT NULL,
-    is_unlocked BOOLEAN DEFAULT true,
-    assigned_date DATE,
-    points INT DEFAULT 10
+-- CREATE USER BINGO COMPLETIONS TABLE
+CREATE TABLE IF NOT EXISTS public.user_bingo (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  tile_id INT NOT NULL,
+  completed BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, tile_id)
 );
 
--- 6. User Bingo Progress Table
-CREATE TABLE IF NOT EXISTS public.user_bingo_progress (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-    task_id UUID REFERENCES public.bingo_tasks(id) ON DELETE CASCADE,
-    completed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(user_id, task_id)
+-- CREATE CUSTOM ASSIGNED TASKS TABLE
+CREATE TABLE IF NOT EXISTS public.custom_tasks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_text TEXT NOT NULL,
+  assigned_date DATE DEFAULT CURRENT_DATE,
+  active BOOLEAN DEFAULT TRUE
 );
 
--- 7. Burnout Surveys Table
-CREATE TABLE IF NOT EXISTS public.burnout_surveys (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-    department TEXT NOT NULL,
-    score INT NOT NULL,
-    status TEXT NOT NULL,
-    logged_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+-- CREATE BURNOUT ASSESSMENTS TABLE
+CREATE TABLE IF NOT EXISTS public.burnout_assessments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
+  score INT NOT NULL,
+  risk_level TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 8. Daily Quotes Table
-CREATE TABLE IF NOT EXISTS public.daily_quotes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    quote_text TEXT NOT NULL,
-    source_type TEXT NOT NULL, -- 'general' | 'islamic'
-    day_number INT UNIQUE NOT NULL
-);
+-- ENABLE ROW LEVEL SECURITY & PUBLIC PERMISSIONS
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.gratitude_posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.mood_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_bingo ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.custom_tasks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.burnout_assessments ENABLE ROW LEVEL SECURITY;
 
--- SEEDING SAMPLE DAILY QUOTES (100 Rotated Days)
-INSERT INTO public.daily_quotes (quote_text, source_type, day_number) VALUES
-('Peace comes from within. Do not seek it without.', 'general', 1),
-('Verily, with hardship comes ease. (Quran 94:6)', 'islamic', 2),
-('Small steps taken consistently create profound wellness transformation.', 'general', 3),
-('The most beloved deeds to Allah are those done regularly, even if small. (Hadith)', 'islamic', 4),
-('Take care of your mind; your workplace productivity will naturally follow.', 'general', 5),
-('Tie your camel first, then put your trust in Allah. Rest and preparation matter.', 'islamic', 6),
-('Rest is not laziness; it is essential maintenance for your soul and mind.', 'general', 7),
-('Speak good words or remain silent. Positive workplace speech brings calm. (Hadith)', 'islamic', 8)
-ON CONFLICT (day_number) DO NOTHING;
-        </pre>
-      </div>
+CREATE POLICY "Public Read Profiles" ON public.profiles FOR SELECT USING (true);
+CREATE POLICY "Public Insert Profiles" ON public.profiles FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Read Gratitude" ON public.gratitude_posts FOR SELECT USING (true);
+CREATE POLICY "Public Insert Gratitude" ON public.gratitude_posts FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Read Moods" ON public.mood_logs FOR SELECT USING (true);
+CREATE POLICY "Public Insert Moods" ON public.mood_logs FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Read Bingo" ON public.user_bingo FOR SELECT USING (true);
+CREATE POLICY "Public Insert Bingo" ON public.user_bingo FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Read Tasks" ON public.custom_tasks FOR SELECT USING (true);
+CREATE POLICY "Public Insert Tasks" ON public.custom_tasks FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public Read Burnout" ON public.burnout_assessments FOR SELECT USING (true);
+CREATE POLICY "Public Insert Burnout" ON public.burnout_assessments FOR INSERT WITH CHECK (true);
+</pre>
+
+            <div class="mt-4 flex justify-between items-center">
+                <span class="text-[11px] text-slate-500">Database: Bersih Cloud (hihbmsqeglelqjqrezuo)</span>
+                <button onclick="copySqlCode()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition">
+                    <i class="fa-solid fa-copy mr-1"></i> Copy SQL to Clipboard
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-    /* ==========================================================================
-       1. SUPABASE CLIENT & CONFIGURATION
-       ========================================================================== */
-    const SUPABASE_URL = "https://hihbmsqeglelqjqrezuo.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpaGJtc3FlZ2xlbHFqcXJlenVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NTQ2MjcsImV4cCI6MjEwNjIzMDYyN30.OqG_07BhjuOzhS1DGsO9UNaMHg759kSzn2uZ__3ObwQ";
-
-    // Initialize Supabase JS Client v2
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Session State Key in localStorage
-    const SESSION_KEY = 'bersih_care_session';
-
-    // Application State Manager
-    let currentUser = null;
-    let quotesList = [];
-    let currentQuoteFilter = 'all';
-    let currentBingoWeek = 1;
-
-    /* ==========================================================================
-       2. MOCK FALLBACK DATA (For Offline Resilience)
-       ========================================================================== */
-    const MOCK_QUOTES = [
-      { id: '1', quote_text: 'Peace comes from within. Do not seek it without.', source_type: 'general', day_number: 1 },
-      { id: '2', quote_text: 'Verily, with hardship comes ease. (Quran 94:6)', source_type: 'islamic', day_number: 2 },
-      { id: '3', quote_text: 'Small steps taken consistently create profound workplace transformation.', source_type: 'general', day_number: 3 },
-      { id: '4', quote_text: 'The most beloved deeds to Allah are those done regularly, even if small. (Hadith)', source_type: 'islamic', day_number: 4 },
-      { id: '5', quote_text: 'Prioritize your mental clarity; productivity will naturally follow.', source_type: 'general', day_number: 5 },
-      { id: '6', quote_text: 'Tie your camel first, then put your trust in Allah. Rest and preparation matter.', source_type: 'islamic', day_number: 6 },
-      { id: '7', quote_text: 'Rest is not laziness; it is essential maintenance for your soul.', source_type: 'general', day_number: 7 },
-      { id: '8', quote_text: 'Speak good words or remain mindful. Kindness builds strong teams. (Hadith)', source_type: 'islamic', day_number: 8 }
-    ];
-
-    const MOCK_BINGO_TASKS = [
-      { id: 'b1', title: '5-Min Box Breathing', category: 'Mindfulness', week_num: 1, is_unlocked: true, points: 10, assigned_date: '2026-10-01' },
-      { id: 'b2', title: 'Hydration Check (2L Today)', category: 'Physical Reset', week_num: 1, is_unlocked: true, points: 10, assigned_date: '2026-10-02' },
-      { id: 'b3', title: 'Send Gratitude Shout-out', category: 'Connection', week_num: 1, is_unlocked: true, points: 15, assigned_date: '2026-10-03' },
-      { id: 'b4', title: 'Screen-Free Lunch Hour', category: 'Mindfulness', week_num: 1, is_unlocked: true, points: 20, assigned_date: '2026-10-04' },
-      { id: 'b5', title: 'Desk Stretch Session', category: 'Physical Reset', week_num: 2, is_unlocked: true, points: 15, assigned_date: '2026-10-08' },
-      { id: 'b6', title: 'Digital Detox After 7 PM', category: 'Mindfulness', week_num: 2, is_unlocked: true, points: 20, assigned_date: '2026-10-09' }
-    ];
-
-    let mockGratitudeFeed = [
-      { id: 'g1', user_name: 'Sarah (HR)', content: 'Huge thanks to the IT team for resolving our software tickets so swiftly today! 🌿', likes_count: 5, created_at: new Date().toISOString() },
-      { id: 'g2', user_name: 'Ahmad (Operations)', content: 'Grateful for our team lead for encouraging us to step away for a 10-min walk!', likes_count: 3, created_at: new Date().toISOString() }
-    ];
-
-    let mockUsers = [
-      { id: 'u1', full_name: 'Ahmad Razak', email: 'ahmad@bersih.com', department: 'Operations', total_points: 45 },
-      { id: 'u2', full_name: 'Sarah Lim', email: 'sarah@bersih.com', department: 'HR', total_points: 35 },
-      { id: 'u3', full_name: 'Nurul Huda', email: 'nurul@bersih.com', department: 'IT', total_points: 30 }
-    ];
-
-    let userCompletedBingoTaskIds = new Set();
-
-    /* ==========================================================================
-       3. INITIALIZATION & SESSION MANAGEMENT
-       ========================================================================== */
-    window.onload = async function() {
-      checkSession();
-      await loadQuotesData();
-      await loadGratitudeFeed();
-      await loadLeaderboard();
-      renderBingoGrid();
-      calculateBurnoutScore();
-    };
-
-    function checkSession() {
-      const saved = localStorage.getItem(SESSION_KEY);
-      if (saved) {
-        try {
-          currentUser = JSON.parse(saved);
-          renderUserProfilePill();
-          renderGreeting();
-        } catch(e) {
-          console.error("Invalid session format");
-        }
-      } else {
-        renderUserProfilePill();
-      }
-    }
-
-    function renderUserProfilePill() {
-      const area = document.getElementById('userProfileArea');
-      if (currentUser) {
-        area.innerHTML = `
-          <div class="flex items-center gap-2">
-            <div class="text-right hidden sm:block">
-              <div class="text-xs font-bold text-slate-800">${currentUser.full_name}</div>
-              <div class="text-[10px] text-slate-500">${currentUser.department}</div>
-            </div>
-            <button onclick="logoutUser()" class="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-medium transition" title="Sign Out">
-              <i class="fa-solid fa-right-from-bracket text-base"></i>
-            </button>
-          </div>
-        `;
-      } else {
-        area.innerHTML = `
-          <button onclick="openAuthModal()" class="px-3.5 py-1.5 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
-            <i class="fa-solid fa-user"></i> Sign In
-          </button>
-        `;
-      }
-    }
-
-    function renderGreeting() {
-      const title = document.getElementById('greetingTitle');
-      const deptBadge = document.getElementById('userDeptBadge');
-      const ptsBadge = document.getElementById('userPointsBadge').querySelector('span');
-
-      if (currentUser) {
-        title.innerText = `Welcome back, ${currentUser.full_name} ✨`;
-        deptBadge.innerText = currentUser.department;
-        ptsBadge.innerText = currentUser.total_points || 0;
-      }
-    }
-
-    /* ==========================================================================
-       4. AUTHENTICATION LOGIC (Supabase + Local Sync)
-       ========================================================================== */
-    let isSignUpMode = false;
-
-    function openAuthModal() {
-      document.getElementById('authModal').classList.remove('hidden');
-    }
-    function closeAuthModal() {
-      document.getElementById('authModal').classList.add('hidden');
-    }
-
-    function toggleAuthMode() {
-      isSignUpMode = !isSignUpMode;
-      const title = document.getElementById('authModalTitle');
-      const signupFields = document.getElementById('signupFields');
-      const submitBtn = document.getElementById('authSubmitBtn');
-      const toggleText = document.getElementById('authToggleText');
-      const toggleBtn = document.getElementById('authToggleBtn');
-
-      if (isSignUpMode) {
-        title.innerText = "Create Bersih Care Profile";
-        signupFields.classList.remove('hidden');
-        submitBtn.innerText = "Sign Up Profile";
-        toggleText.innerText = "Already registered?";
-        toggleBtn.innerText = "Sign In";
-      } else {
-        title.innerText = "Sign In to Bersih Care";
-        signupFields.classList.add('hidden');
-        submitBtn.innerText = "Sign In";
-        toggleText.innerText = "Don't have an account?";
-        toggleBtn.innerText = "Sign Up";
-      }
-    }
-
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-
-      if (isSignUpMode) {
-        const fullName = document.getElementById('authFullName').value.trim();
-        const dept = document.getElementById('authDept').value;
-
-        // Try Supabase Signup Insert
-        try {
-          const { data, error } = await supabaseClient
-            .from('profiles')
-            .insert([{ full_name: fullName, email: email, department: dept, password_hash: password, total_points: 0 }])
-            .select();
-
-          if (error) throw error;
-          currentUser = data[0];
-        } catch (err) {
-          console.warn("Supabase auth bypass/fallback:", err.message);
-          // Fallback local user creation
-          currentUser = { id: 'u_' + Date.now(), full_name: fullName, email: email, department: dept, total_points: 0 };
-          mockUsers.push(currentUser);
-        }
-
-      } else {
-        // Login Flow
-        try {
-          const { data, error } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('email', email)
-            .single();
-
-          if (error || !data) throw new Error("Account not found");
-          currentUser = data;
-        } catch (err) {
-          console.warn("Using fallback local login verification");
-          const found = mockUsers.find(u => u.email === email);
-          if (found) {
-            currentUser = found;
-          } else {
-            currentUser = { id: 'u_guest', full_name: 'Bersih Employee', email: email, department: 'Sales & Marketing', total_points: 20 };
-          }
-        }
-      }
-
-      localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
-      renderUserProfilePill();
-      renderGreeting();
-      closeAuthModal();
-      showToast("Authentication successful! Welcome to the portal.");
-    }
-
-    function logoutUser() {
-      currentUser = null;
-      localStorage.removeItem(SESSION_KEY);
-      renderUserProfilePill();
-      document.getElementById('greetingTitle').innerText = "Welcome to Bersih Care Portal ✨";
-      showToast("Signed out successfully.");
-    }
-
-    /* ==========================================================================
-       5. NAVIGATION & TAB SWITCHING
-       ========================================================================== */
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
-      // Update Nav active styles (Desktop)
-      document.querySelectorAll('#desktopNav button').forEach(btn => {
-        btn.classList.remove('bg-white', 'text-teal-700', 'shadow-sm', 'font-semibold');
-        btn.classList.add('hover:text-teal-700');
-      });
-      const activeNav = document.getElementById(`nav-${tabId}`);
-      if (activeNav) {
-        activeNav.classList.add('bg-white', 'text-teal-700', 'shadow-sm', 'font-semibold');
-      }
-
-      // Mobile Bottom Nav
-      document.querySelectorAll('nav.lg\\:hidden button').forEach(btn => btn.classList.remove('text-teal-700'));
-      const activeMob = document.getElementById(`mob-${tabId}`);
-      if (activeMob) activeMob.classList.add('text-teal-700');
-    }
-
-    /* ==========================================================================
-       6. TAB 1: DAILY WELLNESS HUB & QUOTES
-       ========================================================================== */
-    async function loadQuotesData() {
-      try {
-        const { data, error } = await supabaseClient.from('daily_quotes').select('*');
-        if (error || !data || data.length === 0) throw error;
-        quotesList = data;
-      } catch (err) {
-        quotesList = MOCK_QUOTES;
-      }
-      displayDailyQuote();
-    }
-
-    function displayDailyQuote() {
-      if (!quotesList || quotesList.length === 0) return;
-
-      // Filter
-      let filtered = quotesList;
-      if (currentQuoteFilter !== 'all') {
-        filtered = quotesList.filter(q => q.source_type === currentQuoteFilter);
-      }
-      if (filtered.length === 0) filtered = quotesList;
-
-      // Rotate based on day of year
-      const now = new Date();
-      const start = new Date(now.getFullYear(), 0, 0);
-      const diff = now - start;
-      const oneDay = 1000 * 60 * 60 * 24;
-      const dayOfYear = Math.floor(diff / oneDay);
-
-      const quoteIndex = dayOfYear % filtered.length;
-      const activeQuote = filtered[quoteIndex];
-
-      document.getElementById('quoteDayNum').innerText = activeQuote.day_number || (quoteIndex + 1);
-      document.getElementById('quoteText').innerText = `"${activeQuote.quote_text}"`;
-      document.getElementById('quoteBadge').innerText = activeQuote.source_type === 'islamic' ? 'Islamic Mindfulness Reflection' : 'General Mental Resilience';
-    }
-
-    function filterQuotes(type) {
-      currentQuoteFilter = type;
-      ['all', 'general', 'islamic'].forEach(t => {
-        const btn = document.getElementById(`qfilter-${t}`);
-        if (t === type) {
-          btn.className = "px-3 py-1 rounded-lg bg-white text-teal-700 shadow-sm font-bold";
-        } else {
-          btn.className = "px-3 py-1 rounded-lg hover:text-teal-700";
-        }
-      });
-      displayDailyQuote();
-    }
-
-    function rotateRandomQuote() {
-      const randomIndex = Math.floor(Math.random() * quotesList.length);
-      const activeQuote = quotesList[randomIndex];
-      document.getElementById('quoteText').innerText = `"${activeQuote.quote_text}"`;
-      document.getElementById('quoteDayNum').innerText = activeQuote.day_number || 'Random';
-      document.getElementById('quoteBadge').innerText = activeQuote.source_type === 'islamic' ? 'Islamic Reflection' : 'General Wisdom';
-    }
-
-    /* Daily Mood Recording */
-    async function recordMood(energyLevel, emoji) {
-      if (!currentUser) {
-        openAuthModal();
-        return;
-      }
-
-      document.getElementById('selectedMoodStatus').innerHTML = `Log submitted: <strong>${emoji} ${energyLevel}</strong> logged for today.`;
-      
-      // Save to Supabase
-      try {
-        await supabaseClient.from('mood_logs').insert([{
-          user_id: currentUser.id,
-          department: currentUser.department,
-          energy_level: energyLevel
-        }]);
-      } catch(e) {
-        console.warn("Mood saved locally");
-      }
-
-      // Show Contextual Tip Toast
-      const tips = {
-        'Recharged': "Fantastic! Channel your momentum to support a teammate or tackle high-focus projects.",
-        'Steady': "Great equilibrium! Keep maintaining your gentle pace and screen breaks.",
-        'Running Low': "Time for a 5-minute Micro-Break! Try the 20-20-20 eye reset or Box Breathing.",
-        'Overwhelmed': "Take a breath. Step away from your workstation, sip warm water, or use the soundscape generator."
-      };
-      showToast(`${emoji} ${tips[energyLevel]}`);
-      
-      updateMoodPulseUI(energyLevel);
-    }
-
-    function updateMoodPulseUI(lastLogged) {
-      document.getElementById('totalMoodCount').innerText = parseInt(document.getElementById('totalMoodCount').innerText) + 1;
-    }
-
-    /* ==========================================================================
-       7. TAB 2: GRATITUDE WALL & SHOUT-OUTS
-       ========================================================================== */
-    async function loadGratitudeFeed() {
-      try {
-        const { data, error } = await supabaseClient.from('gratitude_posts').select('*').order('created_at', { ascending: false });
-        if (error || !data) throw error;
-        renderGratitudeFeedUI(data);
-      } catch(e) {
-        renderGratitudeFeedUI(mockGratitudeFeed);
-      }
-    }
-
-    function renderGratitudeFeedUI(posts) {
-      const container = document.getElementById('gratitudeFeed');
-      if (posts.length === 0) {
-        container.innerHTML = `<div class="col-span-2 text-center text-xs text-slate-400 py-8">No gratitude shout-outs yet today. Be the first to post!</div>`;
-        return;
-      }
-
-      container.innerHTML = posts.map(p => `
-        <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-          <p class="text-xs text-slate-700 leading-relaxed italic mb-3">"${p.content}"</p>
-          <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-[11px]">
-            <span class="font-bold text-teal-800">— ${p.user_name}</span>
-            <button onclick="likeGratitudePost('${p.id}')" class="flex items-center gap-1.5 text-rose-500 font-semibold hover:bg-rose-50 px-2.5 py-1 rounded-lg transition">
-              <i class="fa-solid fa-heart"></i> <span>${p.likes_count || 0}</span>
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    async function submitGratitudePost(e) {
-      e.preventDefault();
-      if (!currentUser) {
-        openAuthModal();
-        return;
-      }
-
-      const textInput = document.getElementById('gratitudeText');
-      const content = textInput.value.trim();
-      if (!content) return;
-
-      const newPost = {
-        user_id: currentUser.id,
-        user_name: currentUser.full_name,
-        content: content,
-        likes_count: 0
-      };
-
-      try {
-        const { error } = await supabaseClient.from('gratitude_posts').insert([newPost]);
-        if (error) throw error;
-      } catch(e) {
-        mockGratitudeFeed.unshift({ ...newPost, id: 'g_' + Date.now(), created_at: new Date().toISOString() });
-      }
-
-      textInput.value = '';
-      document.getElementById('charCounter').innerText = '0';
-      showToast("Your gratitude post has been shared! 💖");
-      loadGratitudeFeed();
-    }
-
-    // Character counter listener
-    document.getElementById('gratitudeText')?.addEventListener('input', function() {
-      document.getElementById('charCounter').innerText = this.value.length;
-    });
-
-    async function likeGratitudePost(postId) {
-      const found = mockGratitudeFeed.find(p => p.id === postId);
-      if (found) {
-        found.likes_count += 1;
-        renderGratitudeFeedUI(mockGratitudeFeed);
-      } else {
-        loadGratitudeFeed();
-      }
-      showToast("Liked post!");
-    }
-
-    /* ==========================================================================
-       8. TAB 3: MICRO-BREAK & SOUNDSCAPES
-       ========================================================================== */
-    let breathInterval = null;
-    let isBreathing = false;
-
-    function toggleBreathingGuide() {
-      const btn = document.getElementById('breathStartBtn');
-      const circle = document.getElementById('breathCircleInner');
-      const tech = document.getElementById('breathTechnique').value;
-
-      if (!isBreathing) {
-        isBreathing = true;
-        btn.innerHTML = `<i class="fa-solid fa-pause mr-1"></i> Pause Guide`;
+    <script>
+        // ----------------------------------------------------
+        // 1. SUPABASE CLIENT & GLOBAL STATE CONFIGURATION
+        // ----------------------------------------------------
+        const SUPABASE_URL = "https://hihbmsqeglelqjqrezuo.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhpaGJtc3FlZ2xlbHFqcXJlenVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NTQ2MjcsImV4cCI6MjEwNjIzMDYyN30.OqG_07BhjuOzhS1DGsO9UNaMHg759kSzn2uZ__3ObwQ";
         
-        if (tech === 'box') circle.className = "w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 flex flex-col items-center justify-center text-white shadow-xl anim-breathe-box";
-        else if (tech === '478') circle.className = "w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 flex flex-col items-center justify-center text-white shadow-xl anim-breathe-478";
-        else circle.className = "w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 flex flex-col items-center justify-center text-white shadow-xl anim-breathe-21";
+        let supabaseClient = null;
+        let currentUser = null;
+        let userProfile = null;
+        let isAdminUnlocked = false;
 
-        document.getElementById('breathPhaseText').innerText = "Focusing...";
-      } else {
-        isBreathing = false;
-        btn.innerHTML = `<i class="fa-solid fa-play mr-1"></i> Start Guide`;
-        circle.className = "w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 flex flex-col items-center justify-center text-white shadow-xl transition-transform";
-        document.getElementById('breathPhaseText').innerText = "Inhale";
-      }
-    }
+        // Default local Bingo Tiles (16 tiles for 4x4)
+        let bingoTiles = [
+            { id: 1, text: "Took a 10-min outdoor walk", pts: 10 },
+            { id: 2, text: "Drank 2L water today", pts: 10 },
+            { id: 3, text: "Sent a colleague thank-you note", pts: 15 },
+            { id: 4, text: "Stepped away during lunch", pts: 10 },
+            { id: 5, text: "Practiced 3-min Box Breathing", pts: 15 },
+            { id: 6, text: "Completed 20-20-20 Eye Reset", pts: 10 },
+            { id: 7, text: "Organized desk space", pts: 10 },
+            { id: 8, text: "Recited 33x SubhanAllah Zikr", pts: 15 },
+            { id: 9, text: "Complimented a team member", pts: 15 },
+            { id: 10, text: "Stretched shoulders at desk", pts: 10 },
+            { id: 11, text: "Logged energy pulse today", pts: 10 },
+            { id: 12, text: "No screen 30 mins before sleep", pts: 20 },
+            { id: 13, text: "Shared a positive quote", pts: 10 },
+            { id: 14, text: "Listened to calming soundscape", pts: 10 },
+            { id: 15, text: "Checked in on a coworker", pts: 15 },
+            { id: 16, text: "Completed Burnout Self-Check", pts: 20 }
+        ];
 
-    function changeBreathingTechnique() {
-      if (isBreathing) toggleBreathingGuide();
-      const tech = document.getElementById('breathTechnique').value;
-      const desc = document.getElementById('breathDesc');
-      if (tech === 'box') desc.innerText = "Box Breathing restores mental focus by equalizing inhale, hold, and exhale cycles.";
-      else if (tech === '478') desc.innerText = "4-7-8 Technique acts as a natural tranquilizer for the nervous system.";
-      else desc.innerText = "2-1 Deep Reset rapidly lowers heart rate during high-stress moments.";
-    }
+        // 100-DAY QUOTE DATABASE (Sample representative set including Islamic perspectives)
+        const QUOTES_DATABASE = [
+            { text: "Verily, with hardship comes ease.", author: "Surah Ash-Sharh (94:6)" },
+            { text: "Your mental health is a priority. Your happiness is an essential. Your self-care is a necessity.", author: "Office Wellness Principle" },
+            { text: "Patience (Sabr) is not passive waiting; it is active strength and steady trust.", author: "Islamic Wisdom" },
+            { text: "Do not let the quietness of small progress make you believe you are stagnant.", author: "Self-Compassion Notes" },
+            { text: "Tie your camel and trust in God.", author: "Prophetic Tradition (Hadith)" },
+            { text: "You don't have to carry the whole mountain all at once; just take the next step.", author: "Mindfulness Reminder" },
+            { text: "He who is grateful for small blessings finds contentment in all seasons.", author: "Daily Reflection" }
+        ];
 
-    /* Digital Tasbeeh Counter */
-    let tasbeehVal = 0;
-    function incrementTasbeeh() {
-      tasbeehVal += 1;
-      document.getElementById('tasbeehDisplay').innerText = tasbeehVal;
-      if (tasbeehVal === 33 || tasbeehVal === 100) {
-        confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
-        showToast("Mashallah! Target reached 🌟");
-      }
-    }
-    function resetTasbeeh() {
-      tasbeehVal = 0;
-      document.getElementById('tasbeehDisplay').innerText = 0;
-    }
+        // ----------------------------------------------------
+        // 2. APP INITIALIZATION & AUTHENTICATION
+        // ----------------------------------------------------
+        window.addEventListener('DOMContentLoaded', async () => {
+            initSupabase();
+            loadQuoteOfDay();
+            renderBingoGrid();
+            
+            // Check for persistent user session
+            if (supabaseClient) {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session && session.user) {
+                    await handleUserLoggedIn(session.user);
+                }
+            }
+        });
 
-    /* Audio Soundscape Generator (Web Audio API Synthesizer) */
-    let audioCtx = null;
-    let activeNodes = { rain: null, waves: null, noise: null };
-    let gainNodes = { rain: null, waves: null, noise: null };
-
-    function initAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-
-    function toggleSoundscape(type) {
-      initAudioContext();
-      const btn = document.getElementById(`btn-sound-${type}`);
-
-      if (activeNodes[type]) {
-        // Stop Sound
-        activeNodes[type].stop();
-        activeNodes[type] = null;
-        btn.innerText = "Play";
-        btn.className = "px-3 py-1 bg-slate-200 text-slate-700 font-bold rounded-lg text-xs hover:bg-teal-600 hover:text-white transition";
-      } else {
-        // Start White Noise / Synth Generator
-        const bufferSize = audioCtx.sampleRate * 2;
-        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const output = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          output[i] = Math.random() * 2 - 1;
+        function initSupabase() {
+            try {
+                if (window.supabase) {
+                    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    updateSyncBadge(true, "Cloud Connected: Bersih Supabase Database");
+                } else {
+                    updateSyncBadge(false, "Supabase SDK pending load. Local fallback mode.");
+                }
+            } catch (err) {
+                console.error("Supabase connection err:", err);
+                updateSyncBadge(false, "Database connection offline.");
+            }
         }
 
-        const whiteNoise = audioCtx.createBufferSource();
-        whiteNoise.buffer = noiseBuffer;
-        whiteNoise.loop = true;
+        function updateSyncBadge(online, text) {
+            const ind = document.getElementById('sync-status-indicator');
+            const txt = document.getElementById('sync-status-text');
+            if (ind && txt) {
+                txt.innerText = text;
+                ind.className = online 
+                    ? "w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" 
+                    : "w-2.5 h-2.5 rounded-full bg-amber-400 inline-block animate-pulse";
+            }
+        }
 
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.value = parseFloat(document.getElementById(`vol-${type}`).value);
+        function toggleAuthMode(mode) {
+            const formLogin = document.getElementById('form-login');
+            const formSignup = document.getElementById('form-signup');
+            const tabLogin = document.getElementById('auth-tab-login');
+            const tabSignup = document.getElementById('auth-tab-signup');
 
-        whiteNoise.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        whiteNoise.start();
+            if (mode === 'login') {
+                formLogin.classList.remove('hidden');
+                formSignup.classList.add('hidden');
+                tabLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-white text-bersih-600 shadow-sm transition";
+                tabSignup.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition";
+            } else {
+                formLogin.classList.add('hidden');
+                formSignup.classList.remove('hidden');
+                tabSignup.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-white text-bersih-600 shadow-sm transition";
+                tabLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition";
+            }
+        }
 
-        activeNodes[type] = whiteNoise;
-        gainNodes[type] = gainNode;
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
 
-        btn.innerText = "Stop";
-        btn.className = "px-3 py-1 bg-teal-700 text-white font-bold rounded-lg text-xs transition";
-      }
-    }
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) {
+                    alert("Login Failed: " + error.message);
+                } else {
+                    await handleUserLoggedIn(data.user);
+                }
+            } else {
+                // Fallback local mock login
+                handleUserLoggedIn({ id: 'mock-id-1', email, user_metadata: { full_name: email.split('@')[0], department: 'Bersih Team' } });
+            }
+        }
 
-    function updateSoundVolume(type) {
-      if (gainNodes[type]) {
-        gainNodes[type].gain.value = parseFloat(document.getElementById(`vol-${type}`).value);
-      }
-    }
+        async function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const dept = document.getElementById('signup-dept').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
 
-    /* 20-20-20 Eye Reset Timer */
-    let eyeTimer = null;
-    let eyeTimeLeft = 1200; // 20 mins
-    function toggleEyeTimer() {
-      const btn = document.getElementById('eyeTimerBtn');
-      if (eyeTimer) {
-        clearInterval(eyeTimer);
-        eyeTimer = null;
-        btn.innerText = "Start Timer";
-      } else {
-        btn.innerText = "Pause";
-        eyeTimer = setInterval(() => {
-          eyeTimeLeft--;
-          const m = Math.floor(eyeTimeLeft / 60);
-          const s = eyeTimeLeft % 60;
-          document.getElementById('eyeTimerDisplay').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-          if (eyeTimeLeft <= 0) {
-            clearInterval(eyeTimer);
-            showToast("👁️ Eye Rest Time! Look 20 feet away for 20 seconds.");
-          }
-        }, 1000);
-      }
-    }
+            if (supabaseClient) {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { full_name: name, department: dept } }
+                });
 
-    function showQuickStretchModal() {
-      showToast("🧘 Stretch Prompt: Roll your shoulders backward 5 times, then gently tilt your neck side to side.");
-    }
+                if (error) {
+                    alert("Registration Failed: " + error.message);
+                } else {
+                    // Create Profile record in database
+                    if (data.user) {
+                        await supabaseClient.from('profiles').insert([{
+                            id: data.user.id,
+                            full_name: name,
+                            department: dept,
+                            email: email
+                        }]);
+                    }
+                    alert("Account created! Logging in...");
+                    await handleUserLoggedIn(data.user || { id: 'mock-id', email, user_metadata: { full_name: name, department: dept } });
+                }
+            } else {
+                handleUserLoggedIn({ id: 'mock-id', email, user_metadata: { full_name: name, department: dept } });
+            }
+        }
 
-    /* ==========================================================================
-       9. TAB 4: MENTAL HEALTH BINGO & LEADERBOARD
-       ========================================================================== */
-    function switchBingoWeek(weekNum) {
-      currentBingoWeek = weekNum;
-      [1, 2, 3, 4].forEach(w => {
-        const btn = document.getElementById(`bingoweek-${w}`);
-        if (w === weekNum) btn.className = "px-3 py-1.5 rounded-lg bg-white text-teal-700 shadow-sm font-bold";
-        else btn.className = "px-3 py-1.5 rounded-lg hover:text-teal-700";
-      });
-      renderBingoGrid();
-    }
+        async function handleUserLoggedIn(user) {
+            currentUser = user;
+            
+            // Retrieve profile metadata
+            let name = user.user_metadata?.full_name || "Team Member";
+            let dept = user.user_metadata?.department || "Bersih Solutions";
 
-    function renderBingoGrid() {
-      const container = document.getElementById('bingoGrid');
-      const filtered = MOCK_BINGO_TASKS.filter(t => t.week_num === currentBingoWeek);
+            if (supabaseClient) {
+                const { data } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
+                if (data) {
+                    name = data.full_name;
+                    dept = data.department;
+                }
+            }
 
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-400 text-xs">No bingo challenges assigned for Week ${currentBingoWeek} yet.</div>`;
-        return;
-      }
+            userProfile = { name, dept };
 
-      container.innerHTML = filtered.map(t => {
-        const isDone = userCompletedBingoTaskIds.has(t.id);
-        return `
-          <div onclick="completeBingoTask('${t.id}', ${t.points})" class="p-5 rounded-2xl glass-card border ${isDone ? 'border-emerald-500 bg-emerald-50/30' : 'border-slate-200/80'} cursor-pointer hover:shadow-md transition relative group overflow-hidden">
-            <div class="flex items-start justify-between mb-2">
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded ${isDone ? 'bg-emerald-200 text-emerald-900' : 'bg-slate-100 text-slate-600'}">${t.category}</span>
-              <span class="text-xs font-bold text-amber-500 flex items-center gap-1"><i class="fa-solid fa-star"></i> +${t.points} pts</span>
-            </div>
-            <h4 class="text-sm font-bold text-slate-800 ${isDone ? 'line-through text-slate-400' : ''}">${t.title}</h4>
-            <div class="mt-4 flex items-center justify-between text-[11px] text-slate-400">
-              <span>Assigned: ${t.assigned_date || 'Oct 2026'}</span>
-              <span class="font-bold ${isDone ? 'text-emerald-600' : 'text-teal-700'}">${isDone ? '✓ Completed' : 'Tap to Complete'}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+            // Update Header UI
+            document.getElementById('user-greeting-name').innerText = name;
+            document.getElementById('nav-user-name').innerText = name;
+            document.getElementById('nav-user-dept').innerText = dept;
 
-    async function completeBingoTask(taskId, pts) {
-      if (!currentUser) {
-        openAuthModal();
-        return;
-      }
+            // Hide Auth Overlay
+            document.getElementById('auth-overlay').classList.add('hidden');
+            document.getElementById('app-container').classList.remove('hidden');
 
-      if (userCompletedBingoTaskIds.has(taskId)) return;
+            // Load initial real-time data
+            loadGratitudePosts();
+            loadOfficePulse();
+            loadUserBingoState();
+            checkAssignedTasks();
+        }
 
-      userCompletedBingoTaskIds.add(taskId);
-      currentUser.total_points = (currentUser.total_points || 0) + pts;
-      localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
-      
-      // Sync with Supabase / Mock Users
-      try {
-        await supabaseClient.from('user_bingo_progress').insert([{ user_id: currentUser.id, task_id: taskId }]);
-        await supabaseClient.from('profiles').update({ total_points: currentUser.total_points }).eq('id', currentUser.id);
-      } catch(e) {
-        const u = mockUsers.find(x => x.email === currentUser.email);
-        if (u) u.total_points = currentUser.total_points;
-      }
+        async function handleLogout() {
+            if (supabaseClient) {
+                await supabaseClient.auth.signOut();
+            }
+            currentUser = null;
+            document.getElementById('auth-overlay').classList.remove('hidden');
+            document.getElementById('app-container').classList.add('hidden');
+        }
 
-      // Trigger Confetti
-      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-      showToast(`🎉 Tile Unlocked! +${pts} points earned!`);
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap text-slate-600 hover:bg-slate-100 transition";
+            });
 
-      renderGreeting();
-      renderBingoGrid();
-      loadLeaderboard();
-    }
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn active px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition bg-bersih-50 text-bersih-600 font-bold";
+            }
 
-    async function loadLeaderboard() {
-      let users = mockUsers;
-      try {
-        const { data } = await supabaseClient.from('profiles').select('*').order('total_points', { ascending: false }).limit(5);
-        if (data && data.length > 0) users = data;
-      } catch(e) {}
+            if (tabId === 'bingo') loadBingoLeaderboard();
+        }
 
-      users.sort((a,b) => b.total_points - a.total_points);
+        // ----------------------------------------------------
+        // 3. QUOTES & DAILY MOOD RESPONSE SYSTEM
+        // ----------------------------------------------------
+        function loadQuoteOfDay() {
+            const dayNum = Math.floor(Math.random() * QUOTES_DATABASE.length);
+            const q = QUOTES_DATABASE[dayNum];
+            document.getElementById('quote-day-num').innerText = dayNum + 1;
+            document.getElementById('daily-quote-text').innerText = `"${q.text}"`;
+            document.getElementById('daily-quote-author').innerText = `— ${q.author}`;
+        }
 
-      const list = document.getElementById('leaderboardList');
-      list.innerHTML = users.slice(0, 5).map((u, idx) => {
-        let badge = `<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 text-xs flex items-center justify-center font-bold">${idx+1}</span>`;
-        if (idx === 0) badge = `<span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 text-xs flex items-center justify-center font-bold"><i class="fa-solid fa-crown"></i></span>`;
-        if (idx === 1) badge = `<span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 text-xs flex items-center justify-center font-bold">2</span>`;
-        if (idx === 2) badge = `<span class="w-6 h-6 rounded-full bg-amber-900/10 text-amber-900 text-xs flex items-center justify-center font-bold">3</span>`;
+        function getNewQuote() {
+            loadQuoteOfDay();
+        }
 
-        return `
-          <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2.5">
-              ${badge}
-              <div>
-                <div class="font-bold text-slate-800">${u.full_name}</div>
-                <div class="text-[10px] text-slate-400">${u.department}</div>
-              </div>
-            </div>
-            <div class="font-bold text-teal-800">${u.total_points} pts</div>
-          </div>
-        `;
-      }).join('');
-    }
+        async function logMood(mood, careAdvice) {
+            const box = document.getElementById('mood-response-box');
+            const title = document.getElementById('mood-response-title');
+            const text = document.getElementById('mood-response-text');
 
-    /* ==========================================================================
-       10. TAB 5: BURNOUT SELF-CHECK
-       ========================================================================== */
-    function calculateBurnoutScore() {
-      const w = parseInt(document.getElementById('slider-workload').value);
-      const f = parseInt(document.getElementById('slider-fatigue').value);
-      const r = parseInt(document.getElementById('slider-rest').value);
-      const c = parseInt(document.getElementById('slider-clarity').value);
+            box.classList.remove('hidden');
+            title.innerText = `Care Suggestion (${mood}):`;
+            text.innerText = careAdvice;
 
-      document.getElementById('val-workload').innerText = `${w} / 10`;
-      document.getElementById('val-fatigue').innerText = `${f} / 10`;
-      document.getElementById('val-rest').innerText = `${r} / 10`;
-      document.getElementById('val-clarity').innerText = `${c} / 10`;
+            if (supabaseClient && currentUser) {
+                await supabaseClient.from('mood_logs').insert([{
+                    user_id: currentUser.id,
+                    mood: mood
+                }]);
+            }
 
-      // Composite Score (Avg)
-      const avg = Math.round((w + f + r + c) / 4);
+            loadOfficePulse();
+        }
 
-      const badge = document.getElementById('burnoutStatusBadge');
-      const scoreText = document.getElementById('burnoutScoreText');
-      const scoreSub = document.getElementById('burnoutScoreSub');
-      const recs = document.getElementById('burnoutRecommendations');
+        async function loadOfficePulse() {
+            let counts = { Recharged: 0, Steady: 0, 'Running Low': 0, Overwhelmed: 0 };
+            let total = 0;
 
-      if (avg <= 4) {
-        badge.className = "my-4 p-4 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-200 text-center";
-        scoreText.innerText = "Balanced 💚";
-        scoreSub.innerText = "Your stress indicators are in a healthy, sustainable range.";
-        recs.innerHTML = `
-          <li>Keep engaging in micro-breaks throughout your daily schedule.</li>
-          <li>Share your positive energy on the Gratitude Wall!</li>
-        `;
-      } else if (avg <= 7) {
-        badge.className = "my-4 p-4 rounded-xl bg-amber-100 text-amber-900 border border-amber-200 text-center";
-        scoreText.innerText = "Mild Fatigue 🟡";
-        scoreSub.innerText = "Noticeable mental strain detected. Action suggested.";
-        recs.innerHTML = `
-          <li>Incorporate 10-minute soundscape focus periods during heavy tasks.</li>
-          <li>Practice the 20-20-20 eye rest rule twice every afternoon.</li>
-          <li>Communicate workload boundaries with your team lead.</li>
-        `;
-      } else {
-        badge.className = "my-4 p-4 rounded-xl bg-rose-100 text-rose-900 border border-rose-200 text-center";
-        scoreText.innerText = "High Burnout Risk 🔴";
-        scoreSub.innerText = "Elevated exhaustion and fatigue indicators.";
-        recs.innerHTML = `
-          <li>Schedule a rest pause or reach out to Bersih HR Wellness Desk.</li>
-          <li>Utilize the 4-7-8 Breathing Guide in the Micro-Break tab immediately.</li>
-          <li>Delegate urgent non-essential workplace tasks where possible.</li>
-        `;
-      }
-    }
+            if (supabaseClient) {
+                const { data } = await supabaseClient.from('mood_logs').select('mood');
+                if (data && data.length > 0) {
+                    data.forEach(r => {
+                        if (counts[r.mood] !== undefined) counts[r.mood]++;
+                    });
+                    total = data.length;
+                }
+            }
 
-    async function saveBurnoutSurvey() {
-      showToast("Burnout check-in logged anonymously. Thank you for prioritizing wellness!");
-    }
+            if (total === 0) total = 1; // avoid division by zero
 
-    /* ==========================================================================
-       11. ADMIN PANEL & SQL SCRIPTS
-       ========================================================================== */
-    function openAdminModal() {
-      document.getElementById('adminPinModal').classList.remove('hidden');
-    }
-    function closeAdminPinModal() {
-      document.getElementById('adminPinModal').classList.add('hidden');
-    }
+            document.getElementById('pulse-recharged-pct').innerText = Math.round((counts.Recharged / total) * 100) + '%';
+            document.getElementById('pulse-recharged-bar').style.width = Math.round((counts.Recharged / total) * 100) + '%';
 
-    function verifyAdminPin() {
-      const pin = document.getElementById('adminPinInput').value;
-      if (pin === "1234") {
-        closeAdminPinModal();
-        document.getElementById('adminPanelModal').classList.remove('hidden');
-        renderAdminUserTable();
-        renderAdminBurnoutStats();
-      } else {
-        showToast("Incorrect Admin PIN Code");
-      }
-    }
+            document.getElementById('pulse-steady-pct').innerText = Math.round((counts.Steady / total) * 100) + '%';
+            document.getElementById('pulse-steady-bar').style.width = Math.round((counts.Steady / total) * 100) + '%';
 
-    function closeAdminPanelModal() {
-      document.getElementById('adminPanelModal').classList.add('hidden');
-    }
+            document.getElementById('pulse-low-pct').innerText = Math.round((counts['Running Low'] / total) * 100) + '%';
+            document.getElementById('pulse-low-bar').style.width = Math.round((counts['Running Low'] / total) * 100) + '%';
 
-    function renderAdminUserTable() {
-      const table = document.getElementById('adminUserTable');
-      table.innerHTML = mockUsers.map(u => `
-        <tr>
-          <td class="p-3 font-semibold text-slate-800">${u.full_name}</td>
-          <td class="p-3">${u.email}</td>
-          <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 text-[10px]">${u.department}</span></td>
-          <td class="p-3 font-bold text-amber-600">${u.total_points} pts</td>
-          <td class="p-3 text-right">
-            <button onclick="adminDeleteUser('${u.id}')" class="text-rose-600 hover:text-rose-800 font-bold">Delete</button>
-          </td>
-        </tr>
-      `).join('');
-    }
+            document.getElementById('pulse-overwhelmed-pct').innerText = Math.round((counts.Overwhelmed / total) * 100) + '%';
+            document.getElementById('pulse-overwhelmed-bar').style.width = Math.round((counts.Overwhelmed / total) * 100) + '%';
 
-    function adminDeleteUser(userId) {
-      mockUsers = mockUsers.filter(u => u.id !== userId);
-      renderAdminUserTable();
-      showToast("User record removed.");
-    }
+            document.getElementById('total-pulse-count').innerText = total;
+        }
 
-    function renderAdminBurnoutStats() {
-      const depts = ['Sales & Marketing', 'Operations', 'HR', 'Finance', 'IT', 'Administration'];
-      const container = document.getElementById('adminBurnoutStats');
-      container.innerHTML = depts.map(d => `
-        <div class="p-3 rounded-xl bg-white border text-xs">
-          <div class="font-bold text-slate-800">${d}</div>
-          <div class="text-[10px] text-slate-400 mt-0.5">Avg Stress Level</div>
-          <div class="text-sm font-bold text-teal-700 mt-1">4.2 / 10 <span class="text-[10px] font-normal text-emerald-600">Healthy</span></div>
-        </div>
-      `).join('');
-    }
+        // ----------------------------------------------------
+        // 4. GRATITUDE & SHOUT-OUT WALL MODULE
+        // ----------------------------------------------------
+        function toggleGratitudeModal(show) {
+            document.getElementById('gratitude-modal').classList.toggle('hidden', !show);
+        }
 
-    function dispatchAdminBroadcast() {
-      const txt = document.getElementById('adminBroadcastInput').value.trim();
-      if (!txt) return;
-      document.getElementById('broadcastText').innerText = txt;
-      document.getElementById('broadcastBanner').classList.remove('hidden');
-      closeAdminPanelModal();
-      showToast("Broadcast notification published!");
-    }
+        async function submitGratitudePost() {
+            const text = document.getElementById('gratitude-text').value.trim();
+            const anon = document.getElementById('gratitude-anon').checked;
 
-    function dismissBroadcast() {
-      document.getElementById('broadcastBanner').classList.add('hidden');
-    }
+            if (!text) return alert("Please enter a note!");
 
-    function adminResetLeaderboard() {
-      if (confirm("Are you sure you want to reset all October Mental Health Bingo points back to 0?")) {
-        mockUsers.forEach(u => u.total_points = 0);
-        if (currentUser) currentUser.total_points = 0;
-        localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
-        renderGreeting();
-        loadLeaderboard();
-        renderAdminUserTable();
-        showToast("Leaderboard points reset to zero.");
-      }
-    }
+            const author = anon ? "Anonymous Colleague" : (userProfile?.name || "Team Member");
 
-    /* SQL Modal */
-    function openSqlModal() { document.getElementById('sqlModal').classList.remove('hidden'); }
-    function closeSqlModal() { document.getElementById('sqlModal').classList.add('hidden'); }
-    function copySqlScript() {
-      const code = document.getElementById('sqlScriptContainer').innerText;
-      document.execCommand('copy');
-      showToast("SQL DDL script copied to clipboard!");
-    }
+            if (supabaseClient && currentUser) {
+                await supabaseClient.from('gratitude_posts').insert([{
+                    user_id: currentUser.id,
+                    author_name: author,
+                    content: text,
+                    likes: 0
+                }]);
+            }
 
-    /* Toast Notification System */
-    function showToast(msg) {
-      const toast = document.createElement('div');
-      toast.className = "fixed bottom-5 right-5 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-2xl z-50 transition-all duration-300 flex items-center gap-2";
-      toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${msg}`;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3500);
-    }
-  </script>
+            document.getElementById('gratitude-text').value = '';
+            toggleGratitudeModal(false);
+            loadGratitudePosts();
+        }
 
+        async function loadGratitudePosts() {
+            const grid = document.getElementById('gratitude-grid');
+            grid.innerHTML = '<p class="text-xs text-slate-400 col-span-3 text-center">Loading gratitude notes...</p>';
+
+            let posts = [];
+            if (supabaseClient) {
+                const { data } = await supabaseClient.from('gratitude_posts').select('*').order('created_at', { ascending: false });
+                if (data) posts = data;
+            }
+
+            if (posts.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 glass-card rounded-2xl">
+                        <i class="fa-regular fa-comments text-3xl text-slate-300 mb-2"></i>
+                        <p class="text-xs text-slate-500 font-medium">No shout-outs posted yet. Be the first to share gratitude!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = posts.map(p => `
+                <div class="sticky-note bg-amber-50/90 border border-amber-200 p-5 rounded-2xl flex flex-col justify-between">
+                    <p class="text-xs sm:text-sm font-medium text-slate-800 leading-relaxed mb-4">"${p.content}"</p>
+                    <div class="flex items-center justify-between border-t border-amber-200/60 pt-3 text-xs">
+                        <span class="font-bold text-amber-900">— ${p.author_name}</span>
+                        <button onclick="likeGratitude('${p.id}', ${p.likes})" class="flex items-center gap-1 text-rose-500 hover:text-rose-600 bg-white/80 px-2.5 py-1 rounded-full border border-amber-200 transition">
+                            <i class="fa-solid fa-heart"></i> <span>${p.likes || 0}</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function likeGratitude(id, currentLikes) {
+            if (supabaseClient) {
+                await supabaseClient.from('gratitude_posts').update({ likes: (currentLikes || 0) + 1 }).eq('id', id);
+                loadGratitudePosts();
+            }
+        }
+
+        // ----------------------------------------------------
+        // 5. MICRO-BREAK & BREATHING COMPANION
+        // ----------------------------------------------------
+        let breathInterval = null;
+        let isBreathing = false;
+        let breathPattern = 'box'; // box, 478, deep
+
+        function setBreathingTechnique(tech) {
+            breathPattern = tech;
+            document.querySelectorAll('#tab-microbreak button').forEach(b => {
+                if (b.id.startsWith('btn-breath-')) b.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+            });
+            document.getElementById(`btn-breath-${tech}`).className = "px-3 py-1.5 rounded-lg bg-white text-bersih-600 shadow-sm transition font-bold";
+        }
+
+        function toggleBreathing() {
+            const btn = document.getElementById('btn-start-breath');
+            const ring = document.getElementById('breath-ring');
+            const inst = document.getElementById('breath-instruction');
+            const timer = document.getElementById('breath-timer');
+
+            if (isBreathing) {
+                clearInterval(breathInterval);
+                isBreathing = false;
+                btn.innerText = "Start Breathing";
+                btn.className = "px-6 py-2.5 bg-bersih-600 hover:bg-bersih-700 text-white font-semibold rounded-xl text-sm transition shadow";
+                ring.className = "w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-bersih-500 bg-emerald-50 flex flex-col items-center justify-center breath-ring shadow-inner";
+                inst.innerText = "Ready?";
+                timer.innerText = "4";
+            } else {
+                isBreathing = true;
+                btn.innerText = "Stop Exercise";
+                btn.className = "px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl text-sm transition shadow";
+                runBreathingCycle();
+            }
+        }
+
+        function runBreathingCycle() {
+            const ring = document.getElementById('breath-ring');
+            const inst = document.getElementById('breath-instruction');
+            const timer = document.getElementById('breath-timer');
+
+            let step = 0; // 0: inhale, 1: hold, 2: exhale, 3: hold2
+            let count = 4;
+
+            inst.innerText = "Inhale Gently";
+            ring.className = "w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-bersih-500 breath-inhale flex flex-col items-center justify-center breath-ring shadow-inner";
+
+            breathInterval = setInterval(() => {
+                count--;
+                timer.innerText = count;
+
+                if (count <= 0) {
+                    step = (step + 1) % 4;
+                    if (step === 0) {
+                        count = 4;
+                        inst.innerText = "Inhale Gently";
+                        ring.className = "w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-bersih-500 breath-inhale flex flex-col items-center justify-center breath-ring shadow-inner";
+                    } else if (step === 1) {
+                        count = breathPattern === '478' ? 7 : 4;
+                        inst.innerText = "Hold Breath";
+                        ring.className = "w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-bersih-teal breath-hold flex flex-col items-center justify-center breath-ring shadow-inner";
+                    } else if (step === 2) {
+                        count = breathPattern === '478' ? 8 : 4;
+                        inst.innerText = "Exhale Slowly";
+                        ring.className = "w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-emerald-200 breath-exhale flex flex-col items-center justify-center breath-ring shadow-inner";
+                    } else {
+                        count = breathPattern === 'deep' ? 1 : 4;
+                        inst.innerText = "Rest";
+                    }
+                }
+            }, 1000);
+        }
+
+        // DIGITAL TASBEEH COUNTER
+        let tasbeehCount = 0;
+        function incrementTasbeeh() {
+            tasbeehCount++;
+            document.getElementById('tasbeeh-count').innerText = tasbeehCount;
+        }
+
+        function resetTasbeeh() {
+            tasbeehCount = 0;
+            document.getElementById('tasbeeh-count').innerText = tasbeehCount;
+        }
+
+        function changeTasbeehPreset() {
+            resetTasbeeh();
+        }
+
+        // AUDIO SOUNDSCAPE SYNTHESIZER (Web Audio API)
+        let audioCtx = null;
+        let activeNoiseNode = null;
+        let activeAudioKey = null;
+
+        function toggleAudio(key) {
+            if (activeAudioKey === key) {
+                stopAudio();
+                activeAudioKey = null;
+                document.getElementById(`audio-state-${key}`).innerText = "Off";
+            } else {
+                stopAudio();
+                startAudio(key);
+                activeAudioKey = key;
+                document.querySelectorAll("[id^='audio-state-']").forEach(e => e.innerText = "Off");
+                document.getElementById(`audio-state-${key}`).innerText = "Playing 🎵";
+            }
+        }
+
+        function startAudio(key) {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            const bufferSize = audioCtx.sampleRate * 2;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = buffer.getChannelData(0);
+
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+
+            const whiteNoise = audioCtx.createBufferSource();
+            whiteNoise.buffer = buffer;
+            whiteNoise.loop = true;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = key === 'rain' ? 'lowpass' : (key === 'waves' ? 'bandpass' : 'lowpass');
+            filter.frequency.value = key === 'rain' ? 800 : 400;
+
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0.05;
+
+            whiteNoise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            whiteNoise.start();
+            activeNoiseNode = whiteNoise;
+        }
+
+        function stopAudio() {
+            if (activeNoiseNode) {
+                activeNoiseNode.stop();
+                activeNoiseNode = null;
+            }
+        }
+
+        // ----------------------------------------------------
+        // 6. OCTOBER BINGO & LEADERBOARD MODULE
+        // ----------------------------------------------------
+        let userCompletedTiles = new Set();
+
+        function renderBingoGrid() {
+            const grid = document.getElementById('bingo-grid');
+            grid.innerHTML = bingoTiles.map(t => {
+                const isCompleted = userCompletedTiles.has(t.id);
+                return `
+                    <div onclick="toggleBingoTile(${t.id})" class="p-3 sm:p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between text-left ${
+                        isCompleted 
+                            ? 'bg-gradient-to-br from-bersih-600 to-teal-600 text-white border-transparent shadow-md transform scale-[1.02]' 
+                            : 'bg-white hover:border-bersih-500 border-slate-200 text-slate-800'
+                    }">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isCompleted ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}">+${t.pts} pts</span>
+                                <i class="fa-solid ${isCompleted ? 'fa-circle-check text-emerald-300' : 'fa-circle text-slate-200'}"></i>
+                            </div>
+                            <p class="text-xs font-semibold leading-snug">${t.text}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Calculate user total score
+            let score = 0;
+            userCompletedTiles.forEach(id => {
+                const found = bingoTiles.find(x => x.id === id);
+                if (found) score += found.pts;
+            });
+            document.getElementById('user-bingo-score').innerText = score;
+        }
+
+        async function toggleBingoTile(tileId) {
+            if (userCompletedTiles.has(tileId)) {
+                userCompletedTiles.delete(tileId);
+            } else {
+                userCompletedTiles.add(tileId);
+            }
+
+            renderBingoGrid();
+
+            if (supabaseClient && currentUser) {
+                if (userCompletedTiles.has(tileId)) {
+                    await supabaseClient.from('user_bingo').insert([{ user_id: currentUser.id, tile_id: tileId }]);
+                } else {
+                    await supabaseClient.from('user_bingo').delete().eq('user_id', currentUser.id).eq('tile_id', tileId);
+                }
+                loadBingoLeaderboard();
+            }
+        }
+
+        async function loadUserBingoState() {
+            if (supabaseClient && currentUser) {
+                const { data } = await supabaseClient.from('user_bingo').select('tile_id').eq('user_id', currentUser.id);
+                if (data) {
+                    userCompletedTiles = new Set(data.map(d => d.tile_id));
+                    renderBingoGrid();
+                }
+            }
+        }
+
+        async function loadBingoLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '<p class="text-xs text-slate-400">Loading rankings...</p>';
+
+            if (supabaseClient) {
+                const { data: users } = await supabaseClient.from('profiles').select('id, full_name, department');
+                const { data: completions } = await supabaseClient.from('user_bingo').select('user_id, tile_id');
+
+                if (users) {
+                    const scores = users.map(u => {
+                        const count = completions ? completions.filter(c => c.user_id === u.id).length : 0;
+                        return { name: u.full_name, dept: u.department, score: count * 10 };
+                    }).sort((a, b) => b.score - a.score);
+
+                    list.innerHTML = scores.slice(0, 5).map((s, idx) => `
+                        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                            <div class="flex items-center space-x-3">
+                                <span class="w-6 h-6 rounded-full ${idx === 0 ? 'bg-amber-400 text-white' : 'bg-slate-200 text-slate-700'} flex items-center justify-center text-xs font-bold">${idx + 1}</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-800">${s.name}</h4>
+                                    <span class="text-[10px] text-slate-400">${s.dept}</span>
+                                </div>
+                            </div>
+                            <span class="text-xs font-black text-bersih-600">${s.score} pts</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        // ----------------------------------------------------
+        // 7. BURNOUT SELF-CHECK TOOL
+        // ----------------------------------------------------
+        async function calculateBurnoutScore(e) {
+            e.preventDefault();
+            const q1 = parseInt(document.getElementById('val-q1').innerText);
+            const q2 = parseInt(document.getElementById('val-q2').innerText);
+            const q3 = parseInt(document.getElementById('val-q3').innerText);
+            const q4 = parseInt(document.getElementById('val-q4').innerText);
+
+            const total = q1 + q2 + q3 + q4;
+            const resBox = document.getElementById('burnout-result-box');
+            const badge = document.getElementById('burnout-badge');
+            const advice = document.getElementById('burnout-advice-text');
+
+            resBox.classList.remove('hidden');
+
+            let riskLevel = "Low Risk";
+            if (total <= 8) {
+                riskLevel = "Healthy Balance";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold text-white bg-emerald-600";
+                advice.innerText = "Great job maintaining work-life balance! Continue engaging in micro-breaks and daily gratitude reflections.";
+            } else if (total <= 14) {
+                riskLevel = "Moderate Fatigue";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold text-white bg-amber-500";
+                advice.innerText = "You are experiencing moderate workload strain. Consider using the 4-7-8 Breathing exercises and scheduling a short walk outside during lunch.";
+            } else {
+                riskLevel = "High Burnout Risk";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold text-white bg-rose-600";
+                advice.innerText = "Your scores indicate high exhaustion. Please speak with your supervisor or HR team regarding workload adjustments and prioritize rest today.";
+            }
+
+            if (supabaseClient && currentUser) {
+                await supabaseClient.from('burnout_assessments').insert([{
+                    user_id: currentUser.id,
+                    score: total,
+                    risk_level: riskLevel
+                }]);
+            }
+        }
+
+        // ----------------------------------------------------
+        // 8. SECURE ADMIN BACKEND PORTAL (PIN: 1234)
+        // ----------------------------------------------------
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('admin-pin-input').value;
+            if (pin === "1234") {
+                isAdminUnlocked = true;
+                document.getElementById('admin-pin-screen').classList.add('hidden');
+                document.getElementById('admin-content-screen').classList.remove('hidden');
+                loadAdminUserList();
+            } else {
+                alert("Incorrect PIN code!");
+            }
+        }
+
+        async function loadAdminUserList() {
+            const table = document.getElementById('admin-users-table');
+            table.innerHTML = '<tr><td colspan="4" class="p-3 text-center text-slate-400">Loading users...</td></tr>';
+
+            if (supabaseClient) {
+                const { data } = await supabaseClient.from('profiles').select('*');
+                if (data) {
+                    table.innerHTML = data.map(u => `
+                        <tr>
+                            <td class="p-2.5 font-bold text-slate-800">${u.full_name}</td>
+                            <td class="p-2.5 text-slate-600">${u.department}</td>
+                            <td class="p-2.5 text-slate-500">${u.email}</td>
+                            <td class="p-2.5 text-right space-x-2">
+                                <button onclick="adminDeleteUser('${u.id}')" class="text-rose-600 hover:underline">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+
+        async function adminDeleteUser(userId) {
+            if (confirm("Are you sure you want to delete this staff user account?")) {
+                if (supabaseClient) {
+                    await supabaseClient.from('profiles').delete().eq('id', userId);
+                    loadAdminUserList();
+                }
+            }
+        }
+
+        async function adminResetBingo() {
+            if (confirm("Are you sure you want to reset all October Bingo progress for all employees?")) {
+                if (supabaseClient) {
+                    await supabaseClient.from('user_bingo').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                    alert("October Bingo leaderboard reset fresh!");
+                    userCompletedTiles.clear();
+                    renderBingoGrid();
+                    loadBingoLeaderboard();
+                }
+            }
+        }
+
+        async function adminAssignTask() {
+            const task = document.getElementById('admin-task-desc').value.trim();
+            if (!task) return alert("Please enter task details!");
+
+            if (supabaseClient) {
+                await supabaseClient.from('custom_tasks').insert([{ task_text: task, active: true }]);
+                alert("Task notification dispatched to all employees!");
+                document.getElementById('admin-task-desc').value = '';
+                checkAssignedTasks();
+            }
+        }
+
+        async function checkAssignedTasks() {
+            if (supabaseClient) {
+                const { data } = await supabaseClient.from('custom_tasks').select('*').eq('active', true).order('assigned_date', { ascending: false }).limit(1);
+                if (data && data.length > 0) {
+                    document.getElementById('assigned-tasks-banner').classList.remove('hidden');
+                    document.getElementById('assigned-task-text').innerText = data[0].task_text;
+                }
+            }
+        }
+
+        function markTaskAcknowledged() {
+            document.getElementById('assigned-tasks-banner').classList.add('hidden');
+        }
+
+        // SQL Modal Handling
+        function openSqlModal() { document.getElementById('sql-modal').classList.remove('hidden'); }
+        function closeSqlModal() { document.getElementById('sql-modal').classList.add('hidden'); }
+        function copySqlCode() {
+            const code = document.getElementById('sql-code-text').innerText;
+            navigator.clipboard ? navigator.clipboard.writeText(code) : document.execCommand('copy');
+            alert("SQL setup script copied to clipboard!");
+        }
+    </script>
 </body>
 </html>
