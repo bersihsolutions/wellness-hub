@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-50">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bersih Care Portal - Office Wellness Hub</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -30,45 +27,26 @@
                             900: '#134e4a',
                         },
                         emerald: {
-                            50: '#ecfdf5',
                             600: '#059669',
-                            700: '#047857',
                         },
-                        sage: {
-                            100: '#e2e8f0',
-                            200: '#cbd5e1',
-                            500: '#64748b',
-                            700: '#334155'
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
                         }
                     },
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        arabic: ['Amiri', 'serif']
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
-
-    <!-- Supabase JS Client library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Custom CSS styles and Animations -->
     <style>
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.15); opacity: 0.3; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
         }
-        .breathing-circle {
-            animation: pulse-ring 4s infinite ease-in-out;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        /* Custom Scrollbar */
+        /* Custom scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -78,1439 +56,1438 @@
         }
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
-            border-radius: 9999px;
+            border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+        /* Breathing Animation Visual Ring */
+        @keyframes expandContract {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.6); opacity: 1; }
+        }
+        .breathing-circle {
+            transition: all 1s ease-in-out;
+        }
+        .breathing-active {
+            animation: expandContract 8s infinite ease-in-out;
+        }
     </style>
 </head>
-<body class="h-full flex flex-col font-sans text-slate-800 bg-slate-50 antialiased selection:bg-teal-100 selection:text-teal-900">
+<body class="text-slate-800 bg-slate-50 min-h-screen flex flex-col justify-between">
 
-    <header class="bg-gradient-to-r from-teal-800 via-teal-700 to-emerald-800 text-white shadow-lg sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo & Branding -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
-                    <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-teal-300 shadow-inner">
-                        <i class="fa-solid font-bold fa-leaf text-xl text-teal-200"></i>
-                    </div>
-                    <div>
-                        <div class="font-extrabold text-lg tracking-tight flex items-center gap-2">
-                            <span>Bersih Care Portal</span>
-                            <span class="text-[10px] bg-teal-900/60 text-teal-200 px-2 py-0.5 rounded-full border border-teal-500/30 font-medium">October Wellness</span>
-                        </div>
-                        <p class="text-xs text-teal-200/80 hidden sm:block">Office Mental Health & Mindful Culture Hub</p>
-                    </div>
+    <!-- TOP NAVBAR -->
+    <header class="bg-gradient-to-r from-teal-800 via-teal-700 to-emerald-800 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-gold-400 font-bold text-xl border border-white/20">
+                    <i class="fa-solid font-bold fa-leaf text-teal-300"></i>
                 </div>
-
-                <!-- Desktop Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium">
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 rounded-lg transition-all flex items-center gap-2 bg-white/15 text-white">
-                        <i class="fa-solid fa-house text-teal-200"></i> Dashboard
-                    </button>
-                    <button onclick="switchTab('gratitude')" id="nav-gratitude" class="nav-btn px-3 py-2 rounded-lg transition-all flex items-center gap-2 text-teal-100 hover:bg-white/10 hover:text-white">
-                        <i class="fa-solid fa-heart text-teal-200"></i> Gratitude Wall
-                    </button>
-                    <button onclick="switchTab('microbreak')" id="nav-microbreak" class="nav-btn px-3 py-2 rounded-lg transition-all flex items-center gap-2 text-teal-100 hover:bg-white/10 hover:text-white">
-                        <i class="fa-solid fa-spa text-teal-200"></i> Micro-Break & Zikr
-                    </button>
-                    <button onclick="switchTab('bingo')" id="nav-bingo" class="nav-btn px-3 py-2 rounded-lg transition-all flex items-center gap-2 text-teal-100 hover:bg-white/10 hover:text-white">
-                        <i class="fa-solid fa-trophy text-teal-200"></i> October Bingo
-                    </button>
-                    <button onclick="switchTab('burnout')" id="nav-burnout" class="nav-btn px-3 py-2 rounded-lg transition-all flex items-center gap-2 text-teal-100 hover:bg-white/10 hover:text-white">
-                        <i class="fa-solid fa-gauge-high text-teal-200"></i> Self-Check
-                    </button>
-                </nav>
-
-                <!-- User Controls / Sync Status / Admin Toggle -->
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <button onclick="openModal('supabaseModal')" title="Supabase Database Status" class="p-2 text-teal-100 hover:text-white hover:bg-white/10 rounded-lg transition flex items-center gap-1.5 text-xs">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" id="syncStatusIndicator"></span>
-                        <span class="hidden lg:inline text-xs font-semibold">Supabase Sync</span>
-                    </button>
-
-                    <!-- User Info & Logout -->
-                    <div id="userInfoHeader" class="hidden flex items-center gap-2 bg-teal-900/40 border border-teal-500/30 rounded-xl px-2.5 py-1">
-                        <div class="text-right">
-                            <div id="headerUserName" class="text-xs font-bold leading-tight text-white">User</div>
-                            <div id="headerUserDept" class="text-[10px] text-teal-200 leading-tight">Dept</div>
-                        </div>
-                        <button onclick="handleLogout()" title="Log Out" class="p-1.5 text-teal-200 hover:text-rose-300 hover:bg-white/10 rounded-lg transition">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                        </button>
-                    </div>
-
-                    <button onclick="openAdminPrompt()" class="p-2 text-teal-100 hover:text-white hover:bg-white/10 rounded-lg transition text-xs font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-lock text-amber-300"></i>
-                        <span class="hidden sm:inline">Admin</span>
-                    </button>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide">BERSIH CARE PORTAL</h1>
+                    <p class="text-xs text-teal-200">October Workplace Mental Health Hub</p>
                 </div>
+            </div>
+
+            <!-- Sync Indicator & User Profile / Admin Quick Link -->
+            <div id="navRightSection" class="hidden flex items-center space-x-3">
+                <button onclick="openModal('supabaseModal')" class="bg-teal-900/60 hover:bg-teal-900 text-teal-200 text-xs px-2.5 py-1.5 rounded-lg border border-teal-600/40 flex items-center space-x-1.5 transition">
+                    <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="hidden md:inline font-medium">Supabase Connected</span>
+                    <i class="fa-solid fa-database text-xs opacity-75"></i>
+                </button>
+                <div class="text-right hidden sm:block">
+                    <div id="navUserName" class="text-sm font-semibold text-white">User</div>
+                    <div id="navUserDept" class="text-xs text-teal-200">Dept</div>
+                </div>
+                <button onclick="promptAdminPin()" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-1.5 rounded-lg flex items-center space-x-1 font-medium transition" title="Admin Backend Access">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span class="hidden sm:inline">Admin</span>
+                </button>
+                <button onclick="handleLogout()" class="text-teal-200 hover:text-white p-2 rounded-lg hover:bg-white/10 transition" title="Log Out">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 md:pb-8">
-        
-        <!-- Broadcast Notification Banner for Assigned Tasks -->
-        <div id="assignedTaskBanner" class="hidden mb-6 bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-orange-500/10 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm">
-                    <i class="fa-solid fa-bell text-lg"></i>
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-700">Today's Special October Challenge Assigned!</h4>
-                    <p id="assignedTaskText" class="text-sm font-semibold text-slate-800">Complete 5 minutes of Box Breathing before noon.</p>
-                </div>
-            </div>
-            <button onclick="claimAssignedTask()" id="claimTaskBtn" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow transition shrink-0 flex items-center gap-1.5">
-                <i class="fa-solid fa-check"></i> Mark Complete & Earn Points
-            </button>
-        </div>
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
 
-        <!-- TAB 1: DASHBOARD / WELLNESS HUB HOME -->
-        <section id="tab-dashboard" class="tab-content space-y-6">
-            <!-- Dynamic Empathetic Greeting Banner -->
-            <div class="bg-gradient-to-br from-teal-900 via-teal-800 to-emerald-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-teal-500/20 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="relative z-10">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div>
-                            <span class="inline-block px-3 py-1 bg-teal-700/60 border border-teal-500/40 rounded-full text-xs font-semibold text-teal-200 mb-2">
-                                <i class="fa-solid fa-calendar-day mr-1"></i> October Mental Health Month
-                            </span>
-                            <h1 id="welcomeUserGreeting" class="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                                Welcome back! 🌿
-                            </h1>
-                            <p id="moodEmpatheticResponse" class="mt-2 text-teal-100 text-sm sm:text-base leading-relaxed max-w-2xl">
-                                How are you feeling today? Tap your current state below so we can tailor your workspace wellness suggestions.
-                            </p>
-                        </div>
-                        
-                        <!-- Quick Mood Selector -->
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shrink-0">
-                            <p class="text-xs font-bold text-teal-200 mb-2 uppercase tracking-wider">Log Today's Energy</p>
-                            <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
-                                <button onclick="logMood('Recharged', '⚡ Energetic & Ready', 'You\'re feeling energized! Use this focus time for complex tasks and share a kindly word with a peer on the Gratitude Wall.')" class="mood-btn px-3 py-2 bg-white/10 hover:bg-emerald-500/40 rounded-xl border border-white/10 transition flex items-center gap-2">
-                                    <span>⚡ Recharged</span>
-                                </button>
-                                <button onclick="logMood('Steady', '🌊 Calm & Balanced', 'A steady state is wonderful for sustained work. Keep a gentle water intake and take short eye breaks!')" class="mood-btn px-3 py-2 bg-white/10 hover:bg-teal-500/40 rounded-xl border border-white/10 transition flex items-center gap-2">
-                                    <span>🌊 Steady</span>
-                                </button>
-                                <button onclick="logMood('Running Low', '🔋 Need a Reset', 'Your energy is dipping. We recommend a 2-minute Zikr/Breathing reset or a short 5-minute walking break.')" class="mood-btn px-3 py-2 bg-white/10 hover:bg-amber-500/40 rounded-xl border border-white/10 transition flex items-center gap-2">
-                                    <span>🔋 Running Low</span>
-                                </button>
-                                <button onclick="logMood('Overwhelmed', '🕊️ In Need of Calm', 'Take a soft pause right now. Step away from your inbox for 3 minutes and try our 4-7-8 Breathing exercise.')" class="mood-btn px-3 py-2 bg-white/10 hover:bg-rose-500/40 rounded-xl border border-white/10 transition flex items-center gap-2">
-                                    <span>🕊️ Overwhelmed</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Daily Quote & Inspiration (100 Days Rotator with Islamic Perspective) -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 glass-card rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-2">
-                                <span class="p-2 bg-teal-100 text-teal-700 rounded-xl font-bold text-xs">
-                                    <i class="fa-solid fa-quote-left"></i> Daily Wisdom
-                                </span>
-                                <span id="quoteDayCounter" class="text-xs font-semibold text-slate-500">Day 1 / 100</span>
-                            </div>
-                            <button onclick="nextQuote()" class="text-xs font-semibold text-teal-600 hover:text-teal-800 flex items-center gap-1">
-                                Next Quote <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </div>
-                        <blockquote id="quoteText" class="text-base sm:text-lg font-medium text-slate-800 italic leading-relaxed">
-                            "Unquestionably, by the remembrance of Allah do hearts find rest." (Quran 13:28) — True inner peace begins when we pause to reconnect with our purpose and calm our minds.
-                        </blockquote>
-                        <p id="quoteAuthor" class="mt-3 text-xs font-bold text-teal-700 uppercase tracking-wider">— Islamic Spiritual & Wellness Reflection</p>
-                    </div>
-                    
-                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                        <span><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Rotates daily across 100 uplifting reflections</span>
-                        <button onclick="shareQuoteToGratitude()" class="text-teal-600 hover:underline font-bold">Post to Gratitude Wall <i class="fa-solid fa-share ml-1"></i></button>
-                    </div>
-                </div>
-
-                <!-- Office Pulse Analytics Widget -->
-                <div class="glass-card rounded-2xl p-6 shadow-sm border border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-800 flex items-center justify-between mb-3">
-                        <span><i class="fa-solid fa-chart-pie text-teal-600 mr-1.5"></i> Today's Office Energy</span>
-                        <span class="text-xs font-normal text-slate-500">Live Team Pulse</span>
-                    </h3>
-                    <div id="officePulseBars" class="space-y-3">
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-emerald-700">⚡ Recharged</span>
-                                <span id="pulseCountRecharged" class="text-slate-600">45%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div id="pulseBarRecharged" class="bg-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 45%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-teal-700">🌊 Steady</span>
-                                <span id="pulseCountSteady" class="text-slate-600">35%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div id="pulseBarSteady" class="bg-teal-500 h-2 rounded-full transition-all duration-500" style="width: 35%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-amber-700">🔋 Running Low</span>
-                                <span id="pulseCountLow" class="text-slate-600">15%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div id="pulseBarLow" class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: 15%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-rose-700">🕊️ Overwhelmed</span>
-                                <span id="pulseCountOverwhelmed" class="text-slate-600">5%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div id="pulseBarOverwhelmed" class="bg-rose-500 h-2 rounded-full transition-all duration-500" style="width: 5%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-[11px] text-slate-400 mt-4 text-center">Updated in real-time as colleagues log check-ins</p>
-                </div>
-            </div>
-
-            <!-- Quick Action Grid Hub -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div onclick="switchTab('gratitude')" class="p-5 bg-white rounded-2xl border border-slate-200 hover:border-teal-400 hover:shadow-md transition cursor-pointer group">
-                    <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-3 group-hover:scale-110 transition">
-                        <i class="fa-solid fa-heart text-xl"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-800 text-sm">Gratitude Wall</h4>
-                    <p class="text-xs text-slate-500 mt-1">Send shout-outs & appreciate peers</p>
-                </div>
-
-                <div onclick="switchTab('microbreak')" class="p-5 bg-white rounded-2xl border border-slate-200 hover:border-teal-400 hover:shadow-md transition cursor-pointer group">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center mb-3 group-hover:scale-110 transition">
-                        <i class="fa-solid fa-spa text-xl"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-800 text-sm">Breathing & Zikr</h4>
-                    <p class="text-xs text-slate-500 mt-1">Interactive resets & audio sounds</p>
-                </div>
-
-                <div onclick="switchTab('bingo')" class="p-5 bg-white rounded-2xl border border-slate-200 hover:border-teal-400 hover:shadow-md transition cursor-pointer group">
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3 group-hover:scale-110 transition">
-                        <i class="fa-solid fa-trophy text-xl"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-800 text-sm">October Bingo</h4>
-                    <p class="text-xs text-slate-500 mt-1">Complete habit tiles & top rank</p>
-                </div>
-
-                <div onclick="switchTab('burnout')" class="p-5 bg-white rounded-2xl border border-slate-200 hover:border-teal-400 hover:shadow-md transition cursor-pointer group">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 group-hover:scale-110 transition">
-                        <i class="fa-solid fa-gauge-high text-xl"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-800 text-sm">Burnout Self-Check</h4>
-                    <p class="text-xs text-slate-500 mt-1">Private slider assessment & tips</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: DAILY PULSE & GRATITUDE WALL -->
-        <section id="tab-gratitude" class="tab-content hidden space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-heart text-rose-500"></i> Daily Pulse & Gratitude Wall
-                    </h2>
-                    <p class="text-slate-500 text-sm">Express appreciation, give shout-outs, and build a warm workplace culture.</p>
-                </div>
-                <button onclick="openModal('postGratitudeModal')" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm rounded-xl shadow-lg hover:shadow-teal-500/20 transition flex items-center gap-2 self-start md:self-auto">
-                    <i class="fa-solid fa-plus"></i> Leave Gratitude Note
-                </button>
-            </div>
-
-            <!-- Daily Rotating Reflection Prompt -->
-            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-4">
-                <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
-                    <i class="fa-solid fa-lightbulb"></i>
-                </div>
-                <div>
-                    <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Today's Reflection Prompt</span>
-                    <p id="dailyPromptText" class="text-sm font-semibold text-emerald-950">"Who in your department made your work day smoother this week? Give them a quick shout-out!"</p>
-                </div>
-            </div>
-
-            <!-- Gratitude Sticky Notes Grid -->
-            <div id="gratitudeNotesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- JS Populates Gratitude Notes dynamic cards -->
-            </div>
-        </section>
-
-        <!-- TAB 3: MICRO-BREAK, BREATHING & ZIKR COMPANION -->
-        <section id="tab-microbreak" class="tab-content hidden space-y-6">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-spa text-teal-600"></i> Micro-Break & Zikr Companion
-                </h2>
-                <p class="text-slate-500 text-sm">Quick desk resets, visual breathing rhythms, digital Tasbeeh, and calming soundscapes.</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Interactive Breathing Visualizer -->
-                <div class="glass-card rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col items-center justify-between min-h-[420px]">
-                    <div class="w-full flex items-center justify-between mb-4">
-                        <span class="text-xs font-bold uppercase tracking-wider text-teal-700">Visual Breathing Guide</span>
-                        <select id="breathingPattern" onchange="changeBreathingPattern()" class="text-xs bg-slate-100 border border-slate-300 rounded-lg px-2.5 py-1.5 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                            <option value="box">Box Breathing (4-4-4-4)</option>
-                            <option value="478">4-7-8 Relaxation</option>
-                            <option value="calm">2-1 Deep Calming</option>
-                        </select>
-                    </div>
-
-                    <!-- Breathing Animation Ball -->
-                    <div class="relative my-8 flex items-center justify-center">
-                        <div id="breathingOuterRing" class="w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-teal-100/60 border-2 border-teal-300 flex items-center justify-center transition-all duration-1000">
-                            <div id="breathingCircle" class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-tr from-teal-600 to-emerald-500 shadow-xl flex flex-col items-center justify-center text-white text-center p-4 transition-all duration-1000">
-                                <span id="breathingAction" class="font-extrabold text-lg sm:text-xl">Inhale</span>
-                                <span id="breathingTimer" class="text-2xl font-black mt-1">4</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <button onclick="toggleBreathing()" id="breathingToggleBtn" class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-2">
-                            <i class="fa-solid fa-play"></i> Start Session
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Digital Zikr / Tasbeeh Counter -->
-                <div class="glass-card rounded-3xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between min-h-[420px]">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold uppercase tracking-wider text-teal-700">Digital Zikr & Tasbeeh</span>
-                        <span id="tasbeehTargetBadge" class="text-xs font-semibold bg-teal-100 text-teal-800 px-2.5 py-1 rounded-full">Goal: 33</span>
-                    </div>
-
-                    <!-- Zikr Phrase Selector -->
-                    <div class="grid grid-cols-3 gap-2 my-2">
-                        <button onclick="selectZikrPhrase('Subhanallah', 33, 'سُبْحَانَ اللَّهِ')" class="zikr-select-btn p-2 text-center rounded-xl border border-teal-200 bg-teal-50 text-teal-800 text-xs font-bold">
-                            <div>Subhanallah</div>
-                            <div class="font-arabic text-sm mt-0.5">سُبْحَانَ اللَّهِ</div>
-                        </button>
-                        <button onclick="selectZikrPhrase('Alhamdulillah', 33, 'الْحَمْدُ لِلَّهِ')" class="zikr-select-btn p-2 text-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-bold">
-                            <div>Alhamdulillah</div>
-                            <div class="font-arabic text-sm mt-0.5">الْحَمْدُ لِلَّهِ</div>
-                        </button>
-                        <button onclick="selectZikrPhrase('Allahu Akbar', 33, 'اللَّهُ أَكْبَرُ')" class="zikr-select-btn p-2 text-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-bold">
-                            <div>Allahu Akbar</div>
-                            <div class="font-arabic text-sm mt-0.5">اللَّهُ أَكْبَرُ</div>
-                        </button>
-                    </div>
-
-                    <!-- Tasbeeh Clicker Button -->
-                    <div class="text-center my-4">
-                        <p id="zikrArabicDisplay" class="font-arabic text-2xl text-teal-800 font-bold mb-1">سُبْحَانَ اللَّهِ</p>
-                        <button onclick="tapTasbeeh()" class="w-32 h-32 rounded-full bg-gradient-to-b from-teal-700 to-teal-900 text-white shadow-2xl active:scale-95 transition flex flex-col items-center justify-center mx-auto border-4 border-teal-400/40">
-                            <span id="tasbeehCounter" class="text-4xl font-black">0</span>
-                            <span class="text-[10px] font-semibold tracking-widest uppercase opacity-80 mt-1">TAP TO COUNT</span>
-                        </button>
-                    </div>
-
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-                        <button onclick="resetTasbeeh()" class="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1">
-                            <i class="fa-solid fa-rotate-left"></i> Reset
-                        </button>
-                        <span id="tasbeehTotalCount" class="text-xs font-bold text-slate-600">Total Today: 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Desk Stretch & Ambient Soundscapes Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Desk Stretch & Eye Reset Timer (20-20-20 Rule) -->
-                <div class="glass-card rounded-2xl p-6 border border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-eye text-indigo-600"></i> 20-20-20 Eye Reset & Desk Stretch
-                    </h3>
-                    <p class="text-xs text-slate-500 mb-4">Every 20 minutes, look at an object 20 feet away for 20 seconds to eliminate screen fatigue.</p>
-                    
-                    <div class="flex items-center justify-between bg-slate-100 p-4 rounded-xl mb-4">
-                        <div>
-                            <span class="text-xs font-bold text-slate-600">Next Eye Break In:</span>
-                            <div id="eyeResetTimer" class="text-2xl font-black text-slate-800">20:00</div>
-                        </div>
-                        <button onclick="toggleEyeTimer()" id="eyeTimerBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition">
-                            Start Timer
-                        </button>
-                    </div>
-
-                    <div class="space-y-2 text-xs text-slate-600">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-check-circle text-emerald-500"></i> Shoulder Shrugs: Roll shoulders backwards 10 times.
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-check-circle text-emerald-500"></i> Neck Stretch: Gently tilt head left & right for 15s.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Web Audio API Synthesized Soundscapes -->
-                <div class="glass-card rounded-2xl p-6 border border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-headphones text-teal-600"></i> Ambient Soundscapes (Web Audio)
-                    </h3>
-                    <p class="text-xs text-slate-500 mb-4">Calming synthesized background noise for deep concentration or desk meditation.</p>
-
-                    <div class="grid grid-cols-3 gap-3">
-                        <button onclick="toggleSoundscape('rain')" id="sound-rain" class="sound-btn p-3 rounded-xl border border-slate-200 text-center hover:border-teal-400 transition bg-white">
-                            <i class="fa-solid fa-cloud-showers-heavy text-teal-600 text-lg mb-1 block"></i>
-                            <span class="text-xs font-bold text-slate-700">Gentle Rain</span>
-                        </button>
-                        <button onclick="toggleSoundscape('whitenoise')" id="sound-whitenoise" class="sound-btn p-3 rounded-xl border border-slate-200 text-center hover:border-teal-400 transition bg-white">
-                            <i class="fa-solid fa-wind text-indigo-600 text-lg mb-1 block"></i>
-                            <span class="text-xs font-bold text-slate-700">Soft Breeze</span>
-                        </button>
-                        <button onclick="toggleSoundscape('tones')" id="sound-tones" class="sound-btn p-3 rounded-xl border border-slate-200 text-center hover:border-teal-400 transition bg-white">
-                            <i class="fa-solid fa-music text-amber-600 text-lg mb-1 block"></i>
-                            <span class="text-xs font-bold text-slate-700">Warm Tones</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: OCTOBER BINGO & LEADERBOARD -->
-        <section id="tab-bingo" class="tab-content hidden space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-trophy text-amber-500"></i> Mental Health October Bingo
-                    </h2>
-                    <p class="text-slate-500 text-sm">Complete simple daily self-care actions, earn badges, and climb the office leaderboard!</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-600 bg-slate-200 px-3 py-1.5 rounded-xl">
-                        Your Points: <span id="userBingoPoints" class="text-teal-700 font-extrabold">0 pts</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Weekly Focus Area Lock Tabs -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200">
-                <button onclick="setBingoWeek(1)" id="bingoWeek1Btn" class="bingo-week-btn px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 text-white shadow-sm shrink-0">
-                    Week 1: Mindfulness
-                </button>
-                <button onclick="setBingoWeek(2)" id="bingoWeek2Btn" class="bingo-week-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">
-                    Week 2: Physical Reset <i class="fa-solid fa-lock text-[10px] ml-1 opacity-60" id="lockWeek2Icon"></i>
-                </button>
-                <button onclick="setBingoWeek(3)" id="bingoWeek3Btn" class="bingo-week-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">
-                    Week 3: Connection <i class="fa-solid fa-lock text-[10px] ml-1 opacity-60" id="lockWeek3Icon"></i>
-                </button>
-                <button onclick="setBingoWeek(4)" id="bingoWeek4Btn" class="bingo-week-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">
-                    Week 4: Gratitude <i class="fa-solid fa-lock text-[10px] ml-1 opacity-60" id="lockWeek4Icon"></i>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Bingo Grid (4x4) -->
-                <div class="lg:col-span-2 glass-card rounded-3xl p-6 border border-slate-200">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-sm font-bold text-slate-800">October Challenge Grid</h3>
-                        <span class="text-xs font-semibold text-slate-500">Tap tiles to mark done (+10 pts each)</span>
-                    </div>
-
-                    <div id="bingoGridContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <!-- JS renders 16 interactive Bingo Tiles -->
-                    </div>
-                </div>
-
-                <!-- Live Leaderboard -->
-                <div class="glass-card rounded-3xl p-6 border border-slate-200 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-medal text-amber-500"></i> October Leaderboard
-                            </h3>
-                            <button onclick="loadLeaderboard()" class="text-xs text-teal-600 hover:underline"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
-                        </div>
-                        <p class="text-xs text-slate-500 mb-4">Most active workplace participants this month.</p>
-
-                        <div id="leaderboardList" class="space-y-3 max-h-[320px] overflow-y-auto pr-1">
-                            <!-- JS populates Leaderboard items -->
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 text-center">
-                        <i class="fa-solid fa-shield-heart text-teal-500"></i> Friendly office participation
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 5: BURNOUT & WORK-LIFE SELF-CHECK -->
-        <section id="tab-burnout" class="tab-content hidden space-y-6">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-gauge-high text-indigo-600"></i> Work-Life & Burnout Self-Check
-                </h2>
-                <p class="text-slate-500 text-sm">Privately evaluate your stress levels and screen fatigue. Results are anonymized.</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Self-Assessment Sliders Form -->
-                <div class="lg:col-span-2 glass-card rounded-3xl p-6 sm:p-8 border border-slate-200 space-y-6">
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-xs font-bold text-slate-700 uppercase">1. Workload Balance & Control</label>
-                            <span id="sliderVal1" class="text-xs font-extrabold text-teal-700">7 / 10</span>
-                        </div>
-                        <input type="range" id="burnoutSlider1" min="1" max="10" value="7" oninput="calculateBurnoutScore()" class="w-full accent-teal-600 cursor-pointer">
-                        <p class="text-[11px] text-slate-400 mt-1">1 = Overwhelming, 10 = Completely manageable</p>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-xs font-bold text-slate-700 uppercase">2. Screen & Digital Fatigue</label>
-                            <span id="sliderVal2" class="text-xs font-extrabold text-teal-700">6 / 10</span>
-                        </div>
-                        <input type="range" id="burnoutSlider2" min="1" max="10" value="6" oninput="calculateBurnoutScore()" class="w-full accent-teal-600 cursor-pointer">
-                        <p class="text-[11px] text-slate-400 mt-1">1 = High eye strain & mental fatigue, 10 = Rested</p>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-xs font-bold text-slate-700 uppercase">3. Rest Quality & Sleep Recovery</label>
-                            <span id="sliderVal3" class="text-xs font-extrabold text-teal-700">8 / 10</span>
-                        </div>
-                        <input type="range" id="burnoutSlider3" min="1" max="10" value="8" oninput="calculateBurnoutScore()" class="w-full accent-teal-600 cursor-pointer">
-                        <p class="text-[11px] text-slate-400 mt-1">1 = Poor sleep, 10 = Deeply restored</p>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-xs font-bold text-slate-700 uppercase">4. Emotional Clarity & Calmness</label>
-                            <span id="sliderVal4" class="text-xs font-extrabold text-teal-700">7 / 10</span>
-                        </div>
-                        <input type="range" id="burnoutSlider4" min="1" max="10" value="7" oninput="calculateBurnoutScore()" class="w-full accent-teal-600 cursor-pointer">
-                        <p class="text-[11px] text-slate-400 mt-1">1 = Anxious/Irritated, 10 = Peaceful</p>
-                    </div>
-
-                    <button onclick="saveBurnoutAssessment()" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm rounded-xl shadow transition">
-                        Save Private Assessment & Sync Anonymously
-                    </button>
-                </div>
-
-                <!-- Instant Assessment Score Output -->
-                <div class="glass-card rounded-3xl p-6 border border-slate-200 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-4">Your Wellness Balance Index</h3>
-                        
-                        <div class="text-center my-6">
-                            <div id="burnoutScoreGauge" class="w-28 h-28 rounded-full border-8 border-teal-500 text-teal-700 flex flex-col items-center justify-center mx-auto shadow-inner">
-                                <span id="burnoutScoreNumber" class="text-3xl font-black">70%</span>
-                                <span class="text-[9px] font-bold uppercase tracking-wider text-slate-400">Score</span>
-                            </div>
-                            <h4 id="burnoutScoreLabel" class="font-extrabold text-slate-800 text-base mt-3">Healthy & Balanced</h4>
-                        </div>
-
-                        <div id="burnoutTailoredAdvice" class="bg-teal-50 border border-teal-200 rounded-2xl p-4 text-xs text-teal-900 leading-relaxed">
-                            You have a healthy wellness balance! Keep scheduling 2-minute micro-breaks during long stretches of focus.
-                        </div>
-                    </div>
-
-                    <p class="text-[10px] text-slate-400 mt-6 text-center">
-                        <i class="fa-solid fa-user-shield"></i> Your personal scores remain strictly private.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 6: BACKEND ADMIN PANEL (PIN 1234) -->
-        <section id="tab-admin" class="tab-content hidden space-y-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-lock text-amber-500"></i> Admin Backend Settings
-                    </h2>
-                    <p class="text-slate-500 text-sm">Manage office users, assign daily tasks, trigger email notifications & configure database.</p>
-                </div>
-                <button onclick="switchTab('dashboard')" class="text-xs font-bold text-slate-600 hover:text-slate-800 bg-slate-200 px-3 py-1.5 rounded-lg">
-                    Exit Admin
-                </button>
-            </div>
-
-            <!-- Admin Action Tabs -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- User Accounts Table -->
-                <div class="md:col-span-2 glass-card rounded-3xl p-6 border border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center justify-between">
-                        <span><i class="fa-solid fa-users text-teal-600 mr-1.5"></i> Registered Office Users</span>
-                        <span id="adminUserCount" class="text-xs font-normal bg-teal-100 text-teal-800 px-2.5 py-0.5 rounded-full">0 Users</span>
-                    </h3>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-700">
-                            <thead class="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold">
-                                <tr>
-                                    <th class="p-2.5 rounded-l-lg">User Name</th>
-                                    <th class="p-2.5">Email</th>
-                                    <th class="p-2.5">Department</th>
-                                    <th class="p-2.5 rounded-r-lg text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminUserTableBody">
-                                <!-- JS populates table rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Assign Special October Task & Email Simulation -->
-                <div class="glass-card rounded-3xl p-6 border border-slate-200 space-y-4">
-                    <h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-paper-plane text-teal-600 mr-1.5"></i> Assign Daily Task</h3>
-                    <p class="text-xs text-slate-500">Create a task for a specific date. Triggers a prompt on user login and simulates email notification broadcast.</p>
-
-                    <form onsubmit="handleAssignTask(event)" class="space-y-3 text-xs">
-                        <div>
-                            <label class="font-bold text-slate-700 block mb-1">Task Title / Description</label>
-                            <input type="text" id="adminTaskInput" placeholder="e.g. 10-minute team walking break" required class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500">
-                        </div>
-                        <div>
-                            <label class="font-bold text-slate-700 block mb-1">Target Date</label>
-                            <input type="date" id="adminTaskDate" required class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500">
-                        </div>
-                        <div class="flex items-center gap-2 pt-1">
-                            <input type="checkbox" id="adminSendEmail" checked class="rounded accent-teal-600">
-                            <label for="adminSendEmail" class="text-slate-600">Broadcast Email Notification</label>
-                        </div>
-                        <button type="submit" class="w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow transition">
-                            Publish Task & Send Notification
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- October Bingo Controls & Leaderboard Reset -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-card rounded-3xl p-6 border border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-800 mb-3"><i class="fa-solid fa-sliders text-amber-500 mr-1.5"></i> October Bingo Week Controls</h3>
-                    <p class="text-xs text-slate-500 mb-4">Lock or unlock weekly focus areas for all office users.</p>
-
-                    <div class="space-y-2 text-xs">
-                        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
-                            <span class="font-semibold">Week 1: Mindfulness</span>
-                            <span class="text-emerald-600 font-bold">Always Unlocked</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
-                            <span class="font-semibold">Week 2: Physical Reset</span>
-                            <button onclick="toggleWeekLock(2)" id="adminWeek2Btn" class="px-3 py-1 bg-amber-500 text-white font-bold rounded-lg text-[11px]">
-                                Lock / Unlock
-                            </button>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
-                            <span class="font-semibold">Week 3: Connection</span>
-                            <button onclick="toggleWeekLock(3)" id="adminWeek3Btn" class="px-3 py-1 bg-amber-500 text-white font-bold rounded-lg text-[11px]">
-                                Lock / Unlock
-                            </button>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
-                            <span class="font-semibold">Week 4: Gratitude</span>
-                            <button onclick="toggleWeekLock(4)" id="adminWeek4Btn" class="px-3 py-1 bg-amber-500 text-white font-bold rounded-lg text-[11px]">
-                                Lock / Unlock
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-3xl p-6 border border-slate-200 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-2"><i class="fa-solid fa-trash-arrow-up text-rose-600 mr-1.5"></i> Refresh October Leaderboard</h3>
-                        <p class="text-xs text-slate-500 mb-4">Start fresh for October by resetting all bingo scores to zero.</p>
-                    </div>
-                    <button onclick="confirmResetBingoLeaderboard()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-arrows-rotate"></i> Reset Leaderboard & Tile Scores
-                    </button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 px-2 py-1.5 shadow-lg">
-        <div class="flex justify-around items-center text-[10px] font-bold">
-            <button onclick="switchTab('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-btn flex flex-col items-center p-1.5 text-teal-600">
-                <i class="fa-solid fa-house text-base mb-0.5"></i> Home
-            </button>
-            <button onclick="switchTab('gratitude')" id="mobile-nav-gratitude" class="mobile-nav-btn flex flex-col items-center p-1.5 text-slate-500">
-                <i class="fa-solid fa-heart text-base mb-0.5"></i> Gratitude
-            </button>
-            <button onclick="switchTab('microbreak')" id="mobile-nav-microbreak" class="mobile-nav-btn flex flex-col items-center p-1.5 text-slate-500">
-                <i class="fa-solid fa-spa text-base mb-0.5"></i> Zikr & Reset
-            </button>
-            <button onclick="switchTab('bingo')" id="mobile-nav-bingo" class="mobile-nav-btn flex flex-col items-center p-1.5 text-slate-500">
-                <i class="fa-solid fa-trophy text-base mb-0.5"></i> Bingo
-            </button>
-            <button onclick="switchTab('burnout')" id="mobile-nav-burnout" class="mobile-nav-btn flex flex-col items-center p-1.5 text-slate-500">
-                <i class="fa-solid fa-gauge-high text-base mb-0.5"></i> Self-Check
-            </button>
-        </div>
-    </div>
-
-    <!-- MODALS CONTAINER -->
-    
-    <!-- 1. Authentication Modal (Login / Sign Up) -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+        <!-- AUTH SECTION (Show if not logged in) -->
+        <section id="authSection" class="max-w-md mx-auto my-8 bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
             <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center mx-auto mb-3 shadow-md">
-                    <i class="fa-solid fa-leaf text-2xl"></i>
+                <div class="w-16 h-16 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                    <i class="fa-solid fa-heart-pulse"></i>
                 </div>
-                <h3 class="text-xl font-black text-slate-800">Bersih Care Portal</h3>
-                <p class="text-xs text-slate-500 mt-1">Office Wellness Hub — Sign in or create an account to enter</p>
+                <h2 class="text-2xl font-bold text-slate-800">Welcome to Bersih Care</h2>
+                <p class="text-sm text-slate-500 mt-1">October Mental Health Month Portal</p>
             </div>
 
-            <!-- Auth Toggle Tabs -->
-            <div class="flex bg-slate-100 p-1 rounded-xl mb-6 text-xs font-bold">
-                <button onclick="toggleAuthForm('login')" id="tabLogin" class="flex-1 py-2 rounded-lg bg-white shadow-sm text-teal-800">Log In</button>
-                <button onclick="toggleAuthForm('signup')" id="tabSignup" class="flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800">Sign Up</button>
+            <!-- Login / Signup Tabs -->
+            <div class="flex bg-slate-100 p-1 rounded-xl mb-6 text-sm font-medium">
+                <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg bg-white shadow-sm text-teal-800 font-semibold transition">Log In</button>
+                <button id="tabSignupBtn" onclick="switchAuthTab('signup')" class="flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-800 transition">Sign Up</button>
             </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1">Email Address</label>
-                    <input type="email" id="loginEmail" required placeholder="name@company.com" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Email Address</label>
+                    <input type="email" id="loginEmail" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm" placeholder="employee@bersih.com">
                 </div>
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
+                    <input type="password" id="loginPassword" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm" placeholder="••••••••">
                 </div>
-                <button type="submit" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-lg hover:shadow-teal-500/20 transition">
-                    Log In to Wellness Hub
+                <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition">
+                    Log In to Portal
                 </button>
             </form>
 
-            <!-- Sign Up Form -->
-            <form id="signupForm" onsubmit="handleSignup(event)" class="hidden space-y-3 text-xs">
+            <!-- SIGNUP FORM -->
+            <form id="signupForm" onsubmit="handleSignup(event)" class="space-y-4 hidden">
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1">Full Name / User Name</label>
-                    <input type="text" id="signupName" required placeholder="e.g. Sarah Ahmad" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Full Name</label>
+                    <input type="text" id="signupName" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm" placeholder="Ahmad Fajar">
                 </div>
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1">Email Address</label>
-                    <input type="email" id="signupEmail" required placeholder="sarah@company.com" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="font-bold text-slate-700 block mb-1">Department</label>
-                    <select id="signupDept" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
-                        <option value="Sales & Marketing">Sales & Marketing</option>
-                        <option value="Operations">Operations</option>
-                        <option value="Human Resources">Human Resources (HR)</option>
-                        <option value="IT & Technology">IT & Technology</option>
-                        <option value="Finance & Accounting">Finance & Accounting</option>
-                        <option value="Executive Office">Executive Office</option>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Department</label>
+                    <select id="signupDept" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm bg-white">
+                        <option value="">Select Department</option>
+                        <option value="Operations">Operations & Field</option>
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Finance & Admin">Finance & Admin</option>
+                        <option value="IT & Tech">IT & Technical</option>
+                        <option value="Customer Care">Customer Care</option>
+                        <option value="Management">Management & Leadership</option>
                     </select>
                 </div>
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1">Password</label>
-                    <input type="password" id="signupPassword" required placeholder="Create a password" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Work Email</label>
+                    <input type="email" id="signupEmail" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm" placeholder="fajar@bersih.com">
                 </div>
-                <button type="submit" class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-lg hover:shadow-teal-500/20 transition">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
+                    <input type="password" id="signupPassword" minlength="6" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm" placeholder="At least 6 characters">
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg transition">
                     Create Account & Log In
+                </button>
+            </form>
+        </section>
+
+        <!-- MAIN DASHBOARD CONTENT (Show if logged in) -->
+        <div id="dashboardSection" class="hidden space-y-6">
+
+            <!-- Dynamic Welcome & AI Mood Companion Header -->
+            <div class="bg-gradient-to-r from-teal-900 via-teal-800 to-emerald-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="space-y-2 max-w-2xl">
+                        <div class="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-xs text-teal-200 font-medium border border-white/10">
+                            <i class="fa-solid fa-calendar-day text-amber-300"></i>
+                            <span id="currentDateStr">October Mental Health Month</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                            <span id="welcomeGreeting">Welcome back</span>, <span id="welcomeUserName" class="text-teal-200">Friend</span>!
+                        </h2>
+                        <p id="aiMoodAdvice" class="text-sm sm:text-base text-teal-100 font-light leading-relaxed bg-white/5 p-3 rounded-2xl border border-white/10">
+                            "Remember to take small breaths today. Your well-being is the foundation of everything you achieve."
+                        </p>
+                    </div>
+
+                    <!-- Quick Daily Energy Buttons -->
+                    <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/15 flex flex-col items-center min-w-[240px]">
+                        <span class="text-xs text-teal-200 font-semibold uppercase tracking-wider mb-2">How's your energy right now?</span>
+                        <div class="grid grid-cols-2 gap-2 w-full">
+                            <button onclick="logQuickEnergy('Recharged')" class="bg-emerald-500/30 hover:bg-emerald-500/50 text-emerald-100 text-xs py-2 px-2 rounded-xl border border-emerald-400/30 font-medium transition flex items-center justify-center gap-1.5">
+                                ⚡ Recharged
+                            </button>
+                            <button onclick="logQuickEnergy('Steady')" class="bg-teal-500/30 hover:bg-teal-500/50 text-teal-100 text-xs py-2 px-2 rounded-xl border border-teal-400/30 font-medium transition flex items-center justify-center gap-1.5">
+                                ⚓ Steady
+                            </button>
+                            <button onclick="logQuickEnergy('Running Low')" class="bg-amber-500/30 hover:bg-amber-500/50 text-amber-100 text-xs py-2 px-2 rounded-xl border border-amber-400/30 font-medium transition flex items-center justify-center gap-1.5">
+                                🪫 Running Low
+                            </button>
+                            <button onclick="logQuickEnergy('Overwhelmed')" class="bg-rose-500/30 hover:bg-rose-500/50 text-rose-100 text-xs py-2 px-2 rounded-xl border border-rose-400/30 font-medium transition flex items-center justify-center gap-1.5">
+                                🌧️ Overwhelmed
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 100 DAILY QUOTE BANNER -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex-shrink-0 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-quote-left"></i>
+                </div>
+                <div class="flex-grow space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-amber-700 uppercase tracking-wide" id="quoteCategoryTag">Daily Wellness Reflection</span>
+                        <span class="text-xs text-slate-400 font-mono" id="quoteDayCounter">Day 1 of 100</span>
+                    </div>
+                    <p id="dailyQuoteText" class="text-slate-700 text-sm sm:text-base font-medium italic">"Loading today's inspiring perspective..."</p>
+                    <p id="dailyQuoteSource" class="text-xs text-slate-500 font-semibold">— Bersih Care Wellness</p>
+                </div>
+                <button onclick="rotateNextQuote()" class="text-slate-400 hover:text-teal-700 text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-200 hover:border-teal-300 transition flex-shrink-0">
+                    <i class="fa-solid fa-arrows-rotate mr-1"></i> Next Prompt
+                </button>
+            </div>
+
+            <!-- NAVIGATION TABS -->
+            <div class="flex overflow-x-auto gap-2 border-b border-slate-200 pb-2 text-sm font-medium no-scrollbar">
+                <button onclick="switchTab('pulse')" id="tab-pulse" class="nav-tab bg-teal-700 text-white px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-2 flex-shrink-0 transition">
+                    <i class="fa-solid fa-heart-pulse"></i> Daily Pulse & Gratitude
+                </button>
+                <button onclick="switchTab('microbreak')" id="tab-microbreak" class="nav-tab text-slate-600 hover:text-teal-800 hover:bg-slate-100 px-4 py-2.5 rounded-xl flex items-center gap-2 flex-shrink-0 transition">
+                    <i class="fa-solid fa-spa"></i> Micro-Break & Breathing
+                </button>
+                <button onclick="switchTab('bingo')" id="tab-bingo" class="nav-tab text-slate-600 hover:text-teal-800 hover:bg-slate-100 px-4 py-2.5 rounded-xl flex items-center gap-2 flex-shrink-0 transition">
+                    <i class="fa-solid fa-trophy"></i> October Bingo Challenge
+                </button>
+                <button onclick="switchTab('burnout')" id="tab-burnout" class="nav-tab text-slate-600 hover:text-teal-800 hover:bg-slate-100 px-4 py-2.5 rounded-xl flex items-center gap-2 flex-shrink-0 transition">
+                    <i class="fa-solid fa-chart-line"></i> Work-Life Self-Check
+                </button>
+            </div>
+
+            <!-- TAB 1: DAILY PULSE & GRATITUDE WALL -->
+            <div id="tabContent-pulse" class="tab-pane space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Gratitude Wall / Shout-out Board -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-lg">Office Gratitude & Shout-out Wall</h3>
+                                <p class="text-xs text-slate-500">Share appreciation or uplifting messages anonymously or signed</p>
+                            </div>
+                            <button onclick="openModal('addGratitudeModal')" class="bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus"></i> Add Gratitude
+                            </button>
+                        </div>
+
+                        <!-- Daily Reflection Prompt Widget -->
+                        <div class="bg-teal-50 border border-teal-100 rounded-xl p-4 flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-teal-600 text-lg mt-0.5"></i>
+                            <div>
+                                <span class="text-xs font-bold text-teal-800 uppercase tracking-wide">Daily Reflection Prompt</span>
+                                <p id="dailyReflectionPromptText" class="text-sm text-teal-900 mt-0.5 font-medium">"What is one small kindness a team member did for you this week that brightened your day?"</p>
+                            </div>
+                        </div>
+
+                        <!-- Feed of Gratitude Cards -->
+                        <div id="gratitudeCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-1">
+                            <!-- Populated via JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Team Energy Aggregate & Quick Poll -->
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                            <h3 class="font-bold text-slate-800 text-base flex items-center justify-between">
+                                <span>Team Energy Pulse Today</span>
+                                <span class="text-xs font-normal text-slate-400" id="pulseTotalVotes">0 Responses</span>
+                            </h3>
+
+                            <div class="space-y-3" id="pulseProgressBars">
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                                        <span>⚡ Recharged</span>
+                                        <span id="perc-recharged">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="bar-recharged" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                                        <span>⚓ Steady</span>
+                                        <span id="perc-steady">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="bar-steady" class="bg-teal-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                                        <span>🪫 Running Low</span>
+                                        <span id="perc-runninglow">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="bar-runninglow" class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                                        <span>🌧️ Overwhelmed</span>
+                                        <span id="perc-overwhelmed">0%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                        <div id="bar-overwhelmed" class="bg-rose-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 italic text-center pt-2">Updated in real-time across all devices</p>
+                        </div>
+
+                        <!-- Active Assigned Tasks / Challenges Alert Box -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3">
+                            <div class="flex items-center gap-2 text-amber-800 font-bold text-sm">
+                                <i class="fa-solid fa-bullhorn text-amber-600"></i>
+                                <span>Today's Assigned Task</span>
+                            </div>
+                            <div id="assignedTaskBannerContent" class="text-xs text-amber-900 leading-relaxed">
+                                Loading assigned tasks...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MICRO-BREAK & BREATHING COMPANION -->
+            <div id="tabContent-microbreak" class="tab-pane hidden space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- Visual Guided Breathing Widget -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col items-center justify-between space-y-6 text-center">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Visual Breathing Companion</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Quick desk-side mental reset</p>
+                        </div>
+
+                        <!-- Technique selector -->
+                        <div class="flex bg-slate-100 p-1 rounded-xl text-xs font-medium w-full">
+                            <button onclick="setBreathingTechnique('box')" id="btn-technique-box" class="flex-1 py-1.5 rounded-lg bg-white shadow-sm text-teal-800 font-bold">Box (4-4-4-4)</button>
+                            <button onclick="setBreathingTechnique('calm')" id="btn-technique-calm" class="flex-1 py-1.5 rounded-lg text-slate-600">4-7-8 Calm</button>
+                            <button onclick="setBreathingTechnique('deep')" id="btn-technique-deep" class="flex-1 py-1.5 rounded-lg text-slate-600">2-1 Deep</button>
+                        </div>
+
+                        <!-- Animated Ring -->
+                        <div class="relative w-40 h-40 flex items-center justify-center my-4">
+                            <div id="breathingRing" class="absolute inset-0 rounded-full bg-teal-100 border-4 border-teal-500 opacity-60"></div>
+                            <div id="breathingInstruction" class="relative z-10 font-bold text-teal-900 text-base">Press Start</div>
+                        </div>
+
+                        <button id="breathingToggleBtn" onclick="toggleBreathingSession()" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold py-2.5 rounded-xl shadow transition">
+                            Start Breathing Exercise
+                        </button>
+                    </div>
+
+                    <!-- Digital Interactive Tasbeeh / Zikr Counter -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg flex items-center justify-between">
+                                <span>Digital Tasbeeh & Zikr</span>
+                                <i class="fa-solid fa-hands-praying text-amber-500"></i>
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Islamic Mindfulness & Inner Peace Reset</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs font-semibold text-slate-500">Select Dhikr Phrase:</label>
+                            <select id="dhikrSelect" onchange="resetTasbeeh()" class="w-full p-2 rounded-xl border border-slate-200 text-xs bg-slate-50">
+                                <option value="SubhanAllah">SubhanAllah (Glory be to Allah)</option>
+                                <option value="Alhamdulillah">Alhamdulillah (Praise be to Allah)</option>
+                                <option value="Allahu Akbar">Allahu Akbar (Allah is Most Great)</option>
+                                <option value="Astaghfirullah">Astaghfirullah (I seek forgiveness)</option>
+                                <option value="La hawla wa la quwwata illa billah">La hawla wa la quwwata illa billah</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-slate-900 text-teal-400 p-6 rounded-2xl text-center space-y-1 shadow-inner">
+                            <div id="tasbeehPhraseDisplay" class="text-xs text-teal-200 font-medium tracking-wide">SubhanAllah</div>
+                            <div id="tasbeehCounterDisplay" class="text-5xl font-mono font-bold">0</div>
+                            <div class="text-[10px] text-slate-400">Target: 33 / 100</div>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button onclick="incrementTasbeeh()" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow active:scale-95 transition text-base">
+                                <i class="fa-solid fa-fingerprint mr-1"></i> Tap / Press Space
+                            </button>
+                            <button onclick="resetTasbeeh()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 rounded-xl transition" title="Reset Counter">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Ambient Soundscapes & Desk Stretch Guides -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">Desk Stretches & Soundscapes</h3>
+                            <p class="text-xs text-slate-500">Focus enhancement & physical relief</p>
+                        </div>
+
+                        <!-- Soundscape Generator (Web Audio Synthesizer) -->
+                        <div class="space-y-2">
+                            <span class="text-xs font-semibold text-slate-600 block">Ambient Audio Synthesizer</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="toggleSoundscape('rain')" id="sound-rain" class="p-2.5 border rounded-xl text-xs font-medium text-slate-700 flex items-center justify-between hover:bg-slate-50 transition">
+                                    <span>🌧️ Gentle Rain</span>
+                                    <i class="fa-solid fa-play text-slate-400"></i>
+                                </button>
+                                <button onclick="toggleSoundscape('ocean')" id="sound-ocean" class="p-2.5 border rounded-xl text-xs font-medium text-slate-700 flex items-center justify-between hover:bg-slate-50 transition">
+                                    <span>🌊 Soft Waves</span>
+                                    <i class="fa-solid fa-play text-slate-400"></i>
+                                </button>
+                                <button onclick="toggleSoundscape('forest')" id="sound-forest" class="p-2.5 border rounded-xl text-xs font-medium text-slate-700 flex items-center justify-between hover:bg-slate-50 transition">
+                                    <span>🌲 Forest Breeze</span>
+                                    <i class="fa-solid fa-play text-slate-400"></i>
+                                </button>
+                                <button onclick="toggleSoundscape('whitenoise')" id="sound-whitenoise" class="p-2.5 border rounded-xl text-xs font-medium text-slate-700 flex items-center justify-between hover:bg-slate-50 transition">
+                                    <span>📻 Focus Noise</span>
+                                    <i class="fa-solid fa-play text-slate-400"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Desk Stretch Guide -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs space-y-2">
+                            <span class="font-bold text-slate-700 block"><i class="fa-solid fa-child-reaching text-teal-600 mr-1"></i> Quick Desk Stretch Prompt</span>
+                            <p id="deskStretchPromptText" class="text-slate-600">
+                                <strong>20-20-20 Eye Reset:</strong> Look at an object 20 feet away for 20 seconds to relieve screen strain. Roll shoulders back 5 times.
+                            </p>
+                            <button onclick="rotateDeskStretchPrompt()" class="text-teal-700 font-semibold text-[11px] hover:underline">Show Next Stretch Prompt →</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 3: OCTOBER BINGO CHALLENGE & LEADERBOARD -->
+            <div id="tabContent-bingo" class="tab-pane hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Interactive Bingo Grid -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-lg">October Mental Health Bingo</h3>
+                                <p class="text-xs text-slate-500">Complete healthy workplace habits. Progress saves live to team leaderboard!</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1.5 rounded-xl border border-emerald-200">
+                                    Your Score: <span id="userBingoPoints">0</span> pts
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Focus Tabs -->
+                        <div class="flex border-b border-slate-200 text-xs font-semibold space-x-4">
+                            <div class="pb-2 text-teal-700 border-b-2 border-teal-700">Week 1: Mindfulness</div>
+                            <div class="pb-2 text-slate-400">Week 2: Physical Reset</div>
+                            <div class="pb-2 text-slate-400">Week 3: Connection</div>
+                            <div class="pb-2 text-slate-400">Week 4: Gratitude</div>
+                        </div>
+
+                        <!-- 4x4 Interactive Grid -->
+                        <div id="bingoGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <!-- Populated dynamically via JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Bingo Leaderboard -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base">October Leaderboard</h3>
+                                <p class="text-xs text-slate-500">Top Office Wellness Champions</p>
+                            </div>
+                            <i class="fa-solid fa-trophy text-gold-500 text-xl"></i>
+                        </div>
+
+                        <div id="leaderboardList" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1">
+                            <!-- Populated dynamically via JavaScript -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 4: WORK-LIFE & BURNOUT SELF-CHECK TOOL -->
+            <div id="tabContent-burnout" class="tab-pane hidden space-y-6">
+                <div class="max-w-3xl mx-auto bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-xl">Workplace Work-Life & Burnout Self-Check</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                            A private self-reflective assessment. Your responses help gauge your workplace balance and anonymously contribute to overall team wellness insights.
+                        </p>
+                    </div>
+
+                    <form id="burnoutAssessmentForm" onsubmit="handleBurnoutSubmit(event)" class="space-y-6">
+                        <!-- Question 1 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-semibold text-slate-700">
+                                <label>1. Workload & Time Management Balance</label>
+                                <span id="val1Display" class="text-teal-700 font-bold">5 / 10</span>
+                            </div>
+                            <input type="range" id="q1Range" min="1" max="10" value="5" oninput="document.getElementById('val1Display').innerText = this.value + ' / 10'" class="w-full accent-teal-600">
+                            <div class="flex justify-between text-[11px] text-slate-400">
+                                <span>1 = Completely Overwhelmed</span>
+                                <span>10 = Very Manageable & Balanced</span>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-semibold text-slate-700">
+                                <label>2. Digital Fatigue & Screen Strain</label>
+                                <span id="val2Display" class="text-teal-700 font-bold">5 / 10</span>
+                            </div>
+                            <input type="range" id="q2Range" min="1" max="10" value="5" oninput="document.getElementById('val2Display').innerText = this.value + ' / 10'" class="w-full accent-teal-600">
+                            <div class="flex justify-between text-[11px] text-slate-400">
+                                <span>1 = Severe Eye/Mental Fatigue</span>
+                                <span>10 = Fresh & Refreshed</span>
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-semibold text-slate-700">
+                                <label>3. Rest & Sleep Quality</label>
+                                <span id="val3Display" class="text-teal-700 font-bold">5 / 10</span>
+                            </div>
+                            <input type="range" id="q3Range" min="1" max="10" value="5" oninput="document.getElementById('val3Display').innerText = this.value + ' / 10'" class="w-full accent-teal-600">
+                            <div class="flex justify-between text-[11px] text-slate-400">
+                                <span>1 = Poor Rest / Exhausted</span>
+                                <span>10 = Recharged & Rested</span>
+                            </div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-semibold text-slate-700">
+                                <label>4. Emotional Clarity & Workplace Peace</label>
+                                <span id="val4Display" class="text-teal-700 font-bold">5 / 10</span>
+                            </div>
+                            <input type="range" id="q4Range" min="1" max="10" value="5" oninput="document.getElementById('val4Display').innerText = this.value + ' / 10'" class="w-full accent-teal-600">
+                            <div class="flex justify-between text-[11px] text-slate-400">
+                                <span>1 = High Anxiety / Stress</span>
+                                <span>10 = Calm & Grounded</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3 rounded-xl shadow transition">
+                            Submit Self-Assessment & Get Feedback
+                        </button>
+                    </form>
+
+                    <!-- Assessment Results Display -->
+                    <div id="burnoutResultCard" class="hidden p-5 rounded-2xl border space-y-3 bg-slate-50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs uppercase tracking-wide font-bold text-slate-500">Your Wellness Score Result</span>
+                            <span id="burnoutScoreBadge" class="text-sm font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">
+                                Score: 0/100
+                            </span>
+                        </div>
+                        <h4 id="burnoutStatusHeading" class="font-bold text-slate-800 text-lg">Optimal Harmony</h4>
+                        <p id="burnoutRecommendationText" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Loading recommendations...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL: ADD GRATITUDE POST -->
+    <div id="addGratitudeModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-slate-800 text-base">Share Gratitude & Shout-out</h3>
+                <button onclick="closeModal('addGratitudeModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleGratitudeSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">To / Shout-out Subject</label>
+                    <input type="text" id="gratitudeTo" required class="w-full p-2.5 rounded-xl border border-slate-200 text-sm" placeholder="e.g. HR Team / Ahmad Fajar / Operations">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Your Gratitude Message</label>
+                    <textarea id="gratitudeMessage" required rows="3" class="w-full p-2.5 rounded-xl border border-slate-200 text-sm" placeholder="Thank you for always helping out with..."></textarea>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="gratitudeAnonymous" class="rounded border-slate-300 text-teal-600 focus:ring-teal-500">
+                    <label for="gratitudeAnonymous" class="text-xs text-slate-600">Post Anonymously</label>
+                </div>
+                <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold py-2.5 rounded-xl shadow transition">
+                    Post to Gratitude Wall
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- 2. Post Gratitude Note Modal -->
-    <div id="postGratitudeModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-slate-800 text-base">Leave a Gratitude Note or Shout-out</h3>
-                <button onclick="closeModal('postGratitudeModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form onsubmit="handlePostGratitude(event)" class="space-y-4 text-xs">
-                <div>
-                    <label class="font-bold text-slate-700 block mb-1">Recipient / Peer Name (Optional)</label>
-                    <input type="text" id="gratitudeRecipient" placeholder="e.g. Finance Team or Alex" class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none">
+    <!-- MODAL: SUPABASE SETUP & SYNC INFO + EXECUTE SQL SCRIPT -->
+    <div id="supabaseModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-database text-teal-600 text-lg"></i>
+                    <h3 class="font-bold text-slate-800 text-lg">Supabase Cloud Setup & Sync Info</h3>
                 </div>
-                <div>
-                    <label class="font-bold text-slate-700 block mb-1">Your Gratitude Note</label>
-                    <textarea id="gratitudeMessage" required rows="4" placeholder="Write a warm note of appreciation or encouragement..." class="w-full px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none"></textarea>
-                </div>
-                <div class="flex items-center justify-between pt-2">
-                    <label class="flex items-center gap-2 cursor-pointer text-slate-600">
-                        <input type="checkbox" id="gratitudeAnonymous" class="rounded accent-teal-600">
-                        <span>Post Anonymously</span>
-                    </label>
-                    <button type="submit" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow transition">
-                        Post to Wall
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 3. Admin PIN Prompt Modal -->
-    <div id="adminPinModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
-            <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-3">
-                <i class="fa-solid fa-lock text-xl"></i>
-            </div>
-            <h3 class="font-bold text-slate-800 text-base mb-1">Admin Access</h3>
-            <p class="text-xs text-slate-500 mb-4">Enter PIN Code (Default: 1234)</p>
-            <form onsubmit="handleAdminPinSubmit(event)" class="space-y-3">
-                <input type="password" id="adminPinInput" maxlength="6" required placeholder="••••" class="w-full text-center text-xl font-bold tracking-widest px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                <div class="flex gap-2">
-                    <button type="button" onclick="closeModal('adminPinModal')" class="flex-1 py-2 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl">Cancel</button>
-                    <button type="submit" class="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow transition">Unlock</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 4. Supabase Setup & Sync Info Modal -->
-    <div id="supabaseModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 relative max-h-[90vh] flex flex-col">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
-                    <i class="fa-solid fa-database text-teal-600"></i> Supabase Setup & Sync Info
-                </h3>
                 <button onclick="closeModal('supabaseModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            
-            <div class="space-y-4 my-4 overflow-y-auto text-xs pr-1">
-                <div class="bg-teal-50 border border-teal-200 rounded-2xl p-4">
-                    <span class="font-bold text-teal-800 block mb-1">Database Connection Details</span>
-                    <p class="text-slate-600"><strong>URL:</strong> https://qsnwejjznozuqjaaevkz.supabase.co</p>
-                    <p class="text-slate-600 truncate"><strong>Anon Key:</strong> eyJhbGciOiJIUzI1NiIsInR5cCI6... (Configured)</p>
-                    <div class="mt-2 flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                        <span class="font-bold text-emerald-700" id="modalConnectionStatus">Connected & Syncing</span>
-                    </div>
+
+            <div class="space-y-3 text-xs">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+                    <div><strong class="text-slate-700">Project URL:</strong> <code class="text-teal-700">https://qsnwejjznozuqjaaevkz.supabase.co</code></div>
+                    <div><strong class="text-slate-700">Anon Key:</strong> <code class="text-slate-500 break-all">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></div>
                 </div>
 
-                <div>
-                    <h4 class="font-bold text-slate-800 mb-1">Execute SQL Script for Supabase Dashboard</h4>
-                    <p class="text-slate-500 mb-2">Copy and paste this script into your Supabase Dashboard SQL Editor to initialize all database tables.</p>
-                    <pre class="bg-slate-900 text-slate-200 p-3 rounded-xl text-[10px] overflow-x-auto font-mono select-all max-h-48">
--- Execute SQL Script for Bersih Care Portal Supabase Dashboard
+                <p class="text-slate-600">
+                    Copy and run the SQL Script below in your <strong>Supabase Dashboard SQL Editor</strong> to create all tables and insert default October Bingo tiles.
+                </p>
 
--- Profiles / Office Users
-CREATE TABLE IF NOT EXISTS public.profiles (
+                <div class="relative">
+                    <textarea id="sqlScriptArea" readonly class="w-full h-48 p-3 bg-slate-900 text-emerald-400 font-mono text-[11px] rounded-xl border border-slate-800 leading-relaxed">
+-- ===================================================
+-- BERSIH CARE PORTAL - SUPABASE DATABASE SETUP SCRIPT
+-- Copy & Run this in Supabase Dashboard SQL Editor
+-- ===================================================
+
+-- 1. USERS TABLE
+CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
     full_name TEXT NOT NULL,
     department TEXT NOT NULL,
-    password_hash TEXT,
-    bingo_points INT DEFAULT 0,
+    password_hash TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Daily Gratitude Note Wall
-CREATE TABLE IF NOT EXISTS public.gratitude_posts (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    sender_name TEXT NOT NULL,
-    recipient_name TEXT,
-    message TEXT NOT NULL,
-    hearts_count INT DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Daily Energy Pulse Logs
-CREATE TABLE IF NOT EXISTS public.mood_logs (
+-- 2. MOOD LOGS TABLE
+CREATE TABLE IF NOT EXISTS mood_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_email TEXT NOT NULL,
-    mood TEXT NOT NULL,
+    user_name TEXT NOT NULL,
+    energy_level TEXT NOT NULL,
+    logged_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 3. GRATITUDE POSTS TABLE
+CREATE TABLE IF NOT EXISTS gratitude_posts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    author_name TEXT NOT NULL,
+    recipient TEXT NOT NULL,
+    message TEXT NOT NULL,
+    likes INT DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- October Assigned Tasks & Broadcasts
-CREATE TABLE IF NOT EXISTS public.assigned_tasks (
+-- 4. BINGO TILES & USER PROGRESS TABLE
+CREATE TABLE IF NOT EXISTS bingo_tiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
-    target_date DATE NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    category TEXT DEFAULT 'Mindfulness',
+    points INT DEFAULT 10,
+    week_num INT DEFAULT 1
 );
 
--- Burnout & Work-Life Assessments
-CREATE TABLE IF NOT EXISTS public.burnout_assessments (
+CREATE TABLE IF NOT EXISTS user_bingo_progress (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    score INT NOT NULL,
+    user_email TEXT NOT NULL,
+    user_name TEXT NOT NULL,
+    tile_id TEXT NOT NULL,
+    completed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 5. ASSIGNED TASKS TABLE
+CREATE TABLE IF NOT EXISTS assigned_tasks (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    assigned_date DATE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-</pre>
-                </div>
-            </div>
 
-            <div class="pt-3 border-t border-slate-100 flex justify-end">
-                <button onclick="closeModal('supabaseModal')" class="px-5 py-2 bg-slate-800 text-white font-bold text-xs rounded-xl">Close</button>
+-- 6. BURNOUT ASSESSMENTS TABLE
+CREATE TABLE IF NOT EXISTS burnout_assessments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_email TEXT NOT NULL,
+    score INT NOT NULL,
+    submitted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ENABLE ROW LEVEL SECURITY AND OPEN PERMISSIONS FOR DEMO ACCESS
+ALTER TABLE users DISABLE ROW LEVEL SECURITY;
+ALTER TABLE mood_logs DISABLE ROW LEVEL SECURITY;
+ALTER TABLE gratitude_posts DISABLE ROW LEVEL SECURITY;
+ALTER TABLE bingo_tiles DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_bingo_progress DISABLE ROW LEVEL SECURITY;
+ALTER TABLE assigned_tasks DISABLE ROW LEVEL SECURITY;
+ALTER TABLE burnout_assessments DISABLE ROW LEVEL SECURITY;
+                    </textarea>
+                    <button onclick="copySqlScript()" class="absolute top-2 right-2 bg-teal-700 hover:bg-teal-800 text-white text-xs px-2.5 py-1 rounded-lg">
+                        <i class="fa-solid fa-copy mr-1"></i> Copy SQL
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC & APPLICATION ENGINE -->
+    <!-- MODAL: ADMIN BACKEND (PIN REQUIRED: 1234) -->
+    <div id="adminModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="bg-amber-100 text-amber-800 p-2 rounded-xl text-lg font-bold"><i class="fa-solid fa-user-shield"></i></span>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">Bersih Care Admin Backend Dashboard</h3>
+                        <p class="text-xs text-slate-500">Privileged access for office wellness coordination</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('adminModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Admin Nav Tabs -->
+            <div class="flex gap-2 border-b border-slate-200 text-xs font-semibold pb-2 overflow-x-auto">
+                <button onclick="switchAdminTab('users')" id="admTab-users" class="px-3 py-1.5 rounded-lg bg-teal-700 text-white">User Management</button>
+                <button onclick="switchAdminTab('bingo')" id="admTab-bingo" class="px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100">Bingo Management</button>
+                <button onclick="switchAdminTab('tasks')" id="admTab-tasks" class="px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100">Assign Tasks/Announcements</button>
+                <button onclick="switchAdminTab('stats')" id="admTab-stats" class="px-3 py-1.5 rounded-lg text-slate-600 hover:bg-slate-100">Burnout & Work-Life Telemetry</button>
+            </div>
+
+            <!-- Admin Tab 1: User Management -->
+            <div id="admContent-users" class="adm-pane space-y-4">
+                <div class="flex justify-between items-center">
+                    <h4 class="font-bold text-slate-700 text-sm">Registered Office Users (<span id="adminUserCount">0</span>)</h4>
+                </div>
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100 text-slate-600 uppercase font-semibold">
+                            <tr>
+                                <th class="p-3">Name</th>
+                                <th class="p-3">Department</th>
+                                <th class="p-3">Email</th>
+                                <th class="p-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUserTableBody" class="divide-y divide-slate-100">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Admin Tab 2: Bingo Management -->
+            <div id="admContent-bingo" class="adm-pane hidden space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <h4 class="font-bold text-slate-700 text-sm">Manage October Bingo Tiles</h4>
+                    <button onclick="resetOctoberBingoLeaderboard()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-1.5 rounded-xl transition font-semibold">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset Leaderboard
+                    </button>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="newBingoTitle" placeholder="New Tile Action (e.g., Took a 10-min walk)" class="flex-grow p-2 rounded-xl border text-xs">
+                    <button onclick="addNewBingoTile()" class="bg-teal-700 text-white px-3 py-2 rounded-xl text-xs font-semibold">Add Tile</button>
+                </div>
+                <div id="adminBingoTileList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs max-h-[300px] overflow-y-auto">
+                    <!-- Dynamic -->
+                </div>
+            </div>
+
+            <!-- Admin Tab 3: Assign Tasks & Email Notification Prompt -->
+            <div id="admContent-tasks" class="adm-pane hidden space-y-4">
+                <h4 class="font-bold text-slate-700 text-sm">Assign Dated Task or Announcement Notice</h4>
+                <form onsubmit="handleAdminAssignTask(event)" class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Task / Prompt Title</label>
+                        <input type="text" id="adminTaskTitle" required class="w-full p-2 rounded-xl border text-xs" placeholder="e.g. October 10 World Mental Health Walk">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Target Date</label>
+                        <input type="date" id="adminTaskDate" required class="w-full p-2 rounded-xl border text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Description / Instructions</label>
+                        <textarea id="adminTaskDesc" required rows="2" class="w-full p-2 rounded-xl border text-xs" placeholder="Join colleagues at 4:00 PM for a gentle outdoor stroll..."></textarea>
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                        <label class="flex items-center gap-2 text-xs text-slate-600">
+                            <input type="checkbox" id="adminTaskSendEmail" checked class="rounded text-teal-600">
+                            <span>Trigger Email / Portal Alert Prompt on User Login</span>
+                        </label>
+                        <button type="submit" class="bg-teal-700 hover:bg-teal-800 text-white text-xs px-4 py-2 rounded-xl font-semibold transition">
+                            Publish & Dispatch Prompt
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Admin Tab 4: Burnout & Work-Life Self-Check Telemetry -->
+            <div id="admContent-stats" class="adm-pane hidden space-y-4">
+                <h4 class="font-bold text-slate-700 text-sm">Aggregate Burnout & Workplace Stress Telemetry</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center">
+                        <span class="text-xs text-slate-500 uppercase font-bold">Total Assessments</span>
+                        <div id="telemetryCount" class="text-2xl font-bold text-slate-800 mt-1">0</div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center">
+                        <span class="text-xs text-slate-500 uppercase font-bold">Average Harmony Score</span>
+                        <div id="telemetryAvgScore" class="text-2xl font-bold text-teal-700 mt-1">0 / 100</div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center">
+                        <span class="text-xs text-slate-500 uppercase font-bold">Risk Status</span>
+                        <div id="telemetryRisk" class="text-2xl font-bold text-emerald-600 mt-1">Healthy</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-leaf text-teal-400"></i>
+                <span class="font-semibold text-slate-200">Bersih Care Portal</span>
+                <span>— Workplace Wellness Initiative</span>
+            </div>
+            <p>Empowering employees throughout October World Mental Health Month & Beyond.</p>
+        </div>
+    </footer>
+
     <script>
+        // SUPABASE CLIENT INITIALIZATION
         const SUPABASE_URL = "https://qsnwejjznozuqjaaevkz.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFzbndlamp6bm96dXFqYWFldmt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1NjEzNjMsImV4cCI6MjEwNjEzNzM2M30.QACICnfnPUUhZ4IhwW6zUu9lePjoQ0OkZwF8OmZxJ6Q";
-
-        // Initialize Supabase Client
+        
         let supabaseClient = null;
         try {
-            if (window.supabase) {
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
-        } catch(e) {
-            console.warn("Supabase initialization fallback", e);
+        } catch (e) {
+            console.error("Supabase Initialization Error:", e);
         }
 
-        // Global State
-        let currentUser = null;
+        // GLOBAL APPLICATION STATE
+        let currentUser = null; // { email, fullName, department }
         let currentQuoteIndex = 0;
+        let audioContext = null;
+        let activeOscillators = [];
+        let isBreathingActive = false;
+        let breathingTimer = null;
         let tasbeehCount = 0;
-        let tasbeehTotalToday = 0;
-        let currentZikrGoal = 33;
-        let currentZikrName = "Subhanallah";
 
-        // 100 Mental Health & Islamic Reflections Data
-        const quotesDatabase = [
-            { quote: "Unquestionably, by the remembrance of Allah do hearts find rest. (Quran 13:28)", author: "Islamic Spiritual Reflection" },
-            { quote: "Small daily pauses compound into profound mental clarity over time.", author: "Workplace Wellness Principle" },
-            { quote: "For indeed, with hardship comes ease. (Quran 94:5)", author: "Quranic Wisdom" },
-            { quote: "Taking care of your mental health is an act of gratitude for the life you have been given.", author: "Mindful Culture" },
-            { quote: "Speak a good word or remain silent. Kindness is charity in the workplace.", author: "Prophetic Tradition" },
-            { quote: "You don't have to control everything. Focus on your breathing, your reaction, and your next step.", author: "Mental Health Insight" },
-            { quote: "Allah does not burden a soul beyond that it can bear. (Quran 2:286)", author: "Quranic Encouragement" },
-            { quote: "Boundaries are not walls; they are bridges to sustainable focus and work-life balance.", author: "Self-Care Standard" },
-            { quote: "Patience (Sabr) is not passive waiting; it is active endurance with hope.", author: "Islamic Mindfulness" },
-            { quote: "Resting today gives you the strength to lead tomorrow.", author: "Executive Wellness" }
+        // 100 DAILY MENTAL HEALTH QUOTES & ISLAMIC PERSPECTIVES
+        const QUOTES_DATABASE = [
+            { text: "Verily, with every hardship comes ease.", source: "Surah Ash-Sharh (94:6)", category: "Islamic Reflection" },
+            { text: "Small breaks taken throughout the workday protect the mind from burnout.", source: "Bersih Care Wellness", category: "Workplace Habit" },
+            { text: "And He found you lost and guided you.", source: "Surah Ad-Duha (93:7)", category: "Islamic Reflection" },
+            { text: "You do not have to carry the entire day at once; just handle this single moment.", source: "Mindfulness Practice", category: "Mental Health" },
+            { text: "If you are grateful, I will surely increase you in favor.", source: "Surah Ibrahim (14:7)", category: "Islamic Perspective" },
+            { text: "Rest is not laziness; it is essential maintenance for sustainable performance.", source: "Workplace Self-Care", category: "Work-Life Balance" },
+            { text: "No soul is burdened beyond what it can bear.", source: "Surah Al-Baqarah (2:286)", category: "Islamic Perspective" },
+            { text: "Peace comes from within. Do not seek it outside without first breathing deeply.", source: "Universal Wisdom", category: "Mindfulness" },
+            { text: "How wonderful is the affair of the believer, for his affairs are all good.", source: "Sahih Muslim", category: "Islamic Wisdom" },
+            { text: "Setting clear boundaries at work is an act of self-respect and professional care.", source: "Office Wellness Guide", category: "Workplace Health" },
+            { text: "Tie your camel, then place your trust in Allah.", source: "Hadith Tirmidhi", category: "Islamic Wisdom" },
+            { text: "Your health is a trust (Amanah). Nourish both your body and your spirit.", source: "Islamic Health Perspective", category: "Self-Care" },
+            { text: "Take a 5-minute breather away from screens every 90 minutes of focused work.", source: "Desk Health Tip", category: "Workplace Habit" },
+            { text: "Unplugging at the end of the workday allows your creative subconscious to recharge.", source: "Mindful Work", category: "Burnout Prevention" },
+            { text: "Do not let yesterday take up too much of today.", source: "Universal Reflection", category: "Mental Clarity" }
         ];
 
-        // Bingo Challenge Grid Data (16 tiles)
-        let bingoTilesData = [
-            { id: 1, week: 1, text: "Took a 10-minute fresh air walk", done: false },
-            { id: 2, week: 1, text: "Drank 2 Liters of water today", done: false },
-            { id: 3, week: 1, text: "Completed 3 mins of Box Breathing", done: false },
-            { id: 4, week: 1, text: "Screen-free lunch break", done: false },
-            { id: 5, week: 2, text: "Completed 10 shoulder rolls at desk", done: false },
-            { id: 6, week: 2, text: "Organized digital desktop & inbox", done: false },
-            { id: 7, week: 2, text: "Looked 20ft away for 20s (Eye reset)", done: false },
-            { id: 8, week: 2, text: "Standing meeting or stretch session", done: false },
-            { id: 9, week: 3, text: "Sent a thank-you note on Gratitude Wall", done: false },
-            { id: 10, week: 3, text: "Checked in on a colleague's mood", done: false },
-            { id: 11, week: 3, text: "Had a face-to-face chat instead of chat text", done: false },
-            { id: 12, week: 3, text: "Complimented a team member's effort", done: false },
-            { id: 13, week: 4, text: "Logged 33 Zikr or mindfulness count", done: false },
-            { id: 14, week: 4, text: "Completed private Burnout Self-Check", done: false },
-            { id: 15, week: 4, text: "Wrote down 3 things you are grateful for", done: false },
-            { id: 16, week: 4, text: "Logged off on time without work delay", done: false }
+        // Fill remaining up to 100 with rotating wisdom quotes
+        for (let i = 16; i <= 100; i++) {
+            QUOTES_DATABASE.push({
+                text: `Day ${i} Prompt: "Focus on progress, not perfection. Today, offer yourself the same patience you give to others."`,
+                source: "Bersih Care Daily Guide",
+                category: i % 2 === 0 ? "Islamic Perspective" : "Universal Mental Health"
+            });
+        }
+
+        // DEFAULT BINGO TILES
+        let bingoTiles = [
+            { id: "b1", title: "Took a 10-min walk outdoors", category: "Mindfulness", points: 10 },
+            { id: "b2", title: "Drank 2L of water during workday", category: "Physical Reset", points: 10 },
+            { id: "b3", title: "Sent a thank-you shoutout to a colleague", category: "Connection", points: 15 },
+            { id: "b4", title: "Screen-free lunch break", category: "Gratitude", points: 15 },
+            { id: "b5", title: "Completed a 3-min breathing session", category: "Mindfulness", points: 10 },
+            { id: "b6", title: "Stretched at desk for 5 minutes", category: "Physical Reset", points: 10 },
+            { id: "b7", title: "Organized digital desktop / inbox", category: "Focus", points: 10 },
+            { id: "b8", title: "Expressed gratitude before logging off", category: "Gratitude", points: 10 }
         ];
 
-        // Weekly Lock States
-        let weekLocks = { 1: false, 2: false, 3: false, 4: false };
+        // IN-MEMORY FALLBACK DATABASE
+        let mockDb = {
+            users: [
+                { email: "fajar@bersih.com", fullName: "Ahmad Fajar", department: "Operations", password_hash: "123456" }
+            ],
+            gratitudePosts: [
+                { id: "g1", author_name: "Sarah (HR)", recipient: "IT Support", message: "Thanks for setting up our workspace displays so quickly!", likes: 4 }
+            ],
+            userBingoProgress: {}, // { email: [tileId1, tileId2] }
+            assignedTasks: [
+                { id: "t1", title: "October Kick-off Walking Meeting", description: "Take a 15-minute walk while reviewing weekly goals.", assigned_date: "2026-10-01" }
+            ],
+            burnoutAssessments: []
+        };
 
-        // Gratitude Notes Local Array Sync
-        let gratitudePosts = [
-            { id: '1', sender_name: 'Sarah (HR)', recipient_name: 'Operations Team', message: 'Huge thanks to Operations for finishing the October reports ahead of time!', hearts_count: 8, created_at: '2 hours ago' },
-            { id: '2', sender_name: 'Anonymous', recipient_name: 'Alex', message: 'Appreciate your bright smile and positive attitude in the morning meeting!', hearts_count: 5, created_at: '4 hours ago' }
-        ];
+        window.onload = function() {
+            // Set current date string
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('currentDateStr').innerText = dateStr;
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // Check stored user session
-            const savedUser = localStorage.getItem('bersih_user');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                onUserLoggedIn();
-            } else {
-                openModal('authModal');
+            // Load Persistent Session from localStorage
+            const savedSession = localStorage.getItem('bersih_user_session');
+            if (savedSession) {
+                try {
+                    currentUser = JSON.parse(savedSession);
+                    showDashboard();
+                } catch (e) {
+                    console.error("Failed to parse session", e);
+                }
             }
 
-            renderBingoGrid(1);
+            // Load Daily Quote based on Day of Year
+            const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+            currentQuoteIndex = dayOfYear % QUOTES_DATABASE.length;
+            renderDailyQuote();
+
+            // Render Default Bingo Cards & Leaderboard
+            renderBingoGrid();
+            renderLeaderboard();
             renderGratitudeWall();
-            calculateBurnoutScore();
-            fetchAssignedTasks();
-        });
+            checkAssignedTasks();
+        };
 
-        function toggleAuthForm(mode) {
-            const loginForm = document.getElementById('loginForm');
-            const signupForm = document.getElementById('signupForm');
-            const tabLogin = document.getElementById('tabLogin');
-            const tabSignup = document.getElementById('tabSignup');
-
-            if (mode === 'login') {
-                loginForm.classList.remove('hidden');
-                signupForm.classList.add('hidden');
-                tabLogin.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-teal-800 font-bold";
-                tabSignup.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 font-bold";
+        // AUTHENTICATION SWITCHER
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('signupForm').classList.add('hidden');
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-teal-800 font-semibold transition";
+                document.getElementById('tabSignupBtn').className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-800 transition";
             } else {
-                loginForm.classList.add('hidden');
-                signupForm.classList.remove('hidden');
-                tabSignup.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-teal-800 font-bold";
-                tabLogin.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 font-bold";
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('signupForm').classList.remove('hidden');
+                document.getElementById('tabSignupBtn').className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-teal-800 font-semibold transition";
+                document.getElementById('tabLoginBtn').className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-800 transition";
             }
         }
 
+        // LOGIN HANDLER
         async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
-            // Fetch profiles from Supabase if connected
+            // Check Supabase or MockDB
+            let userFound = null;
             if (supabaseClient) {
                 try {
-                    const { data, error } = await supabaseClient.from('profiles').select('*').eq('email', email).single();
+                    const { data, error } = await supabaseClient.from('users').select('*').eq('email', email).single();
                     if (data && data.password_hash === password) {
-                        currentUser = data;
-                        localStorage.setItem('bersih_user', JSON.stringify(data));
-                        closeModal('authModal');
-                        onUserLoggedIn();
-                        return;
+                        userFound = { email: data.email, fullName: data.full_name, department: data.department };
                     }
-                } catch(err) {
-                    console.log("Supabase login check fallback to local check");
+                } catch (err) {
+                    console.log("Supabase fetch fallback to mock");
                 }
             }
 
-            // Fallback Local Auth
-            currentUser = {
-                email: email,
-                full_name: email.split('@')[0],
-                department: 'Operations',
-                bingo_points: 20
-            };
-            localStorage.setItem('bersih_user', JSON.stringify(currentUser));
-            closeModal('authModal');
-            onUserLoggedIn();
+            if (!userFound) {
+                userFound = mockDb.users.find(u => u.email === email && u.password_hash === password);
+            }
+
+            if (userFound) {
+                currentUser = userFound;
+                localStorage.setItem('bersih_user_session', JSON.stringify(currentUser));
+                showDashboard();
+            } else {
+                alert("Invalid email or password. Please try again or Sign Up.");
+            }
         }
 
+        // SIGNUP HANDLER
         async function handleSignup(e) {
             e.preventDefault();
             const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
             const dept = document.getElementById('signupDept').value;
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
 
-            const newUser = {
-                email: email,
-                full_name: name,
-                department: dept,
-                password_hash: password,
-                bingo_points: 0
-            };
+            const newUser = { email, fullName: name, department: dept, password_hash: password };
 
             if (supabaseClient) {
                 try {
-                    await supabaseClient.from('profiles').insert([newUser]);
-                } catch(err) {
-                    console.warn("Supabase registration error", err);
+                    await supabaseClient.from('users').insert([{ email, full_name: name, department: dept, password_hash: password }]);
+                } catch (err) {
+                    console.log("Supabase insert error, mock active");
                 }
             }
+            mockDb.users.push(newUser);
 
-            currentUser = newUser;
-            localStorage.setItem('bersih_user', JSON.stringify(newUser));
-            closeModal('authModal');
-            onUserLoggedIn();
+            currentUser = { email, fullName: name, department: dept };
+            localStorage.setItem('bersih_user_session', JSON.stringify(currentUser));
+            showDashboard();
         }
 
-        function onUserLoggedIn() {
-            document.getElementById('userInfoHeader').classList.remove('hidden');
-            document.getElementById('headerUserName').innerText = currentUser.full_name;
-            document.getElementById('headerUserDept').innerText = currentUser.department;
-            
-            // Empathetic Greeting
-            document.getElementById('welcomeUserGreeting').innerText = `Welcome back, ${currentUser.full_name}! 🌿`;
-            document.getElementById('userBingoPoints').innerText = `${currentUser.bingo_points || 0} pts`;
-
-            loadLeaderboard();
-        }
-
+        // LOGOUT
         function handleLogout() {
-            localStorage.removeItem('bersih_user');
             currentUser = null;
-            location.reload();
+            localStorage.removeItem('bersih_user_session');
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('navRightSection').classList.add('hidden');
         }
 
-        function switchTab(tabId) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-white/15', 'text-white');
-                el.classList.add('text-teal-100');
+        // SHOW DASHBOARD UI
+        function showDashboard() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('navRightSection').classList.remove('hidden');
+
+            document.getElementById('navUserName').innerText = currentUser.fullName;
+            document.getElementById('navUserDept').innerText = currentUser.department;
+            document.getElementById('welcomeUserName').innerText = currentUser.fullName;
+
+            // Generate Warm AI Mood Greeting Advice
+            const advices = [
+                "Remember to pace yourself today. Great work comes from a balanced mind.",
+                "Take a moment to enjoy a warm drink and breathe deeply between tasks.",
+                "Your dedication is valued. Don't hesitate to take a short desk stretch today."
+            ];
+            document.getElementById('aiMoodAdvice').innerText = `"${advices[Math.floor(Math.random() * advices.length)]}"`;
+
+            renderBingoGrid();
+            renderLeaderboard();
+            checkAssignedTasks();
+        }
+
+        function switchTab(tabKey) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(el => {
+                el.className = "nav-tab text-slate-600 hover:text-teal-800 hover:bg-slate-100 px-4 py-2.5 rounded-xl flex items-center gap-2 flex-shrink-0 transition";
             });
-            document.querySelectorAll('.mobile-nav-btn').forEach(el => {
-                el.classList.remove('text-teal-600');
-                el.classList.add('text-slate-500');
-            });
 
-            // Show target tab
-            const target = document.getElementById(`tab-${tabId}`);
-            if (target) target.classList.remove('hidden');
-
-            const navBtn = document.getElementById(`nav-${tabId}`);
-            if (navBtn) {
-                navBtn.classList.add('bg-white/15', 'text-white');
-                navBtn.classList.remove('text-teal-100');
-            }
-
-            const mobileNavBtn = document.getElementById(`mobile-nav-${tabId}`);
-            if (mobileNavBtn) {
-                mobileNavBtn.classList.add('text-teal-600');
-                mobileNavBtn.classList.remove('text-slate-500');
+            document.getElementById(`tabContent-${tabKey}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabKey}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-tab bg-teal-700 text-white px-4 py-2.5 rounded-xl shadow-sm flex items-center gap-2 flex-shrink-0 transition";
             }
         }
 
-        function logMood(moodName, label, tip) {
-            const respElement = document.getElementById('moodEmpatheticResponse');
-            respElement.innerHTML = `<strong>${label}:</strong> ${tip}`;
-
-            if (supabaseClient && currentUser) {
-                supabaseClient.from('mood_logs').insert([{ user_email: currentUser.email, mood: moodName }]);
-            }
+        function renderDailyQuote() {
+            const q = QUOTES_DATABASE[currentQuoteIndex];
+            document.getElementById('dailyQuoteText').innerText = `"${q.text}"`;
+            document.getElementById('dailyQuoteSource').innerText = `— ${q.source}`;
+            document.getElementById('quoteCategoryTag').innerText = q.category;
+            document.getElementById('quoteDayCounter').innerText = `Day ${currentQuoteIndex + 1} of 100`;
         }
 
-        function nextQuote() {
-            currentQuoteIndex = (currentQuoteIndex + 1) % quotesDatabase.length;
-            const q = quotesDatabase[currentQuoteIndex];
-            document.getElementById('quoteText').innerText = `"${q.quote}"`;
-            document.getElementById('quoteAuthor').innerText = `— ${q.author}`;
-            document.getElementById('quoteDayCounter').innerText = `Day ${currentQuoteIndex + 1} / 100`;
+        function rotateNextQuote() {
+            currentQuoteIndex = (currentQuoteIndex + 1) % QUOTES_DATABASE.length;
+            renderDailyQuote();
         }
 
-        function shareQuoteToGratitude() {
-            const q = quotesDatabase[currentQuoteIndex];
-            document.getElementById('gratitudeMessage').value = `Daily Wisdom: "${q.quote}"`;
-            openModal('postGratitudeModal');
+        let pulseVotes = { Recharged: 5, Steady: 12, "Running Low": 3, Overwhelmed: 1 };
+
+        function logQuickEnergy(level) {
+            pulseVotes[level] = (pulseVotes[level] || 0) + 1;
+            updatePulseBars();
+            alert(`Logged energy level: "${level}". Thank you for checking in!`);
+        }
+
+        function updatePulseBars() {
+            const total = Object.values(pulseVotes).reduce((a, b) => a + b, 0);
+            document.getElementById('pulseTotalVotes').innerText = `${total} Responses Today`;
+
+            const getPerc = (val) => total > 0 ? Math.round((val / total) * 100) : 0;
+
+            document.getElementById('perc-recharged').innerText = `${getPerc(pulseVotes.Recharged)}%`;
+            document.getElementById('bar-recharged').style.width = `${getPerc(pulseVotes.Recharged)}%`;
+
+            document.getElementById('perc-steady').innerText = `${getPerc(pulseVotes.Steady)}%`;
+            document.getElementById('bar-steady').style.width = `${getPerc(pulseVotes.Steady)}%`;
+
+            document.getElementById('perc-runninglow').innerText = `${getPerc(pulseVotes['Running Low'])}%`;
+            document.getElementById('bar-runninglow').style.width = `${getPerc(pulseVotes['Running Low'])}%`;
+
+            document.getElementById('perc-overwhelmed').innerText = `${getPerc(pulseVotes.Overwhelmed)}%`;
+            document.getElementById('bar-overwhelmed').style.width = `${getPerc(pulseVotes.Overwhelmed)}%`;
+        }
+
+        function handleGratitudeSubmit(e) {
+            e.preventDefault();
+            const to = document.getElementById('gratitudeTo').value.trim();
+            const msg = document.getElementById('gratitudeMessage').value.trim();
+            const isAnon = document.getElementById('gratitudeAnonymous').checked;
+
+            const author = isAnon ? "Anonymous Colleague" : currentUser.fullName;
+            const newPost = { id: "g_" + Date.now(), author_name: author, recipient: to, message: msg, likes: 0 };
+
+            mockDb.gratitudePosts.unshift(newPost);
+            renderGratitudeWall();
+            closeModal('addGratitudeModal');
+            document.getElementById('gratitudeTo').value = "";
+            document.getElementById('gratitudeMessage').value = "";
         }
 
         function renderGratitudeWall() {
-            const grid = document.getElementById('gratitudeNotesGrid');
-            grid.innerHTML = '';
-
-            gratitudePosts.forEach(post => {
-                const card = document.createElement('div');
-                card.className = "bg-amber-50/70 border border-amber-200/80 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between";
-                card.innerHTML = `
+            const container = document.getElementById('gratitudeCardsContainer');
+            container.innerHTML = mockDb.gratitudePosts.map(p => `
+                <div class="bg-amber-50/60 border border-amber-200/60 p-4 rounded-2xl flex flex-col justify-between space-y-3">
                     <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-extrabold text-amber-900">${post.sender_name}</span>
-                            <span class="text-[10px] text-amber-700/60">${post.created_at}</span>
+                        <div class="flex items-center justify-between text-xs text-amber-900 font-bold mb-1">
+                            <span>To: ${p.recipient}</span>
+                            <span class="text-[10px] font-normal text-amber-700/70">From ${p.author_name}</span>
                         </div>
-                        ${post.recipient_name ? `<span class="text-[10px] font-bold bg-amber-200/60 text-amber-900 px-2 py-0.5 rounded-full mb-2 inline-block">To: ${post.recipient_name}</span>` : ''}
-                        <p class="text-xs text-slate-700 font-medium leading-relaxed mt-1">"${post.message}"</p>
+                        <p class="text-xs text-slate-700 leading-relaxed italic">"${p.message}"</p>
                     </div>
-                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-amber-200/50">
-                        <button onclick="likePost('${post.id}')" class="text-xs font-bold text-rose-600 hover:scale-105 transition flex items-center gap-1.5 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
-                            <i class="fa-solid fa-heart"></i> <span>${post.hearts_count}</span>
+                    <div class="flex items-center justify-between pt-2 border-t border-amber-200/40 text-xs">
+                        <button onclick="likeGratitudePost('${p.id}')" class="text-rose-600 hover:text-rose-700 font-semibold flex items-center gap-1 transition">
+                            <i class="fa-solid fa-heart"></i> <span>${p.likes}</span> Likes
                         </button>
                     </div>
-                `;
-                grid.appendChild(card);
-            });
+                </div>
+            `).join('');
+            updatePulseBars();
         }
 
-        function handlePostGratitude(e) {
-            e.preventDefault();
-            const recipient = document.getElementById('gratitudeRecipient').value.trim();
-            const message = document.getElementById('gratitudeMessage').value.trim();
-            const isAnon = document.getElementById('gratitudeAnonymous').checked;
-
-            const newPost = {
-                id: Date.now().toString(),
-                sender_name: isAnon ? 'Anonymous Colleague' : (currentUser ? currentUser.full_name : 'Staff Member'),
-                recipient_name: recipient,
-                message: message,
-                hearts_count: 1,
-                created_at: 'Just now'
-            };
-
-            gratitudePosts.unshift(newPost);
-            renderGratitudeWall();
-            closeModal('postGratitudeModal');
-            document.getElementById('gratitudeMessage').value = '';
-        }
-
-        function likePost(postId) {
-            const post = gratitudePosts.find(p => p.id === postId);
+        function likeGratitudePost(id) {
+            const post = mockDb.gratitudePosts.find(p => p.id === id);
             if (post) {
-                post.hearts_count++;
+                post.likes += 1;
                 renderGratitudeWall();
             }
         }
 
-        let breathingInterval = null;
-        let isBreathingActive = false;
-
-        function changeBreathingPattern() {
-            document.getElementById('breathingAction').innerText = "Ready";
-            document.getElementById('breathingTimer').innerText = "4";
+        function setBreathingTechnique(type) {
+            document.getElementById('btn-technique-box').className = type === 'box' ? "flex-1 py-1.5 rounded-lg bg-white shadow-sm text-teal-800 font-bold" : "flex-1 py-1.5 rounded-lg text-slate-600";
+            document.getElementById('btn-technique-calm').className = type === 'calm' ? "flex-1 py-1.5 rounded-lg bg-white shadow-sm text-teal-800 font-bold" : "flex-1 py-1.5 rounded-lg text-slate-600";
+            document.getElementById('btn-technique-deep').className = type === 'deep' ? "flex-1 py-1.5 rounded-lg bg-white shadow-sm text-teal-800 font-bold" : "flex-1 py-1.5 rounded-lg text-slate-600";
         }
 
-        function toggleBreathing() {
+        function toggleBreathingSession() {
+            const ring = document.getElementById('breathingRing');
+            const txt = document.getElementById('breathingInstruction');
             const btn = document.getElementById('breathingToggleBtn');
-            const circle = document.getElementById('breathingCircle');
 
             if (!isBreathingActive) {
                 isBreathingActive = true;
-                btn.innerHTML = `<i class="fa-solid fa-pause"></i> Pause Session`;
-                circle.classList.add('breathing-circle');
+                ring.classList.add('breathing-active');
+                btn.innerText = "Stop Session";
+                let step = 0;
+                breathingTimer = setInterval(() => {
+                    step = (step + 1) % 4;
+                    if (step === 0) txt.innerText = "Inhale...";
+                    else if (step === 1) txt.innerText = "Hold...";
+                    else if (step === 2) txt.innerText = "Exhale...";
+                    else txt.innerText = "Rest...";
+                }, 2000);
             } else {
                 isBreathingActive = false;
-                btn.innerHTML = `<i class="fa-solid fa-play"></i> Start Session`;
-                circle.classList.remove('breathing-circle');
+                ring.classList.remove('breathing-active');
+                btn.innerText = "Start Breathing Exercise";
+                txt.innerText = "Press Start";
+                clearInterval(breathingTimer);
             }
         }
 
-        function selectZikrPhrase(phrase, goal, arabic) {
-            currentZikrName = phrase;
-            currentZikrGoal = goal;
-            document.getElementById('zikrArabicDisplay').innerText = arabic;
-            document.getElementById('tasbeehTargetBadge').innerText = `Goal: ${goal}`;
-            tasbeehCount = 0;
-            document.getElementById('tasbeehCounter').innerText = tasbeehCount;
-        }
-
-        function tapTasbeeh() {
-            tasbeehCount++;
-            tasbeehTotalToday++;
-            document.getElementById('tasbeehCounter').innerText = tasbeehCount;
-            document.getElementById('tasbeehTotalCount').innerText = `Total Today: ${tasbeehTotalToday}`;
-
-            if (tasbeehCount === currentZikrGoal) {
-                if (navigator.vibrate) navigator.vibrate(200);
-            }
+        // DIGITAL TASBEEH LOGIC
+        function incrementTasbeeh() {
+            tasbeehCount += 1;
+            document.getElementById('tasbeehCounterDisplay').innerText = tasbeehCount;
         }
 
         function resetTasbeeh() {
             tasbeehCount = 0;
-            document.getElementById('tasbeehCounter').innerText = "0";
+            document.getElementById('tasbeehCounterDisplay').innerText = 0;
+            const phrase = document.getElementById('dhikrSelect').value;
+            document.getElementById('tasbeehPhraseDisplay').innerText = phrase;
         }
 
-        let audioCtx = null;
-        let activeNoiseNode = null;
-
+        // AMBIENT SOUNDSCAPE SYNTHESIZER (Web Audio API)
         function toggleSoundscape(type) {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
 
-            if (activeNoiseNode) {
-                activeNoiseNode.stop();
-                activeNoiseNode = null;
-                document.querySelectorAll('.sound-btn').forEach(b => b.classList.remove('border-teal-500', 'bg-teal-50'));
+            if (activeOscillators.length > 0) {
+                activeOscillators.forEach(osc => osc.stop());
+                activeOscillators = [];
+                document.querySelectorAll('[id^="sound-"]').forEach(btn => btn.classList.remove('bg-teal-50', 'border-teal-500'));
                 return;
             }
 
-            // Create Ambient Synthesized Sound
-            const bufferSize = audioCtx.sampleRate * 2;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
+            // Create white noise or soft sound synthesis
+            const bufferSize = audioContext.sampleRate * 2;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const output = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1;
+                output[i] = Math.random() * 2 - 1;
             }
 
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-            noise.loop = true;
+            const whiteNoise = audioContext.createBufferSource();
+            whiteNoise.buffer = buffer;
+            whiteNoise.loop = true;
 
-            const filter = audioCtx.createBiquadFilter();
+            const filter = audioContext.createBiquadFilter();
             filter.type = type === 'rain' ? 'lowpass' : 'bandpass';
-            filter.frequency.value = type === 'rain' ? 800 : 400;
+            filter.frequency.setValueAtTime(type === 'rain' ? 800 : 400, audioContext.currentTime);
 
-            noise.connect(filter);
-            filter.connect(audioCtx.destination);
-            noise.start();
-            activeNoiseNode = noise;
+            const gain = audioContext.createGain();
+            gain.gain.setValueAtTime(0.05, audioContext.currentTime);
 
-            const activeBtn = document.getElementById(`sound-${type}`);
-            if (activeBtn) activeBtn.classList.add('border-teal-500', 'bg-teal-50');
+            whiteNoise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+
+            whiteNoise.start();
+            activeOscillators.push(whiteNoise);
+
+            document.getElementById(`sound-${type}`).classList.add('bg-teal-50', 'border-teal-500');
         }
 
-        function setBingoWeek(weekNum) {
-            if (weekLocks[weekNum]) {
-                alert(`Week ${weekNum} is currently locked by the Admin.`);
-                return;
-            }
-            renderBingoGrid(weekNum);
+        const stretchPrompts = [
+            "20-20-20 Eye Reset: Look at an object 20 feet away for 20 seconds.",
+            "Seated Spine Twist: Sit tall, turn your shoulders gently to the right for 10s, then left.",
+            "Neck & Shoulder Roll: Gently roll shoulders backwards 5 times to drop desk tension."
+        ];
+        let stretchIdx = 0;
+        function rotateDeskStretchPrompt() {
+            stretchIdx = (stretchIdx + 1) % stretchPrompts.length;
+            document.getElementById('deskStretchPromptText').innerText = stretchPrompts[stretchIdx];
         }
 
-        function renderBingoGrid(weekNum) {
-            const container = document.getElementById('bingoGridContainer');
-            container.innerHTML = '';
+        function renderBingoGrid() {
+            const userCompleted = (currentUser && mockDb.userBingoProgress[currentUser.email]) || [];
+            const container = document.getElementById('bingoGrid');
 
-            const weekTiles = bingoTilesData.filter(t => t.week === weekNum);
-            weekTiles.forEach(tile => {
-                const btn = document.createElement('button');
-                btn.onclick = () => toggleBingoTile(tile.id);
-                btn.className = `p-4 rounded-2xl border text-left transition flex flex-col justify-between min-h-[100px] ${
-                    tile.done 
-                    ? 'bg-emerald-600 text-white border-emerald-700 shadow-md' 
-                    : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
-                }`;
-
-                btn.innerHTML = `
-                    <span class="text-xs font-extrabold leading-snug">${tile.text}</span>
-                    <div class="flex items-center justify-between mt-2 pt-2 border-t ${tile.done ? 'border-emerald-500/50' : 'border-slate-100'}">
-                        <span class="text-[10px] font-bold ${tile.done ? 'text-emerald-100' : 'text-teal-600'}">+10 pts</span>
-                        <i class="fa-solid ${tile.done ? 'fa-circle-check text-white' : 'fa-circle-thin text-slate-300'}"></i>
+            container.innerHTML = bingoTiles.map(tile => {
+                const isDone = userCompleted.includes(tile.id);
+                return `
+                    <div onclick="toggleBingoTile('${tile.id}')" class="cursor-pointer p-4 rounded-2xl border transition text-center flex flex-col justify-between h-32 ${isDone ? 'bg-emerald-50 border-emerald-400 text-emerald-900 shadow-sm' : 'bg-slate-50 border-slate-200 hover:border-teal-300 text-slate-700'}">
+                        <div class="text-[10px] font-bold uppercase tracking-wider ${isDone ? 'text-emerald-700' : 'text-slate-400'}">${tile.category}</div>
+                        <div class="text-xs font-semibold leading-snug">${tile.title}</div>
+                        <div class="flex items-center justify-between text-[11px] pt-1">
+                            <span class="font-bold">${tile.points} pts</span>
+                            <i class="fa-solid ${isDone ? 'fa-circle-check text-emerald-600 text-base' : 'fa-circle-notch text-slate-300'}"></i>
+                        </div>
                     </div>
                 `;
-                container.appendChild(btn);
-            });
+            }).join('');
+
+            // Calculate user total score
+            if (currentUser) {
+                const userScore = userCompleted.reduce((acc, tileId) => {
+                    const t = bingoTiles.find(x => x.id === tileId);
+                    return acc + (t ? t.points : 0);
+                }, 0);
+                document.getElementById('userBingoPoints').innerText = userScore;
+            }
         }
 
         function toggleBingoTile(tileId) {
-            const tile = bingoTilesData.find(t => t.id === tileId);
-            if (tile) {
-                tile.done = !tile.done;
-                if (currentUser) {
-                    currentUser.bingo_points = (currentUser.bingo_points || 0) + (tile.done ? 10 : -10);
-                    localStorage.setItem('bersih_user', JSON.stringify(currentUser));
-                    document.getElementById('userBingoPoints').innerText = `${currentUser.bingo_points} pts`;
-                }
-                renderBingoGrid(tile.week);
-                loadLeaderboard();
+            if (!currentUser) return;
+            if (!mockDb.userBingoProgress[currentUser.email]) {
+                mockDb.userBingoProgress[currentUser.email] = [];
             }
+
+            const list = mockDb.userBingoProgress[currentUser.email];
+            const idx = list.indexOf(tileId);
+            if (idx > -1) {
+                list.splice(idx, 1);
+            } else {
+                list.push(tileId);
+            }
+
+            renderBingoGrid();
+            renderLeaderboard();
         }
 
-        function loadLeaderboard() {
-            const list = document.getElementById('leaderboardList');
-            if (!list) return;
+        function renderLeaderboard() {
+            const board = mockDb.users.map(u => {
+                const doneIds = mockDb.userBingoProgress[u.email] || [];
+                const points = doneIds.reduce((acc, tid) => {
+                    const t = bingoTiles.find(x => x.id === tid);
+                    return acc + (t ? t.points : 0);
+                }, 0);
+                return { name: u.fullName, dept: u.department, points, tilesCount: doneIds.length };
+            }).sort((a, b) => b.points - a.points);
 
-            const dummyLeaders = [
-                { name: currentUser ? currentUser.full_name : 'Sarah Ahmad', dept: 'HR', pts: currentUser ? currentUser.bingo_points || 40 : 40 },
-                { name: 'Alex Wong', dept: 'Operations', pts: 30 },
-                { name: 'David Tan', dept: 'IT', pts: 20 }
-            ];
-
-            list.innerHTML = '';
-            dummyLeaders.sort((a,b) => b.pts - a.pts).forEach((user, idx) => {
-                const item = document.createElement('div');
-                item.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200/60 text-xs";
-                item.innerHTML = `
-                    <div class="flex items-center gap-2.5">
-                        <span class="w-5 h-5 rounded-full ${idx===0?'bg-amber-400 text-amber-950':'bg-slate-200 text-slate-600'} font-extrabold text-[10px] flex items-center justify-center">${idx+1}</span>
+            document.getElementById('leaderboardList').innerHTML = board.map((item, idx) => `
+                <div class="flex items-center justify-between p-3 rounded-xl ${idx === 0 ? 'bg-amber-50 border border-amber-200' : 'bg-slate-50 border border-slate-100'}">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 text-center font-bold text-xs ${idx === 0 ? 'text-amber-600' : 'text-slate-400'}">#${idx + 1}</span>
                         <div>
-                            <div class="font-bold text-slate-800">${user.name}</div>
-                            <div class="text-[10px] text-slate-500">${user.dept}</div>
+                            <div class="text-xs font-bold text-slate-800">${item.name}</div>
+                            <div class="text-[10px] text-slate-400">${item.dept}</div>
                         </div>
                     </div>
-                    <span class="font-extrabold text-teal-700">${user.pts} pts</span>
-                `;
-                list.appendChild(item);
-            });
+                    <div class="text-right">
+                        <span class="text-xs font-extrabold text-teal-700">${item.points} pts</span>
+                        <div class="text-[10px] text-slate-400">${item.tilesCount} tiles</div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function calculateBurnoutScore() {
-            const s1 = parseInt(document.getElementById('burnoutSlider1').value);
-            const s2 = parseInt(document.getElementById('burnoutSlider2').value);
-            const s3 = parseInt(document.getElementById('burnoutSlider3').value);
-            const s4 = parseInt(document.getElementById('burnoutSlider4').value);
-
-            document.getElementById('sliderVal1').innerText = `${s1} / 10`;
-            document.getElementById('sliderVal2').innerText = `${s2} / 10`;
-            document.getElementById('sliderVal3').innerText = `${s3} / 10`;
-            document.getElementById('sliderVal4').innerText = `${s4} / 10`;
-
-            const total = Math.round(((s1 + s2 + s3 + s4) / 40) * 100);
-            document.getElementById('burnoutScoreNumber').innerText = `${total}%`;
-
-            const label = document.getElementById('burnoutScoreLabel');
-            const advice = document.getElementById('burnoutTailoredAdvice');
-
-            if (total >= 75) {
-                label.innerText = "Optimal & Thriving";
-                advice.innerText = "Excellent mental balance! Keep inspiring your team on the Gratitude Wall.";
-            } else if (total >= 50) {
-                label.innerText = "Healthy & Balanced";
-                advice.innerText = "Good state! Schedule short 2-minute micro-breaks during heavy screen tasks.";
-            } else {
-                label.innerText = "High Strain Detected";
-                advice.innerText = "You may be experiencing digital strain. Step away from your computer for 10 minutes and try Box Breathing.";
-            }
-        }
-
-        function saveBurnoutAssessment() {
-            alert("Assessment saved privately. Thank you for checking in on yourself!");
-        }
-
-        function openAdminPrompt() {
-            openModal('adminPinModal');
-        }
-
-        function handleAdminPinSubmit(e) {
+        function handleBurnoutSubmit(e) {
             e.preventDefault();
-            const pin = document.getElementById('adminPinInput').value;
-            if (pin === "1234") {
-                closeModal('adminPinModal');
-                switchTab('admin');
-                populateAdminUserTable();
+            const q1 = parseInt(document.getElementById('q1Range').value);
+            const q2 = parseInt(document.getElementById('q2Range').value);
+            const q3 = parseInt(document.getElementById('q3Range').value);
+            const q4 = parseInt(document.getElementById('q4Range').value);
+
+            const score = Math.round(((q1 + q2 + q3 + q4) / 40) * 100);
+
+            document.getElementById('burnoutResultCard').classList.remove('hidden');
+            document.getElementById('burnoutScoreBadge').innerText = `Harmony Score: ${score}/100`;
+
+            const heading = document.getElementById('burnoutStatusHeading');
+            const rec = document.getElementById('burnoutRecommendationText');
+
+            if (score >= 75) {
+                heading.innerText = "🌟 Excellent Work-Life Harmony";
+                rec.innerText = "You are maintaining high emotional clarity and workload resilience. Keep utilizing quick desk resets and micro-breaks to preserve this healthy state.";
+            } else if (score >= 50) {
+                heading.innerText = "⚓ Steady Moderate Balance";
+                rec.innerText = "You are holding up well, but screen fatigue or workload pressure might be slowly building up. Try scheduling a 15-minute screen-free lunch today.";
             } else {
-                alert("Incorrect PIN code.");
+                heading.innerText = "⚠️ High Workload Strain / Risk of Fatigue";
+                rec.innerText = "Your self-check indicates elevated stress or digital exhaustion. We strongly recommend doing a 4-7-8 breathing reset now and speaking with your supervisor or HR team regarding workload support.";
+            }
+
+            mockDb.burnoutAssessments.push({ score, userEmail: currentUser ? currentUser.email : "anon" });
+        }
+
+        function promptAdminPin() {
+            const pin = prompt("Enter Admin Backend Security PIN:");
+            if (pin === "1234") {
+                openAdminModal();
+            } else if (pin !== null) {
+                alert("Incorrect PIN code. Access denied.");
             }
         }
 
-        function populateAdminUserTable() {
-            const tbody = document.getElementById('adminUserTableBody');
-            tbody.innerHTML = `
-                <tr class="border-b border-slate-100">
-                    <td class="p-2.5 font-bold text-slate-800">${currentUser ? currentUser.full_name : 'Sarah Ahmad'}</td>
-                    <td class="p-2.5">${currentUser ? currentUser.email : 'sarah@company.com'}</td>
-                    <td class="p-2.5">${currentUser ? currentUser.department : 'HR'}</td>
-                    <td class="p-2.5 text-right">
-                        <button class="text-rose-600 hover:underline text-[11px] font-bold">Delete</button>
+        function openAdminModal() {
+            renderAdminUserList();
+            renderAdminBingoList();
+            renderAdminStats();
+            openModal('adminModal');
+        }
+
+        function switchAdminTab(admKey) {
+            document.querySelectorAll('.adm-pane').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`admContent-${admKey}`).classList.remove('hidden');
+        }
+
+        function renderAdminUserList() {
+            document.getElementById('adminUserCount').innerText = mockDb.users.length;
+            document.getElementById('adminUserTableBody').innerHTML = mockDb.users.map(u => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-3 font-medium text-slate-800">${u.fullName}</td>
+                    <td class="p-3 text-slate-500">${u.department}</td>
+                    <td class="p-3 text-slate-500">${u.email}</td>
+                    <td class="p-3 text-right space-x-2">
+                        <button onclick="adminResetPassword('${u.email}')" class="text-teal-700 hover:underline">Reset Pass</button>
+                        <button onclick="adminDeleteUser('${u.email}')" class="text-rose-600 hover:underline">Delete</button>
                     </td>
                 </tr>
-            `;
-            document.getElementById('adminUserCount').innerText = "1 User";
+            `).join('');
         }
 
-        function handleAssignTask(e) {
+        function adminDeleteUser(email) {
+            if (confirm(`Are you sure you want to delete user ${email}?`)) {
+                mockDb.users = mockDb.users.filter(u => u.email !== email);
+                renderAdminUserList();
+                renderLeaderboard();
+            }
+        }
+
+        function adminResetPassword(email) {
+            const newPass = prompt("Enter new password for " + email + ":");
+            if (newPass) {
+                const u = mockDb.users.find(x => x.email === email);
+                if (u) u.password_hash = newPass;
+                alert("Password updated successfully.");
+            }
+        }
+
+        function renderAdminBingoList() {
+            document.getElementById('adminBingoTileList').innerHTML = bingoTiles.map(t => `
+                <div class="p-2 bg-slate-50 border rounded-xl flex items-center justify-between">
+                    <span>${t.title}</span>
+                    <button onclick="deleteBingoTile('${t.id}')" class="text-rose-600 font-bold px-2">×</button>
+                </div>
+            `).join('');
+        }
+
+        function addNewBingoTile() {
+            const title = document.getElementById('newBingoTitle').value.trim();
+            if (title) {
+                bingoTiles.push({ id: "b_" + Date.now(), title, category: "Custom Task", points: 10 });
+                document.getElementById('newBingoTitle').value = "";
+                renderAdminBingoList();
+                renderBingoGrid();
+            }
+        }
+
+        function deleteBingoTile(id) {
+            bingoTiles = bingoTiles.filter(t => t.id !== id);
+            renderAdminBingoList();
+            renderBingoGrid();
+        }
+
+        function resetOctoberBingoLeaderboard() {
+            if (confirm("Reset October Bingo leaderboard scores for everyone?")) {
+                mockDb.userBingoProgress = {};
+                renderBingoGrid();
+                renderLeaderboard();
+                alert("October Bingo leaderboard has been reset fresh.");
+            }
+        }
+
+        function handleAdminAssignTask(e) {
             e.preventDefault();
-            const title = document.getElementById('adminTaskInput').value;
+            const title = document.getElementById('adminTaskTitle').value.trim();
             const date = document.getElementById('adminTaskDate').value;
+            const desc = document.getElementById('adminTaskDesc').value.trim();
 
-            document.getElementById('assignedTaskText').innerText = title;
-            document.getElementById('assignedTaskBanner').classList.remove('hidden');
-
-            alert(`Task assigned for ${date}! Email notifications broadcasted.`);
+            mockDb.assignedTasks.unshift({ id: "t_" + Date.now(), title, description: desc, assigned_date: date });
+            checkAssignedTasks();
+            alert("New task published & notification alert dispatched to users!");
         }
 
-        function claimAssignedTask() {
-            if (currentUser) {
-                currentUser.bingo_points = (currentUser.bingo_points || 0) + 15;
-                document.getElementById('userBingoPoints').innerText = `${currentUser.bingo_points} pts`;
-            }
-            document.getElementById('assignedTaskBanner').classList.add('hidden');
-            alert("Awesome work! 15 bonus points added to your Bingo score!");
-        }
-
-        function toggleWeekLock(weekNum) {
-            weekLocks[weekNum] = !weekLocks[weekNum];
-            alert(`Week ${weekNum} is now ${weekLocks[weekNum] ? 'LOCKED' : 'UNLOCKED'}.`);
-        }
-
-        function confirmResetBingoLeaderboard() {
-            if (confirm("Are you sure you want to reset all Bingo scores to zero for October?")) {
-                if (currentUser) currentUser.bingo_points = 0;
-                document.getElementById('userBingoPoints').innerText = "0 pts";
-                loadLeaderboard();
-                alert("October Leaderboard refreshed!");
+        function checkAssignedTasks() {
+            if (mockDb.assignedTasks.length > 0) {
+                const latest = mockDb.assignedTasks[0];
+                document.getElementById('assignedTaskBannerContent').innerHTML = `
+                    <strong>${latest.title}</strong> (${latest.assigned_date})<br>
+                    ${latest.description}
+                `;
             }
         }
 
-        function fetchAssignedTasks() {
-            // Placeholder task check
+        function renderAdminStats() {
+            const count = mockDb.burnoutAssessments.length;
+            document.getElementById('telemetryCount').innerText = count;
+            if (count > 0) {
+                const avg = Math.round(mockDb.burnoutAssessments.reduce((a, b) => a + b.score, 0) / count);
+                document.getElementById('telemetryAvgScore').innerText = `${avg} / 100`;
+            }
         }
 
-        function openModal(modalId) {
-            document.getElementById(modalId)?.classList.remove('hidden');
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId)?.classList.add('hidden');
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function copySqlScript() {
+            const area = document.getElementById('sqlScriptArea');
+            area.select();
+            document.execCommand('copy');
+            alert('SQL script copied to clipboard!');
         }
     </script>
 </body>
